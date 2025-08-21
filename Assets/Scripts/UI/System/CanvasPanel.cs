@@ -10,7 +10,7 @@ public class CanvasPanel : UIBind
     protected override void Start()
     {
         base.Start();
-
+        Initialize();
     }
 
     protected void SetCanvasComponent()
