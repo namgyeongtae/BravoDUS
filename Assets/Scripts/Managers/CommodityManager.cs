@@ -5,6 +5,8 @@ public class CommodityManager : IManagerBase
 {
     private Dictionary<IngredientType, Ingredient> _ingredients;
 
+    public Ingredient GetIngredient(IngredientType type) => _ingredients[type];
+
     public void Init()
     {
         _ingredients = new Dictionary<IngredientType, Ingredient>();
@@ -22,16 +24,7 @@ public class CommodityManager : IManagerBase
         // TODO: Load ingredients from DB (json, SO ....)
     }
 
-    public Ingredient GetIngredient(IngredientType type)
-    {
-        if (_ingredients.TryGetValue(type, out var ingredient))
-        {
-            return ingredient;
-        }
-        return null;
-    }
-
-    public void AddIngredient(IngredientType type, int amount)
+    public void AddIngredient(IngredientType type, float amount)
     {
         if (_ingredients.TryGetValue(type, out var ingredient))
         {
