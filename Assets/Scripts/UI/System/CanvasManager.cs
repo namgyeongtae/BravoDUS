@@ -86,6 +86,16 @@ public class CanvasManager : MonoBehaviour
         return canvasPanel as T;
     }
 
+    public void RemovePanel(CanvasPanel obj)
+    {
+        if (panelList.Count == 0)
+        {
+            return;
+        }
+
+        obj?.Close();
+    }
+
     public void RemovePanel(string panelObj)
     {
         if (panelList.Count == 0)
