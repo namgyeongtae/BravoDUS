@@ -70,7 +70,7 @@ public class BindAttribute
                     else
                     {
                         var component = outTransform.GetComponent(item.FieldInfo.FieldType);
-                        if (component != null)
+                        if (component == null)
                             continue;
                         item.FieldInfo.SetValue(target, component);
                     }

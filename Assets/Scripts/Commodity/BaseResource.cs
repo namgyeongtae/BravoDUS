@@ -7,16 +7,16 @@ public abstract class BaseResource
 
     public float Amount => _amount;
 
-    public void Gather(int amount)
+    public void Gather(float addValue)
     {
-        _amount += amount;
-        OnAmountChanged();
+        _amount += addValue;
+        OnAmountChanged(_amount);
     }
-    public void Consume(int amount)
+    public void Consume(float subValue)
     {
-        _amount -= amount;
-        OnAmountChanged();
+        _amount -= subValue;
+        OnAmountChanged(_amount);
     }
 
-    protected virtual void OnAmountChanged() { }
+    protected virtual void OnAmountChanged(float amount) { }
 }
