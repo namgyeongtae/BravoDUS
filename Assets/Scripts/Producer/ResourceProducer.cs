@@ -17,8 +17,9 @@ public class ResourceProducer : MonoBehaviour
 
     private void Produce()
     {
-        // 수정: Managers.Game.AddResource 호출 (통합)
-        Managers.Game.AddResource(resourceType, currentRate);
+        // 수정: Managers.Commodity.AddIngredient 직접 호출 (GameManager 원본 돌림으로 호환)
+        IngredientType ingredientType = (IngredientType)System.Enum.Parse(typeof(IngredientType), resourceType); // string to Enum
+        Managers.Commodity.AddIngredient(ingredientType, currentRate);
         Debug.Log($"{resourceType} 생산: {currentRate}");
     }
 
