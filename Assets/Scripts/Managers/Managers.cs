@@ -19,22 +19,20 @@ public class Managers
         _commodity.Init();
         _ui.Init();
         _event.Init();
-        // 수정: GameManager.Instance.Init() 호출 (new 안 함)
-        GameManager.Instance.Init();
+      
     }
 
     public void Update()
     {
         _event.Update();
-        // 수정: GameManager.Instance.Update() 호출
-        GameManager.Instance.Update();
+       
+       
     }
 
     public void Release()
     {
         _commodity.Release();
         _event.Release();
-        // 수정: GameManager.Instance.Release() 호출
-        GameManager.Instance.Release();
+      
     }
 }
