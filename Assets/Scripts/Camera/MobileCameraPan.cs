@@ -12,7 +12,7 @@ public class MobileCameraPan : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
-        groundBounds = new Bounds(new Vector3(-6f, 0f, -6f), new Vector3(88f, 0f, 88f)); // 네 설정 유지
+        groundBounds = new Bounds(new Vector3(-6f, 0f, -6f), new Vector3(88f, 0f, 88f)); 
     }
 
     void Update()
@@ -34,7 +34,7 @@ public class MobileCameraPan : MonoBehaviour
                 // +Z factor 0.5 유지 (위 느리게)
                 if (worldDelta.z > 0) worldDelta.z *= 0.5f;
 
-                // 대각선 속도 보정: normalize 후 magnitude * sqrt(2) 곱어 (대각선 느린 거 fix)
+                // 대각선 속도 보정: normalize 후 magnitude * sqrt(2) 곱 (대각선 느린 거 fix)
                 float magnitude = worldDelta.magnitude;
                 if (magnitude > 0f) // zero 방지
                 {

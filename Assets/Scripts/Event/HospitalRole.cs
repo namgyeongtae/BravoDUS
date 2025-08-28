@@ -8,7 +8,6 @@ public class HospitalRole : RoleHandler
     {
         if (eventType == "Disease")
         {
-            
             Debug.Log("질병 치료: " + (baseHealRate * buildingLevel));
         }
     }

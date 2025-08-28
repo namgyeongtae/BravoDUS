@@ -1,56 +1,56 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using UnityEngine.Pool;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] private GameObject ruinPrefab; // ÀÜÇØ ¸ğµ¨ Prefab
-    [SerializeField] private GameObject basePrefab; // ±âº» °Ç¹° ¸ğµ¨ Prefab
-    [SerializeField] private GameObject upgradedPrefab; // ¾÷±×·¹ÀÌµå ¸ğµ¨ Prefab
-    [SerializeField] private float constructionTime = 30f; // °Ç¼³ ½Ã°£ (ÃÊ)
-    [SerializeField] private int maxLevel = 10; // ¾÷±×·¹ÀÌµå ÃÖ´ë ·¹º§
+    [SerializeField] private GameObject ruinPrefab; // ì”í•´ ëª¨ë¸ Prefab
+    [SerializeField] private GameObject basePrefab; // ê¸°ë³¸ ê±´ë¬¼ ëª¨ë¸ Prefab
+    [SerializeField] private GameObject upgradedPrefab; // ì—…ê·¸ë ˆì´ë“œ ëª¨ë¸ Prefab
+    [SerializeField] private float constructionTime = 30f; // ê±´ì„¤ ì‹œê°„ (ì´ˆ)
+    [SerializeField] private int maxLevel = 10; // ì—…ê·¸ë ˆì´ë“œ ìµœëŒ€ ë ˆë²¨
 
     public enum State { Ruin, Constructing, Base, Upgraded }
-    public State CurrentState { get; private set; } = State.Ruin; // ÇöÀç »óÅÂ
-    public int Level { get; private set; } = 0; // ·¹º§
-    public Vector3 FixedPosition { get; private set; } // °íÁ¤ À§Ä¡
+    public State CurrentState { get; private set; } = State.Ruin; // í˜„ì¬ ìƒíƒœ
+    public int Level { get; private set; } = 0; // ë ˆë²¨
+    public Vector3 FixedPosition { get; private set; } // ê³ ì • ìœ„ì¹˜
 
-    private GameObject currentModel; // ÇöÀç ¸ğµ¨ ÀÎ½ºÅÏ½º
-    private Coroutine constructionCoroutine; // °Ç¼³ ÄÚ·çÆ¾ ÂüÁ¶
-    private ObjectPool<GameObject> ruinPool; // ÀÜÇØ Ç®
-    private ObjectPool<GameObject> basePool; // ±âº» Ç®
-    private ObjectPool<GameObject> upgradedPool; // ¾÷±×·¹ÀÌµå Ç®
+    private GameObject currentModel; // í˜„ì¬ ëª¨ë¸ ì¸ìŠ¤í„´ìŠ¤
+    private Coroutine constructionCoroutine; // ê±´ì„¤ ì½”ë£¨í‹´ ì°¸ì¡°
+    private ObjectPool<GameObject> ruinPool; // ì”í•´ í’€
+    private ObjectPool<GameObject> basePool; // ê¸°ë³¸ í’€
+    private ObjectPool<GameObject> upgradedPool; // ì—…ê·¸ë ˆì´ë“œ í’€
 
-    // ÄÄÆ÷³ÍÆ® ÂüÁ¶ (SOLID ÁØ¼ö, ¿ªÇÒ/ÀÚ¿ø ºĞ¸®)
+    // ì»´í¬ë„ŒíŠ¸ ì°¸ì¡° (SOLID ì¤€ìˆ˜, ì—­í• /ìì› ë¶„ë¦¬)
     private ResourceProducer resourceProducer;
     private RoleHandler roleHandler;
 
     void Awake()
     {
-        FixedPosition = transform.position; // °íÁ¤ À§Ä¡ ¼³Á¤
+        FixedPosition = transform.position; // ê³ ì • ìœ„ì¹˜ ì„¤ì •
         ruinPool = new ObjectPool<GameObject>(() => Instantiate(ruinPrefab), m => m.SetActive(true), m => m.SetActive(false), Destroy, false, 10, 20);
         basePool = new ObjectPool<GameObject>(() => Instantiate(basePrefab), m => m.SetActive(true), m => m.SetActive(false), Destroy, false, 10, 20);
         upgradedPool = new ObjectPool<GameObject>(() => Instantiate(upgradedPrefab), m => m.SetActive(true), m => m.SetActive(false), Destroy, false, 10, 20);
-        SwapModel(ruinPrefab); // ÃÊ±â ÀÜÇØ ¸ğµ¨ ·Îµå
+        SwapModel(ruinPrefab); // ì´ˆê¸° ì”í•´ ëª¨ë¸ ë¡œë“œ
 
-        resourceProducer = GetComponent<ResourceProducer>(); // ÀÚ¿ø »ı»ê ÄÄÆ÷³ÍÆ®
-        roleHandler = GetComponent<RoleHandler>(); // ¿ªÇÒ ÄÄÆ÷³ÍÆ®
+        resourceProducer = GetComponent<ResourceProducer>(); // ìì› ìƒì‚° ì»´í¬ë„ŒíŠ¸
+        roleHandler = GetComponent<RoleHandler>(); // ì—­í•  ì»´í¬ë„ŒíŠ¸
     }
 
     void Start()
     {
-        transform.position = FixedPosition; // ¼öÁ¤: iso ºÎµ¿¼Ò¼ö ¿ÀÂ÷ ¹æÁö
+        transform.position = FixedPosition; // iso ë¶€ë™ì†Œìˆ˜ ì˜¤ì°¨ ë°©ì§€
     }
 
     void Update()
     {
-        // ¼öÁ¤: Å×½ºÆ®¿ë Å° ÀÔ·Â (Q, W, E, R)
-#if UNITY_EDITOR // ¿¡µğÅÍ¿¡¼­¸¸ µ¿ÀÛ (¸ğ¹ÙÀÏ ºôµå ½Ã ¹«½Ã)
+        // í…ŒìŠ¤íŠ¸ìš© í‚¤ ì…ë ¥ ìœ ì§€
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R))
         {
             if (CurrentState == State.Base || CurrentState == State.Upgraded)
             {
-                Upgrade(); // Å×½ºÆ®: ÀÚ¿ø/Á¤ºÎ Ã¼Å© ¹«½Ã
+                Upgrade(); // í…ŒìŠ¤íŠ¸: ìì›/ì •ë¶€ ì²´í¬ ë¬´ì‹œ
             }
             else if (CurrentState == State.Ruin)
             {
@@ -60,10 +60,22 @@ public class Building : MonoBehaviour
 #endif
     }
 
+    // ìˆ˜ì •: ëª¨ë°”ì¼ í´ë¦­(í„°ì¹˜) / ì—ë””í„° ë§ˆìš°ìŠ¤ í´ë¦­ìœ¼ë¡œ ë³€í™” íŠ¸ë¦¬ê±° (GameObjectì— Collider ë¶™ì—¬ì•¼ í•¨)
+    private void OnMouseDown()
+    {
+        if (CurrentState == State.Base || CurrentState == State.Upgraded)
+        {
+            Upgrade(); // í´ë¦­ ì‹œ ì—…ê·¸ë ˆì´ë“œ (ëª¨ë°”ì¼ í„°ì¹˜ í˜¸í™˜)
+        }
+        else if (CurrentState == State.Ruin)
+        {
+            StartConstruction(); // í´ë¦­ ì‹œ ê±´ì„¤ ì‹œì‘
+        }
+    }
+
     public void StartConstruction()
     {
         if (CurrentState != State.Ruin) return;
-        // ¼öÁ¤: ÀÚ¿ø Ã¼Å© Managers.Commodity·Î Á÷Á¢ (GameManager ¿øº» µ¹¸²À¸·Î È£È¯)
         if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 50 || Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 30) return;
         CurrentState = State.Constructing;
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
@@ -71,11 +83,17 @@ public class Building : MonoBehaviour
 
     private IEnumerator ConstructCoroutine()
     {
-        yield return new WaitForSeconds(constructionTime);
+        // ìˆ˜ì •: 1ì´ˆë§ˆë‹¤ ì§„í–‰ë„ ë¡œê·¸ í‘œì‹œ (for ë£¨í”„, 5ì´ˆ ê¸°ì¤€ 0~100%)
+        for (int i = 0; i < 5; i++)
+        {
+            yield return new WaitForSeconds(1f);
+            Debug.Log("ê±´ì„¤ ì§„í–‰: " + ((i + 1) * 20) + "% - " + gameObject.name); // ì¶”ê°€: 1ì´ˆë§ˆë‹¤ ë¡œê·¸ (20% ì¦ê°€)
+        }
         CurrentState = State.Base;
         Level = 1;
         SwapModel(basePrefab);
         constructionCoroutine = null;
+        Debug.Log("ê±´ì„¤ ì™„ë£Œ: " + gameObject.name + ", Level: " + Level); // ì™„ë£Œ ë¡œê·¸
     }
 
     public void CancelConstruction()
@@ -84,7 +102,6 @@ public class Building : MonoBehaviour
         StopCoroutine(constructionCoroutine);
         CurrentState = State.Ruin;
         SwapModel(ruinPrefab);
-        // ¼öÁ¤: È¯ºÒ Managers.Commodity·Î Á÷Á¢
         Managers.Commodity.AddIngredient(IngredientType.Wood, 50);
         Managers.Commodity.AddIngredient(IngredientType.Iron, 30);
         constructionCoroutine = null;
@@ -92,18 +109,19 @@ public class Building : MonoBehaviour
 
     public void Upgrade()
     {
-        if (CurrentState != State.Base || Level >= maxLevel) return;
-        // ¼öÁ¤: ÀÚ¿ø Ã¼Å© Managers.Commodity·Î Á÷Á¢
+        // ìˆ˜ì •: State ì¡°ê±´ ì™„í™” â€“ Base or Upgraded ëª¨ë‘ í—ˆìš© (ë ˆë²¨ 1 í›„ ì¶”ê°€ ì—…ê·¸ë ˆì´ë“œ ê°€ëŠ¥)
+        if (Level >= maxLevel) return;
         if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 100 || Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 50) return;
-        // ¼öÁ¤: Á¤ºÎ ¿¬µ¿ placeholder (º°µµ CraftingManager¿¡ ÀÇÁ¸ ¾È ÇÔ, ¾À Find)
         if (GetGovernmentLevel() < Level + 1) return;
         Level++;
-        CurrentState = State.Upgraded;
-        SwapModel(upgradedPrefab);
+        if (Level == 1) CurrentState = State.Base; // ìˆ˜ì •: ë ˆë²¨ 1 ì‹œ Base (ì²˜ìŒ ì—…ê·¸ë ˆì´ë“œ)
+        else CurrentState = State.Upgraded; // ë ˆë²¨ 2+ ì‹œ Upgraded
+        SwapModel(Level == 1 ? basePrefab : upgradedPrefab); // ìˆ˜ì •: ë ˆë²¨ 1 base, 2+ upgraded
         currentModel.transform.localScale = Vector3.one * (1f + Level * 0.1f);
 
         if (resourceProducer != null) resourceProducer.OnUpgrade(Level);
         if (roleHandler != null) roleHandler.OnUpgrade(Level);
+        Debug.Log("ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ: " + gameObject.name + ", Level: " + Level);
     }
 
     public void OnEvent(string eventType)
@@ -133,9 +151,9 @@ public class Building : MonoBehaviour
         currentModel.transform.rotation = Quaternion.identity;
     }
 
-    private int GetGovernmentLevel() // ¼öÁ¤: Á¤ºÎ ·¹º§ placeholder (¾À FindObjectOfType, GameManager ÀÇÁ¸ Á¦°Å)
+    private int GetGovernmentLevel()
     {
-        Building government = FindObjectOfType<Building>(); // ¿¹½Ã: ÀÌ¸§ or ÅÂ±×·Î Ã£±â (³ªÁß ÃÖÀûÈ­)
+        Building government = FindObjectOfType<Building>();
         if (government != null && government.name == "Government") return government.Level;
         return 0;
     }
