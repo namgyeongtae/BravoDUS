@@ -6,7 +6,7 @@ public class CanvasPanel : UIBind
 {
     public int CanvasPanelDepth { get; private set; } = 0;
     private Canvas _canvasComponent;
-
+    
     protected override void Start()
     {
         base.Start();

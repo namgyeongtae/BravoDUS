@@ -6,7 +6,7 @@ public class UIManager : IManagerBase
 
     public void Init()
     {
-
+        
     }
 
     public T GetUI<T>(string name) where T : CanvasPanel
@@ -22,14 +22,12 @@ public class UIManager : IManagerBase
     public T AddPanel<T>(string name, object param = null) where T : CanvasPanel
     {
         if (name == null) name = typeof(T).Name;
-
         T panel = CanvasManager.Instance?.AddPanel<T>(name, param);
         if (panel == null)
         {
             Debug.LogError($"Failed to add panel : {name}");
             return null;
         }
-
         return panel;
     }
 
@@ -42,7 +40,6 @@ public class UIManager : IManagerBase
             Debug.LogError($"Failed to add panel : {name}");
             return null;
         }
-
         return panel;
     }
 
