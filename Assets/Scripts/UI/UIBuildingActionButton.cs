@@ -24,7 +24,7 @@ public class UIBuildingActionButton : UIBind
 
     public void BindEvent(UnityAction onClick)
     {
-        _button.BindEvent(onClick);
+        _button.BindEvent(onClick, ClickType.Up);
     }
 
     public void StartActiveButton(Vector3 startPos, Vector3 endPos, float duration)
