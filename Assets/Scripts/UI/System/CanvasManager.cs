@@ -6,6 +6,7 @@ using UnityEngine;
 public class CanvasManager : MonoBehaviour
 {
     private Dictionary<string, CanvasPanel> panelList = new();
+    private Dictionary<string, UIPopupBase> popupList = new();
 
     private Canvas _canvas;
 
@@ -39,6 +40,81 @@ public class CanvasManager : MonoBehaviour
         _instance = this;
     }
 
+    public T ShowPopup<T>(string name, object info = null) where T : UIPopupBase
+    {
+        if (name == null) name = typeof(T).Name;
+
+        /* // 이미 켜져 있으면
+        if (popupList.TryGetValue(name, out var popup))
+        {
+
+        } */
+
+        GameObject obj = Managers.Resource.Instantiate($"UI/Popup/{name}", transform);
+        if (obj == null)
+        {
+            Debug.LogError($"Failed to load prefab: {name}");
+            return null;
+        }
+        
+        obj.name = name;
+        UIPopupBase popup = obj.GetComponent<UIPopupBase>();
+        popup.Open();
+
+        RectTransform rect = obj.GetComponent<RectTransform>();
+
+        rect.SetParent(transform);
+
+        int depth = _baseDepth + _gap * popupList.Count;
+
+        popup.SetPanelDepth(depth);
+
+        popupList.Add(name, popup);
+
+        if (info != null)
+        {
+            popup.SetPanelInfo(info);
+        }
+
+        rect.localScale = Vector3.one;
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        obj.SetActive(true);
+        popup.CallAfterSetting();
+
+        return popup as T;
+    }
+    public void ClosePopup(UIPopupBase popup)
+    {
+        if (popupList.Count == 0)
+        {
+            return;
+        }
+
+        popup?.Close();
+    }
+    public void ClosePopup(string popupName)
+    {
+        if (popupList.Count == 0)
+            return;
+
+        if (popupList.TryGetValue(popupName, out var popup))
+        {
+            popup?.Close();
+        }
+    }
+    public void CloseAllPopup()
+    {
+        List<UIPopupBase> popups = new List<UIPopupBase>(popupList.Values);
+        foreach (UIPopupBase popup in popups)
+        {
+            popup?.Close();
+        }
+        popupList.Clear();
+    }
+
     public T AddPanel<T>(string name = null, object info = null) where T : CanvasPanel
     {
         if (name == null) name = typeof(T).Name;
@@ -49,7 +125,7 @@ public class CanvasManager : MonoBehaviour
             return null;
         }
 
-        GameObject obj = Managers.Resource.Instantiate(name, transform);
+        GameObject obj = Managers.Resource.Instantiate($"UI/{name}", transform);
         if (obj == null)
         {
             Debug.LogError($"Failed to load prefab: {name}");
@@ -85,7 +161,6 @@ public class CanvasManager : MonoBehaviour
 
         return canvasPanel as T;
     }
-
     public void RemovePanel(CanvasPanel obj)
     {
         if (panelList.Count == 0)
@@ -95,7 +170,6 @@ public class CanvasManager : MonoBehaviour
 
         obj?.Close();
     }
-
     public void RemovePanel(string panelObj)
     {
         if (panelList.Count == 0)
@@ -106,7 +180,6 @@ public class CanvasManager : MonoBehaviour
             data?.Close();
         }
     }
-
     public void RemoveAllPanel()
     {
         List<CanvasPanel> panels = new List<CanvasPanel>(panelList.Values);
@@ -141,6 +214,30 @@ public class CanvasManager : MonoBehaviour
         Managers.Resource.Destroy(uibase.gameObject);
     }
 
+    public void ReleasePopup(UIPopupBase popup)
+    {
+        if (popup == null)
+            return;
+
+        var data = popupList.FirstOrDefault(x => x.Value.Equals(popup));
+        
+        if (data.Key == null)
+        {
+            Debug.LogWarning($"Failed to find popup : {popup.name}");
+            return;
+        }
+
+        popupList.Remove(data.Key);
+
+        foreach (var p in popupList)
+        {
+            if (p.Value.CanvasPanelDepth > data.Value.CanvasPanelDepth)
+                p.Value.SetPanelDepth(p.Value.CanvasPanelDepth - _gap);
+        }
+
+        Managers.Resource.Destroy(popup.gameObject);
+    }
+
     public T GetPanel<T>(string name = null) where T : CanvasPanel
     {
         if (name == null) name = typeof(T).Name;
@@ -156,6 +253,24 @@ public class CanvasManager : MonoBehaviour
         if (panelList.TryGetValue(name, out var panel))
             return panel.GetComponent<CanvasPanel>();
         
+        return null;
+    }
+
+    public T GetPopup<T>(string name) where T : UIPopupBase
+    {
+        if (name == null) name = typeof(T).Name;
+
+        if (popupList.TryGetValue(name, out var popup))
+            return popup.GetComponent<T>();
+
+        return null;
+    }
+
+    public UIPopupBase GetPopup(string name)
+    {
+        if (popupList.TryGetValue(name, out var popup))
+            return popup.GetComponent<UIPopupBase>();
+
         return null;
     }
 }

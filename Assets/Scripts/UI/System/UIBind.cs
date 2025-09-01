@@ -17,7 +17,7 @@ public class UIBind : UIBindBase
 
     public virtual void Close()
     {
-
+        CanvasManager.Instance.ReleaseUI(this);
 
         OnClose_Event?.Invoke();
         OnClose_Event = null;

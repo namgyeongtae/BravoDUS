@@ -6,11 +6,20 @@ public class CanvasPanel : UIBind
 {
     public int CanvasPanelDepth { get; private set; } = 0;
     private Canvas _canvasComponent;
-    
+
+    public RectTransform Rect { get; private set; }
+
     protected override void Start()
     {
         base.Start();
         Initialize();
+    }
+
+    public override void Open()
+    {
+        base.Open();
+
+        Rect = GetComponent<RectTransform>();
     }
 
     protected void SetCanvasComponent()

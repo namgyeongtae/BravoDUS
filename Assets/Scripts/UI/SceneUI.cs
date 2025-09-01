@@ -4,13 +4,15 @@ using UnityEngine.UI;
 public class SceneUI : CanvasPanel
 {
     [Bind("SliderImage")] private Image _levelGaugeSlider;
-    [Bind("ShopButton")] private Button _shopButton;
+    [Bind("HomeButton")] private UIButton _homeButton;
     [Bind("Level")] private Text _levelText;
 
     [Bind("WoodAmount")] private Text _woodAmount;
     [Bind("IronAmount")] private Text _ironAmount;
 
-    [Bind("SettingButton")] private Button _settingButton;
+    [Bind("SettingButton")] private UIButton _settingButton;
+    [Bind("QuestionButton")] private UIButton _questionButton;
+    [Bind("MenuButton")] private UIButton _menuButton;
 
     [Bind("UIBuildingSelection")]private UIBuildingSelection _buildingSelection;
 
@@ -22,7 +24,7 @@ public class SceneUI : CanvasPanel
 
         Debug.Log("SceneUI Initialize");
 
-        BindEvent(_shopButton, OnShopButtonClicked);
+        BindEvent(_homeButton, OnShopButtonClicked);
     }
 
     public override void Open()

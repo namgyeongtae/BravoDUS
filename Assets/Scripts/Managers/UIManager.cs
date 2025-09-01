@@ -14,9 +14,19 @@ public class UIManager : IManagerBase
         return CanvasManager.Instance.GetPanel<T>(name);
     }
 
+    public T GetPopup<T>(string name) where T : UIPopupBase
+    {
+        return CanvasManager.Instance.GetPopup<T>(name);
+    }
+
     public CanvasPanel GetUI(string name)
     {
         return CanvasManager.Instance.GetPanel(name);
+    }
+
+    public UIPopupBase GetPopup(string name)
+    {
+        return CanvasManager.Instance.GetPopup(name);
     }
 
     public T AddPanel<T>(string name, object param = null) where T : CanvasPanel
@@ -56,5 +66,27 @@ public class UIManager : IManagerBase
     public void RemoveAllPanel()
     {
         CanvasManager.Instance.RemoveAllPanel();
+    }
+
+    public T ShowPopup<T>(string name = null, object param = null) where T : UIPopupBase
+    {
+        if (name == null) name = typeof(T).Name;
+
+        T popup = CanvasManager.Instance?.ShowPopup<T>(name, param);
+        if (popup == null)
+        {
+            Debug.LogError($"Failed to show popup : {name}");
+            return null;
+        }
+
+        return popup;
+    }
+    public void ClosePopup(string popupName)
+    {
+        CanvasManager.Instance.ClosePopup(popupName);
+    }
+    public void ClosePopup(UIPopupBase popup)
+    {
+        CanvasManager.Instance.ClosePopup(popup);
     }
 }
