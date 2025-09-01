@@ -12,7 +12,6 @@ public class ResourceManager
             if (index >= 0)
                 name = name.Substring(index + 1);
         }
-
         return Resources.Load<T>(path);
     }
 
@@ -24,7 +23,6 @@ public class ResourceManager
             Debug.LogError($"Failed to load prefab: {path}");
             return null;
         }
-
         GameObject go = Object.Instantiate(original, parent);
         go.name = original.name;
         return go;
@@ -34,7 +32,7 @@ public class ResourceManager
     {
         if (go == null)
             return;
-        
+
         Object.Destroy(go);
     }
 
@@ -42,7 +40,7 @@ public class ResourceManager
     {
         if (go == null)
             yield break;
-        
+
         yield return new WaitForSeconds(delay);
         Object.Destroy(go);
     }

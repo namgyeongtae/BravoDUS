@@ -12,6 +12,10 @@ public class SceneUI : CanvasPanel
 
     [Bind("SettingButton")] private Button _settingButton;
 
+    [Bind("UIBuildingSelection")]private UIBuildingSelection _buildingSelection;
+
+    public UIBuildingSelection BuildingSelection => _buildingSelection;
+
     protected override void Initialize()
     {
         base.Initialize();
@@ -23,14 +27,13 @@ public class SceneUI : CanvasPanel
 
     public override void Open()
     {
-        // _levelText.text = $"{ÇöÀç Á¤ºÎ ½Ã¼³ÀÇ ·¹º§}"
-        // _levelGaugeSlider.fillAmount = {ÇöÀç À¯ÀúÀÇ ÃæÀü °ÔÀÌÁö} / {´ÙÀ½ ·¹º§·ÎÀÇ ÇÊ¿ä °ÔÀÌÁö}
+        // _buildingSelection = Managers.UI.AddPanel<UIBuildingSelection>();
     }
 
     private void OnShopButtonClicked()
     {
         // TODO
-        // Ä«¸Ş¶ó¸¦ ½´ÆÛ ÂÊÀ¸·Î ¿òÁ÷ÀÌ°í »óÁ¡ UI ¿ÀÇÂ
+        // Ä«ï¿½Ş¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½
     }
 
     public void AddCommodity(Ingredient ingredient, float amount)
@@ -45,6 +48,21 @@ public class SceneUI : CanvasPanel
             case IngredientType.Iron:
                 _ironAmount.text = amount.ToString();
                 break;
+        }
+    }
+
+    // ë¹Œë”© ì„ íƒ ì°½ ì—´ê¸° í˜¹ì€ ë‹«ê¸°
+    public void ToggleBuildingSelection(BuildingType type)
+    {
+        bool isOpen = _buildingSelection.IsOpen;
+
+        if (isOpen)
+        {
+            _buildingSelection.DespawnButtons();
+        }
+        else
+        {
+            _buildingSelection.SpawnButtons(type);
         }
     }
 }

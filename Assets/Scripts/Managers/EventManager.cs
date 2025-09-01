@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EventManager : IManagerBase
 {
-    private Dictionary<EventType, BaseEvent> _events = new();
+    private Dictionary<EventType, BaseEvent> _events = new Dictionary<EventType, BaseEvent>();
 
     public void Init()
     {
@@ -15,7 +15,6 @@ public class EventManager : IManagerBase
         foreach (var evt in _events.Values)
         {
             evt.Timer -= Time.deltaTime;
-
             if (evt.Timer <= 0)
             {
                 evt.Execute();
@@ -31,7 +30,6 @@ public class EventManager : IManagerBase
             Debug.LogWarning($"Event {eventType} already exists");
             return;
         }
-
         _events.Add(eventType, evt);
     }
 
@@ -42,7 +40,10 @@ public class EventManager : IManagerBase
             Debug.LogWarning($"Event {eventType} not found");
             return;
         }
-
         _events.Remove(eventType);
+    }
+    public void Release() // 추가: 전체 해제
+    {
+        _events.Clear();
     }
 }
