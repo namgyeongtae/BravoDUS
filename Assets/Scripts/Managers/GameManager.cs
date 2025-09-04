@@ -4,14 +4,24 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    private Managers _managers = new Managers();
+
     private void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(this);
+
+        _managers.Init();
+
+         DontDestroyOnLoad(this);
+    }
+
+    private void Update()
+    {
+        _managers.Update();
     }
 
     private void OnDestroy()
     {
-        // 원본에 Release 관련 없음, 필요시 추가
+        _managers.Release();
     }
 }
