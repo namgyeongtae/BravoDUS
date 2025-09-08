@@ -63,20 +63,20 @@ public class Building : MonoBehaviour
     // 수정: 모바일 클릭(터치) / 에디터 마우스 클릭으로 변화 트리거 (GameObject에 Collider 붙여야 함)
     private void OnMouseDown()
     {
-        if (CurrentState == State.Base || CurrentState == State.Upgraded)
+        /* if (CurrentState == State.Base || CurrentState == State.Upgraded)
         {
             Upgrade(); // 클릭 시 업그레이드 (모바일 터치 호환)
         }
         else if (CurrentState == State.Ruin)
         {
             StartConstruction(); // 클릭 시 건설 시작
-        }
+        } */
     }
 
     public void StartConstruction()
     {
         if (CurrentState != State.Ruin) return;
-        if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 50 || Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 30) return;
+        // if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 50 || Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 30) return;
         CurrentState = State.Constructing;
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
     }
@@ -141,7 +141,7 @@ public class Building : MonoBehaviour
         if (currentModel != null)
         {
             if (newPrefab == ruinPrefab) ruinPool.Release(currentModel);
-            else if (newPrefab == basePrefab) basePool.Release(currentModel);
+            // else if (newPrefab == basePrefab) basePool.Release(currentModel); // -> newPrefab이 basePrefab인데 basePool을 Release 하니 다음 줄에서 basePrefab이 생성 안됨
             else upgradedPool.Release(currentModel);
         }
         if (newPrefab == ruinPrefab) currentModel = ruinPool.Get();
