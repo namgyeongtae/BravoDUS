@@ -23,7 +23,7 @@ public class FireEventController : EventController
     {
         // 화재 이벤트는 고정된 interval로 스케줄링되므로, 랜덤으로 화재 이벤트를 발생시킴
         
-        Managers.Event.AddIncident(new Incident() {
+        var incident = new Incident() {
             EventType = EventType.FireRiskEvent,
             CreatedAt = now,
             Deadline = now + 120f,
@@ -35,13 +35,18 @@ public class FireEventController : EventController
             },
             OnSpawned = () => {
                 // TODO
+                // 화재 이벤트 알람 UI 띄우기
+                    
                 // 화재 대상 건물에 디버프 부여
                 // 적용할 디버프 기획 파악 필요
                 // var building = Managers.Building.GetRandomBuilding();
                 // building.GetDebuff();
                 Debug.Log("화재 이벤트 스폰");
             }
-        });
-        return null;
+        };
+
+        Managers.Event.AddIncident(incident);
+
+        return incident;
     }
 }
