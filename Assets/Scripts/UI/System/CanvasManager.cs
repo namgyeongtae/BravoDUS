@@ -115,7 +115,7 @@ public class CanvasManager : MonoBehaviour
         popupList.Clear();
     }
 
-    public T AddPanel<T>(string name = null, object info = null) where T : CanvasPanel
+    public T AddPanel<T>(string name = null, object info = null, bool isStackable = false) where T : CanvasPanel
     {
         if (name == null) name = typeof(T).Name;
 
@@ -144,7 +144,11 @@ public class CanvasManager : MonoBehaviour
 
         canvasPanel.SetPanelDepth(depth);
 
-        panelList.Add(name, canvasPanel);
+        if (!isStackable)
+        {
+            panelList.Add(name, canvasPanel);
+        }
+        
 
         if (info != null)
         {
