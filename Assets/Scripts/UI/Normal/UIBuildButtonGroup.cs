@@ -45,6 +45,9 @@ public class UIBuildButtonGroup : CanvasPanel
     private void OnClickBuildButton()
     {
         Debug.Log("Build Start");
+
+        CraftingManager.Instance.StartBuildingConstruction(_selectedBuilding.GetComponent<Building>());
+
         Close();
     }
 
