@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +32,8 @@ public class SceneUI : CanvasPanel
     public override void Open()
     {
         // _buildingSelection = Managers.UI.AddPanel<UIBuildingSelection>();
+        _woodAmount.text = Managers.Commodity.GetIngredient(IngredientType.Wood).Amount.ToString();
+        _ironAmount.text = Managers.Commodity.GetIngredient(IngredientType.Iron).Amount.ToString();
     }
 
     private void OnShopButtonClicked()
@@ -37,20 +41,37 @@ public class SceneUI : CanvasPanel
         // TODO
         // ī�޶� ���� ������ �����̰� ���� UI ����
     }
-
-    public void AddCommodity(Ingredient ingredient, float amount)
+    private IEnumerator CoAddCommodity(Ingredient ingredient, float amount)
     {
         IngredientType type = ingredient.Type;
 
-        switch (type)
+        float currentAmount = type switch
         {
-            case IngredientType.Wood:
-                _woodAmount.text = amount.ToString();
-                break;
-            case IngredientType.Iron:
-                _ironAmount.text = amount.ToString();
-                break;
+            IngredientType.Wood => Convert.ToSingle(_woodAmount.text),
+            IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
+            _ => 0f
+        };
+
+        while (currentAmount < amount)
+        {
+            currentAmount += 1;
+            yield return new WaitForSeconds(0.01f);
+
+            switch (type)
+            {
+                case IngredientType.Wood:
+                    _woodAmount.text = currentAmount.ToString();
+                    break;
+                case IngredientType.Iron:
+                    _ironAmount.text = currentAmount.ToString();
+                    break;
+            }
         }
+    }
+
+    public void AddCommodity(Ingredient ingredient, float amount)
+    {
+        StartCoroutine(CoAddCommodity(ingredient, amount));
     }
 
     // 빌딩 선택 창 열기 혹은 닫기
