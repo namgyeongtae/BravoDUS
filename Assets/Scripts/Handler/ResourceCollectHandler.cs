@@ -8,6 +8,9 @@ public class ResourceCollectHandler : RoleHandler
     private float _intervalTime = 3f;
     private float _quantity = 4f;
 
+    public IngredientType ResourceType => _resourceType;
+    public float Quantity => _quantity;
+
     public override void HandleEvent(string eventType)
     {
         float now = Time.time;
@@ -42,5 +45,7 @@ public class ResourceCollectHandler : RoleHandler
                 Managers.Commodity.AddIngredient(IngredientType.Iron, _quantity);
                 break;
         }
+
+        Managers.UI.AddPanel<UIResourceGather>(this, true);
     }
 }

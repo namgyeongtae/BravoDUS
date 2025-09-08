@@ -4,25 +4,66 @@ using System.Collections;
 
 public class UIResourceGather : CanvasPanel
 {
-    [SerializeField] 
+    [SerializeField] private Sprite _woodIcon;
+    [SerializeField] private Sprite _ironIcon;
 
     [Bind("ResourceIcon")] private Image _resourceIcon;
     [Bind("AmountText")] private Text _amountText;
+
+    private ResourceCollectHandler _rh;
 
     protected override void Initialize()
     {
         base.Initialize();
     }
 
-    public override void SetPanelInfo(object Info)
+    public override void Close()
     {
-        var building = Info as Building;
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(building.transform.position);
-        Rect.position = screenPos;
+        Managers.Resource.Destroy(this.gameObject);
     }
 
-    /* private IEnumerator CoAnimateGather(Building building)
+    public override void SetPanelInfo(object Info)
     {
+        _rh = Info as ResourceCollectHandler;
+    }
 
-    } */
+    public override void CallAfterSetting()
+    {
+        SettingUI(_rh);
+    }
+
+    private void SettingUI(ResourceCollectHandler rh)
+    {
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(rh.transform.position);
+        Rect.position = screenPos;
+
+        _resourceIcon.sprite = rh.ResourceType == IngredientType.Wood ? _woodIcon : _ironIcon;
+        _amountText.text = $"+{rh.Quantity}";
+
+        StartCoroutine(CoAnimateGather());
+    }
+
+    private IEnumerator CoAnimateGather()
+    {
+        // 투명해지면서 점점 올라가기
+        float duration = 0.5f;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            float easedT = UIUtils.EaseInOutCubic(t);
+
+            _resourceIcon.color = new Color(1, 1, 1, 1 - easedT);
+            _amountText.color = new Color(1, 1, 1, 1 - easedT);
+
+            Rect.position = new Vector3(Rect.position.x, Rect.position.y + 1 * t, 0);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log("Close");
+        Close();
+    }
 }
