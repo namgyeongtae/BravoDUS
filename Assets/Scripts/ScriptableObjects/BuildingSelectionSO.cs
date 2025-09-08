@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public enum BuildingType
 {
     None,
-    Center,
+    Government,
     Hospital,
     PoliceStation,
     FireStation,
