@@ -3,27 +3,88 @@ using UnityEngine;
 
 public class EventManager : IManagerBase
 {
-    private Dictionary<EventType, BaseEvent> _events = new Dictionary<EventType, BaseEvent>();
+    private Dictionary<EventType, EventController> _events = new Dictionary<EventType, EventController>();
+    private List<Incident> _incidents = new List<Incident>();
+
+    private CityStat _cityStat = new CityStat();    // Temp Code -> 생성자로 안 할 거임
+
+    public EventController Fire => _events[EventType.FireRiskEvent];
+    public EventController Security => _events[EventType.SecurityEvent];
 
     public void Init()
     {
         // Load Events from Database
+
+        // _cityStat = Managers.Data.LoadData<CityStat>("CityStat"); 어쨌든 현재 유저의 도시 스탯을 로드 (이 방식이 아닐 수 있음)
+    
+        _events.Add(EventType.FireRiskEvent, new FireEventController(0.01f));
+        // _events.Add(EventType.SecurityEvent, new SecurityEventController(0.01f));
     }
 
     public void Update()
     {
-        foreach (var evt in _events.Values)
+        float now = Time.time;
+
+        // 1) 타입별 발생 스케줄링 & 스폰
+        foreach (var ctrl in _events.Values)
         {
-            evt.Timer -= Time.deltaTime;
-            if (evt.Timer <= 0)
-            {
-                evt.Execute();
-                RemoveEvent(evt.EventType);
-            }
+            ctrl.TickSchedule(now, _cityStat);
+        }
+
+        // 2) 활성 인시던트 진행도 갱신(FSM)
+        for (int i = _incidents.Count - 1; i >= 0; --i)
+        {
+            var inc = _incidents[i];
+            TickIncident(inc, Time.deltaTime, now);
+            if (inc.State == IncidentState.Resolved)
+                _incidents.RemoveAt(i);
         }
     }
 
-    public void AddEvent(EventType eventType, BaseEvent evt)
+    private void TickIncident(Incident inc, float dt, float now)
+    {
+        switch (inc.State)
+        {
+            case IncidentState.Progressing:
+                {
+                    // TODO
+                    // 소방대 혹은 경찰대가 출동하는 등 해결하기 위한 조건이 충족된다면 Resolving으로 전환
+                    // if (소방대 or 경찰대 배치 시)
+                    //    inc.State = IncidentState.Resolving;
+                }
+                break;
+            case IncidentState.Resolving:
+                {
+                    // 예시: 단순 진행도 → 해결력/진압력 반영 가능
+                    float power = inc.EventType switch
+                    {
+                        EventType.SecurityEvent => _cityStat.ResponsePower,
+                        EventType.FireRiskEvent => _cityStat.SuppressPower,
+                        _ => throw new System.Exception($"Unknown event type: {inc.EventType}")
+                    };
+
+                    float resolveSeconds = Mathf.Max(5f, 20f / Mathf.Max(1f, power)); // 최소 5초
+                    inc.ResolvingProgress += dt / resolveSeconds;
+
+                    if (inc.ResolvingProgress >= 1f) 
+                        inc.State = IncidentState.Resolved;
+                }
+                break;
+            case IncidentState.Resolved:
+                {
+                    inc.OnResolved?.Invoke();
+
+                    // 화재 이벤트라면
+                    // inc.TargetBuilding.Repair();
+
+                    // 범죄 이벤트라면
+                    // 이 부분 기획이 필요 (범죄 이벤트 시 어떤 부작용이 있는지 파악 후 해당 부작용(디버프) 해제)
+                }
+                break;
+        }
+    }
+
+    public void AddEvent(EventType eventType, EventController evt)
     {
         if (_events.ContainsKey(eventType))
         {
@@ -42,7 +103,17 @@ public class EventManager : IManagerBase
         }
         _events.Remove(eventType);
     }
-    public void Release() // �߰�: ��ü ����
+
+    public void AddIncident(Incident incident)
+    {
+        _incidents.Add(incident);
+    }
+
+    public void RemoveIncident(Incident incident)
+    {
+        _incidents.Remove(incident);
+    }
+    public void Release() // �߰�: ��ü ����
     {
         _events.Clear();
     }

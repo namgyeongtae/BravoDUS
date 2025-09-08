@@ -15,6 +15,8 @@ public class UIBuildingSelection : CanvasPanel
     private Dictionary<BuildingActionType, UnityAction> _actionDict = new();
     private List<UIBuildingActionButton> _actionButtons = new();
 
+    private BuildingType _selectedBuildingType = BuildingType.None;
+
     private Coroutine _animateCoroutine = null;
 
     public bool IsOpen => _isOpen;
@@ -37,6 +39,8 @@ public class UIBuildingSelection : CanvasPanel
 
         _isOpen = false;
         _animateCoroutine = StartCoroutine(DeactiveActionButtons());
+
+        _selectedBuildingType = BuildingType.None;
     }
 
     public void SpawnButtons(BuildingType type)
@@ -64,13 +68,15 @@ public class UIBuildingSelection : CanvasPanel
 
         _isOpen = true;
         _animateCoroutine = StartCoroutine(ActiveActionButtons());
+
+        _selectedBuildingType = type;
     }
 
     private UIBuildingActionButton SpawnActionButton(BuildingAction buildingAction)
     {
         UIBuildingActionButton button = Managers.Resource.Instantiate("UI/Buttons/BuildingActionButton")
                                                 .GetComponent<UIBuildingActionButton>();
-        button.SettingUI(buildingAction.icon, buildingAction.actionName);
+        button.SettingUI(buildingAction);
         button.BindEvent(_actionDict[buildingAction.actionType]);
         button.transform.SetParent(transform);
 
@@ -147,11 +153,35 @@ public class UIBuildingSelection : CanvasPanel
     private void Action_ShowInfo()
     {
         Debug.Log("Show Info");
+        
+        // TODO
+        // _selectedBuildingType 에 따라 정보 팝업 표시
+        switch (_selectedBuildingType)
+        {
+            case BuildingType.Government:
+                Debug.Log("Show Government Info");
+                break;
+            case BuildingType.Hospital:
+                Debug.Log("Show Hospital Info");
+                break;
+            case BuildingType.PoliceStation:
+                Debug.Log("Show Police Station Info");
+                break;
+            case BuildingType.FireStation:
+                Debug.Log("Show Fire Station Info");
+                break;
+            case BuildingType.ConvenienceStore:
+                Debug.Log("Show Convenience Store Info");
+                break;
+        }
     }
 
     private void Action_Upgrade()
     {
         Debug.Log("Start Upgrade");
+
+        // TODO
+        // 선택된 빌딩을 어떻게든 가져와서 Upgrade 함수 호출출
     }
 
     #endregion

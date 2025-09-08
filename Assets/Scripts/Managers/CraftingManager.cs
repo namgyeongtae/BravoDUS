@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class CraftingManager : MonoBehaviour
@@ -43,8 +43,19 @@ public class CraftingManager : MonoBehaviour
                     Building building = hit.transform.GetComponent<Building>();
                     if (building != null && Vector3.Distance(hit.point, building.FixedPosition) < 0.01f) // iso 오차 방지
                     {
-                        if (building.CurrentState == Building.State.Ruin) StartBuildingConstruction(building);
-                        else if (building.CurrentState == Building.State.Base) UpgradeBuilding(building);
+                        // Game Dev 코드
+                        /* if (building.CurrentState == Building.State.Ruin) StartBuildingConstruction(building);
+                        else if (building.CurrentState == Building.State.Base) UpgradeBuilding(building); */
+
+                        // 샷댕이 코드 
+                        if (building.CurrentState == Building.State.Ruin)
+                        {
+                            Managers.UI.AddPanel<UIBuildButtonGroup>(building);
+                        }
+                        else if (building.CurrentState == Building.State.Base)
+                        {
+                            // Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(building.BuildingType);
+                        }
                     }
                 }
             }
@@ -57,7 +68,7 @@ public class CraftingManager : MonoBehaviour
     }
 
     public void StartBuildingConstruction(Building building)
-    {
+    {   
         building.StartConstruction(); // 빌딩 객체 호출 – 논리 분리 (SOLID 준수)
     }
 

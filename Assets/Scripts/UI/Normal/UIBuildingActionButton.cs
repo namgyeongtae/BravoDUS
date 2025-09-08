@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIBuildingActionButton : UIBind
 {
     [Bind("Icon")] private Image _icon;
+    [Bind("Lock")] private Image _lockImage;
     [Bind("ActionName")] private Text _actionName;
 
     private UIButton _button;
@@ -16,10 +17,16 @@ public class UIBuildingActionButton : UIBind
         _button = GetComponent<UIButton>();
     }
 
-    public void SettingUI(Sprite icon, string actionName)
+    public void SettingUI(BuildingAction buildingAction)
     {
-        _icon.sprite = icon;
-        _actionName.text = actionName;
+        // TODO
+        // 선택된 빌딩의 상태에 따라 버튼이 잠길수도 있고 안 잠겨있을 수 있음
+        // ex) buildingAction 이 Upgrade이 경우 현재 빌딩이 업그레이드 하기 위한 조건(Government의 레벨, 자원 등등)이
+        // 충족되지 않으면 버튼을 잠금
+        //_lockImage.gameObject.SetActive(조건);
+
+        _icon.sprite = buildingAction.icon;
+        _actionName.text = buildingAction.actionName;
     }
 
     public void BindEvent(UnityAction onClick)
