@@ -69,9 +69,42 @@ public class SceneUI : CanvasPanel
         }
     }
 
+    private IEnumerator CoSubCommodity(Ingredient ingredient, float amount)
+    {
+        IngredientType type = ingredient.Type;
+
+        float currentAmount = type switch
+        {
+            IngredientType.Wood => Convert.ToSingle(_woodAmount.text),
+            IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
+            _ => 0f
+        };
+
+        while (currentAmount > amount)
+        {
+            currentAmount -= 1;
+            yield return new WaitForSeconds(0.01f);
+
+            switch (type)
+            {
+                case IngredientType.Wood:
+                    _woodAmount.text = currentAmount.ToString();
+                    break;
+                case IngredientType.Iron:
+                    _ironAmount.text = currentAmount.ToString();
+                    break;
+            }
+        }
+    }
+
     public void AddCommodity(Ingredient ingredient, float amount)
     {
         StartCoroutine(CoAddCommodity(ingredient, amount));
+    }
+
+    public void SubCommodity(Ingredient ingredient, float amount)
+    {
+        StartCoroutine(CoSubCommodity(ingredient, amount));
     }
 
     // 빌딩 선택 창 열기 혹은 닫기

@@ -29,16 +29,16 @@ public class UIResourceGather : CanvasPanel
 
     public override void CallAfterSetting()
     {
-        SettingUI(_rh);
+        SettingUI();
     }
 
-    private void SettingUI(ResourceCollectHandler rh)
+    private void SettingUI()
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(rh.transform.position);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(_rh.transform.position);
         Rect.position = screenPos;
 
-        _resourceIcon.sprite = rh.ResourceType == IngredientType.Wood ? _woodIcon : _ironIcon;
-        _amountText.text = $"+{rh.Quantity}";
+        _resourceIcon.sprite = _rh.ResourceType == IngredientType.Wood ? _woodIcon : _ironIcon;
+        _amountText.text = $"+{_rh.Quantity}";
 
         StartCoroutine(CoAnimateGather());
     }

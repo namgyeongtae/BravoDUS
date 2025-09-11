@@ -20,10 +20,11 @@ public class CommodityManager : IManagerBase
     private void LoadIngredientFromDB()
     {
         // TODO: Load ingredients from DB (json, SO ....)
-        // øπΩ√ √ ±‚»≠ (placeholder)
+        // ÔøΩÔøΩÔøΩÔøΩ ÔøΩ ±ÔøΩ»≠ (placeholder)
         _ingredients.Add(IngredientType.Wood, new Ingredient(IngredientType.Wood));
         _ingredients.Add(IngredientType.Iron, new Ingredient(IngredientType.Iron));
-        // √ ±‚ Amount 0 º≥¡§ + OnAmountChanged »£√‚ (Gather∑Œ ≈Î¿œ)
+        // TODO:
+        // Amount 0 will be changed to data value from JSON User Data
         _ingredients[IngredientType.Wood].Gather(0f);
         _ingredients[IngredientType.Iron].Gather(0f);
     }
@@ -33,6 +34,18 @@ public class CommodityManager : IManagerBase
         if (_ingredients.TryGetValue(type, out var ingredient))
         {
             ingredient.Gather(amount);
+        }
+        else
+        {
+            Debug.LogWarning($"Ingredient {type} not found");
+        }
+    }
+
+    public void ConsumeIngredient(IngredientType type, float amount)
+    {
+        if (_ingredients.TryGetValue(type, out var ingredient))
+        {
+            ingredient.Consume(amount);
         }
         else
         {
