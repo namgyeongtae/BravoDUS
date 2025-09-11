@@ -2,12 +2,21 @@ using UnityEngine;
 
 public abstract class RoleHandler : MonoBehaviour
 {
+    protected readonly int MAX_DEBUFF_COUNT = 3;
+    
     protected int buildingLevel = 1;
+    protected int debuffCount = 0;
 
-    public abstract void HandleEvent(string eventType); // ÀÌº¥Æ® Ã³¸®
+    public int DebuffCount => debuffCount;
+
+    public abstract void HandleEvent(string eventType); // ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½
 
     public virtual void OnUpgrade(int newLevel)
     {
         buildingLevel = newLevel;
     }
+
+    public virtual void OnDeBuff() { }
+
+    public virtual void OnResolved() { }
 }

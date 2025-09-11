@@ -18,9 +18,6 @@ public class ResourceCollectHandler : RoleHandler
         {
             CollectResource();
             _lastCollectTime = now;
-
-            var resourceInfo = Managers.Commodity.GetIngredient(_resourceType);
-            Debug.Log($"{_resourceType} 개수: {resourceInfo.Amount}");
         }
     }
 
@@ -32,6 +29,22 @@ public class ResourceCollectHandler : RoleHandler
     public override void OnUpgrade(int newLevel)
     {
         base.OnUpgrade(newLevel);
+    }
+
+    public override void OnDeBuff()
+    {
+        if (debuffCount >= MAX_DEBUFF_COUNT)
+        {
+            return;
+        }
+        debuffCount++;
+
+        _quantity *= 0.5f;  // 추후에 디버프는 변경될 수 있음음
+    }
+
+    public override void OnResolved()
+    {
+        _quantity = 4f;
     }
 
     private void CollectResource()
