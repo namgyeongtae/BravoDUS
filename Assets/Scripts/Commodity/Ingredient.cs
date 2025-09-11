@@ -28,6 +28,6 @@ public class Ingredient : BaseResource
 
         // SceneUI.AddAmount(this, amount);
         Debug.Log($"{_resourceName} 개수: {amount}");
-        Managers.UI.GetUI<SceneUI>("SceneUI").AddCommodity(this, amount);
+       // Managers.UI.GetUI<SceneUI>("SceneUI").AddCommodity(this, amount);
     }
 }
