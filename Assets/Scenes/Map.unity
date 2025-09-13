@@ -119,6 +119,58 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &154033881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 154033883}
+  - component: {fileID: 154033882}
+  m_Layer: 0
+  m_Name: Test2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &154033882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154033881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df62196bc3b24f499b689605d656604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruinPrefab: {fileID: 1796308223114320457, guid: 0a7a6bef058008f469ccb039500153cf, type: 3}
+  basePrefab: {fileID: 1392075550277909093, guid: 883c9b8e60f057047bed21c2e9c5021f, type: 3}
+  upgradedPrefab: {fileID: 7104219932296855556, guid: cef69dfe69a5d884b8998ffaa9664aa5, type: 3}
+  constructionEffectPrefab: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
+  upgradeTime: 1
+  maxLevel: 10
+  _isTestMode: 1
+  constructionTime: 5
+--- !u!4 &154033883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154033881}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.418663, y: 1.23, z: 15.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &429001256
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,10 +843,10 @@ MonoBehaviour:
   basePrefab: {fileID: 1392075550277909093, guid: 883c9b8e60f057047bed21c2e9c5021f, type: 3}
   upgradedPrefab: {fileID: 7104219932296855556, guid: cef69dfe69a5d884b8998ffaa9664aa5, type: 3}
   constructionEffectPrefab: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
-  constructionTime: 5
   upgradeTime: 1
   maxLevel: 10
   _isTestMode: 1
+  constructionTime: 5
 --- !u!4 &1413297786
 Transform:
   m_ObjectHideFlags: 0
@@ -804,7 +856,7 @@ Transform:
   m_GameObject: {fileID: 1413297784}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.418663, y: 1.23, z: -2.8710413}
+  m_LocalPosition: {x: -7.418663, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1683,3 +1735,4 @@ SceneRoots:
   - {fileID: 1006929452}
   - {fileID: 1650182055}
   - {fileID: 1413297786}
+  - {fileID: 154033883}
