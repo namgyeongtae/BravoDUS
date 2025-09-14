@@ -9,10 +9,10 @@ public class UIManager : IManagerBase
         
     }
 
-    public T GetUI<T>(string name) where T : CanvasPanel
-    {
-        return CanvasManager.Instance.GetPanel<T>(name);
-    }
+   // public T GetUI<T>(string name) where T : CanvasPanel
+   // {
+   //     return CanvasManager.Instance.GetPanel<T>(name);
+   // }
 
     public T GetPopup<T>(string name) where T : UIPopupBase
     {
