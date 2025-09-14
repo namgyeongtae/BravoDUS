@@ -21,27 +21,39 @@ public class SecurityEventController : EventController
     {
         var incident = new Incident() {
             EventType = EventType.SecurityEvent,
-            CreatedAt = now,
-            Deadline = now + 120f,
             ResolvingProgress = 0f,
-            OnResolved = () => {
-                // TODO
-                // 치안 이벤트 해결 시 도시 디버프 해제
-                Debug.Log("치안 이벤트 해결");
-            },
-            OnSpawned = () => {
-                // TODO
-                // 치안 이벤트 알람 UI 띄우기
-                    
-                // 도시에 디버프 부여
-                // 적용할 디버프 기획 파악 필요
-                
-                Debug.Log("치안안 이벤트 스폰");
-            }
+            OnResolved = OnResolved_Event,
+            OnSpawned = OnSpawned_Event,
+            OnUpdateTick = OnUpdateTick_Event
         };
 
         Managers.Event.AddIncident(incident);
 
         return incident;
+    }
+
+    protected override void OnSpawned_Event()
+    {
+        // TODO
+        // 치안 이벤트 알람 UI 띄우기
+                    
+        // 도시에 디버프 부여
+        // 적용할 디버프 기획 파악 필요
+                
+        Debug.Log("치안안 이벤트 스폰");
+    }
+
+    protected override void OnResolved_Event()
+    {
+        // TODO
+        // 치안 이벤트 해결 시 도시 디버프 해제
+        Debug.Log("치안 이벤트 해결");
+    }
+
+    protected override void OnUpdateTick_Event()
+    {
+        // TODO
+        // 치안 이벤트 도시 디버프 중첩 부여여
+        Debug.Log("치안 이벤트 도시 디버프 중첩 부여");
     }
 }

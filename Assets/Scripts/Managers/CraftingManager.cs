@@ -9,6 +9,8 @@ public class CraftingManager : MonoBehaviour
     private float lastInputTime = 0f; // 마지막 입력 타임스탬프
     private const float inputCooldown = 0.2f; // 0.2초 내 중복 입력 무시
 
+    public List<Building> Buildings => buildings;
+
     void Awake()
     {
         if (Instance == null) Instance = this;

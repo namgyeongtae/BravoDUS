@@ -51,6 +51,8 @@ public class EventManager : IManagerBase
                     // 소방대 혹은 경찰대가 출동하는 등 해결하기 위한 조건이 충족된다면 Resolving으로 전환
                     // if (소방대 or 경찰대 배치 시)
                     //    inc.State = IncidentState.Resolving;
+                    // else
+                    inc.Tick();
                 }
                 break;
             case IncidentState.Resolving:
@@ -72,13 +74,8 @@ public class EventManager : IManagerBase
                 break;
             case IncidentState.Resolved:
                 {
-                    inc.OnResolved?.Invoke();
-
-                    // 화재 이벤트라면
-                    // inc.TargetBuilding.Repair();
-
-                    // 범죄 이벤트라면
-                    // 이 부분 기획이 필요 (범죄 이벤트 시 어떤 부작용이 있는지 파악 후 해당 부작용(디버프) 해제)
+                    // OnResolved는 EventController에서 생성성
+                    RemoveIncident(inc);
                 }
                 break;
         }
@@ -106,11 +103,13 @@ public class EventManager : IManagerBase
 
     public void AddIncident(Incident incident)
     {
+        incident.OnSpawned?.Invoke();
         _incidents.Add(incident);
     }
 
     public void RemoveIncident(Incident incident)
     {
+        incident.OnResolved?.Invoke();
         _incidents.Remove(incident);
     }
     public void Release() // �߰�: ��ü ����
