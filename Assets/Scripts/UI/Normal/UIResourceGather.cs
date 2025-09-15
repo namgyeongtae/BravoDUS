@@ -63,7 +63,6 @@ public class UIResourceGather : CanvasPanel
             yield return null;
         }
 
-        Debug.Log("Close");
         Close();
     }
 }

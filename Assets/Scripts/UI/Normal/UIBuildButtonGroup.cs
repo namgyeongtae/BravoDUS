@@ -1,24 +1,28 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIBuildButtonGroup : CanvasPanel
 {
     [Bind("Build")] private UIButton _buildButton;
     [Bind("Cancel")] private UIButton _cancelButton;
+    [Bind("ImmediateButton")] private UIButton _immediateButton;
+    [Bind("BuildProgress")] private Slider _buildProgress;
 
-    private GameObject _selectedBuilding = null;
+    private Building _selectedBuilding = null;
 
     protected override void Initialize()
     {
         _buildButton.BindEvent(OnClickBuildButton, ClickType.Up);
         _cancelButton.BindEvent(OnClickCancelButton, ClickType.Up);
+        _immediateButton.BindEvent(OnClickImmediateButton, ClickType.Up);
     }
 
     public override void SetPanelInfo(object Info)
     {
         base.SetPanelInfo(Info);
 
-        _selectedBuilding = (GameObject)Info;
+        _selectedBuilding =  Info as Building;
 
         AdjustPosition();
     }
@@ -39,16 +43,46 @@ public class UIBuildButtonGroup : CanvasPanel
 
     public override void Close()
     {
-        StartCoroutine(AnimateClose());
+        StartCoroutine(AnimateClose(true));
     }
 
+    private void OnClickImmediateButton()
+    {
+        // TODO
+        // 즉시완료 아이템 효과 적용
+        Debug.Log("즉시완료 아이템 효과 적용");
+    }
     private void OnClickBuildButton()
     {
-        Debug.Log("Build Start");
+        _immediateButton.gameObject.SetActive(true);
+        _buildProgress.gameObject.SetActive(true);
+        _buildProgress.value = 0;
 
-        CraftingManager.Instance.StartBuildingConstruction(_selectedBuilding.GetComponent<Building>());
+        StartCoroutine(UpdateBuildProgress());
 
-        Close();
+        CraftingManager.Instance.StartBuildingConstruction(_selectedBuilding);
+
+        _buildButton.gameObject.SetActive(false);
+        _cancelButton.gameObject.SetActive(false);
+    }
+
+    private IEnumerator UpdateBuildProgress()
+    {
+        float duration = _selectedBuilding.constructionTime;
+        float time = 0;
+
+        // 코루틴이 시작되고 duration 동안 _buildProgress.value를 0에서 1로 증가시킴
+        while (time < duration)
+        {
+            float t = time / duration;
+            _buildProgress.value = t;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        _buildProgress.gameObject.SetActive(false);
+
+        base.Close();
     }
 
     private void OnClickCancelButton()
@@ -85,7 +119,7 @@ public class UIBuildButtonGroup : CanvasPanel
             yield return null;
         }
     }
-    private IEnumerator AnimateClose()
+    private IEnumerator AnimateClose(bool isClose)
     {
         float duration = 0.5f;
 
@@ -105,6 +139,9 @@ public class UIBuildButtonGroup : CanvasPanel
             yield return null;
         }
 
-        base.Close();
+        if (isClose)
+        {
+            base.Close();
+        }
     }
 }
