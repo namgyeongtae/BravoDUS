@@ -1,0 +1,47 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "154",
+  "SoundBanks": [
+   {
+    "Id": "3161908922",
+    "Type": "User",
+    "GUID": "{305E95DD-F47B-45C7-94FD-8A692CD15879}",
+    "Language": "SFX",
+    "Hash": "{BD6E79E2-F4D8-792C-E6D8-654F534DA053}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
+    "ShortName": "Main",
+    "Path": "Main.bnk",
+    "Media": [
+     {
+      "Id": "624607771",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Card_Game_UI_Button_Mechanical_Metal_01.wav",
+      "CachePath": "B8/{B8BB93E5-5C18-0172-1E36-D85FBAA333BF}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "814543256",
+      "Name": "Button_Click",
+      "ObjectPath": "\\Events\\Default Work Unit\\Button_Click",
+      "GUID": "{CF220D1A-EDC4-4686-942B-308CCECA690A}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.6976875",
+      "DurationMax": "0.6976875",
+      "MediaRefs": [
+       {
+        "Id": "624607771"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{4991D884-9F0D-D8C2-5FE6-26EBBBB19151}"
+ }
+}
