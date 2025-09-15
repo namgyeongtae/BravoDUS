@@ -1,7 +1,7 @@
 {
  "SoundBanksInfo": {
-  "Platform": "Mac",
-  "BasePlatform": "Mac",
+  "Platform": "Android",
+  "BasePlatform": "Android",
   "SchemaVersion": "16",
   "SoundBankVersion": "154",
   "SoundBanks": [
@@ -42,6 +42,6 @@
     ]
    }
   ],
-  "FileHash": "{892FBD4E-F9FB-C264-C1D2-E68E816D44A0}"
+  "FileHash": "{80BAC5FA-1F4C-352A-A0EF-1EF704D921D6}"
  }
 }

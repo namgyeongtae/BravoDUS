@@ -1,7 +1,7 @@
 {
  "PluginInfo": {
-  "Platform": "Mac",
-  "BasePlatform": "Mac",
+  "Platform": "Android",
+  "BasePlatform": "Android",
   "PluginLibs": [
    {
     "LibName": "System",
@@ -14,6 +14,6 @@
     "Type": "AudioDevice"
    }
   ],
-  "FileHash": "{FBB1DD20-2267-5DFC-9D4C-1103B4D6B869}"
+  "FileHash": "{18CD9949-654D-326A-2A68-3AA18E1D7FC0}"
  }
 }

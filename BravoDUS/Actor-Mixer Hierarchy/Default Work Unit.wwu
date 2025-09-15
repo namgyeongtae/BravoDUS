@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{857F3761-A92F-4F98-BCE4-6F0F4243D2FF}" SchemaVersion="123">
+	<AudioObjects>
+		<WorkUnit Name="Default Work Unit" ID="{857F3761-A92F-4F98-BCE4-6F0F4243D2FF}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Card_Game_UI_Button_Mechanical_Metal_01" ID="{D1428F28-B6DB-4E36-9531-63C7E7D6DFBC}" ShortID="545275956">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3C1F511D-549C-4BC3-93BF-26E405334CAE}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{70F6D890-B4E2-4CF3-9EFB-CD42F6F6F604}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Card_Game_UI_Button_Mechanical_Metal_01" ID="{EBAE6E57-1339-4E02-A7CB-3B49A38987DE}">
+							<Language>SFX</Language>
+							<AudioFile>Card_Game_UI_Button_Mechanical_Metal_01.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="624607771"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="Card_Game_UI_Button_Mechanical_Metal_01" ID="{EBAE6E57-1339-4E02-A7CB-3B49A38987DE}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

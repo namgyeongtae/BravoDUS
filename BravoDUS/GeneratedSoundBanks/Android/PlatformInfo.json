@@ -1,16 +1,16 @@
 {
  "PlatformInfo": {
   "Platform": {
-   "Name": "Mac",
-   "BasePlatform": "Mac",
+   "Name": "Android",
+   "BasePlatform": "Android",
    "Generator": "2024.1.7.8863"
   },
   "RootPaths": {
-   "ProjectRoot": "../../../../BravoDUS",
-   "SourceFilesRoot": "../../../../BravoDUS/.cache",
+   "ProjectRoot": "../..",
+   "SourceFilesRoot": "../../.cache",
    "SoundBanksRoot": ".",
    "ExternalSourcesInputFile": "",
-   "ExternalSourcesOutputRoot": "../../../../BravoDUS/GeneratedSoundBanks/Mac"
+   "ExternalSourcesOutputRoot": "."
   },
   "DefaultAlign": "16",
   "Settings": {
@@ -33,6 +33,6 @@
    "PrintObjectPath": "true",
    "PrintObjectColor": "true"
   },
-  "FileHash": "{DF8A9AEB-6F11-4A73-D603-6DA6810582EA}"
+  "FileHash": "{221DD2C3-7B4D-71D6-11BF-AFA0979209CD}"
  }
 }

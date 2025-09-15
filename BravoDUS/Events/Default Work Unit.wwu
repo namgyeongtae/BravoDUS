@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{9D14C033-A230-4C22-8B1C-2F024A903D06}" SchemaVersion="123">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{9D14C033-A230-4C22-8B1C-2F024A903D06}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Button_Click" ID="{CF220D1A-EDC4-4686-942B-308CCECA690A}">
+					<ChildrenList>
+						<Action Name="" ID="{54892585-1E11-4F42-B9BC-088909AADCF7}" ShortID="314959966">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Card_Game_UI_Button_Mechanical_Metal_01" ID="{D1428F28-B6DB-4E36-9531-63C7E7D6DFBC}" WorkUnitID="{857F3761-A92F-4F98-BCE4-6F0F4243D2FF}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

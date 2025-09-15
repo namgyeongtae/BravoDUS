@@ -5,28 +5,21 @@
    "GUID": "{F94E7844-5714-433B-9312-39D8B9DEF836}",
    "Generator": "2024.1.7.8863"
   },
-  "CacheRoot": "../../../../BravoDUS/.cache",
+  "CacheRoot": "../.cache",
   "Platforms": [
    {
     "Name": "Android",
     "GUID": "{D40CFAAD-AA35-4BFD-B08E-C2143233611E}",
     "BasePlatform": "Android",
     "BasePlatformGUID": "{A2D401DE-B8B6-4FEB-8142-137C34D507CA}",
-    "Path": "."
-   },
-   {
-    "Name": "Mac",
-    "GUID": "{72F3C98B-3134-4D72-99A8-94801C7C9D33}",
-    "BasePlatform": "Mac",
-    "BasePlatformGUID": "{9C6217D5-DD11-4795-87C1-6CE02853C540}",
-    "Path": "."
+    "Path": "Android"
    },
    {
     "Name": "Windows",
     "GUID": "{451D2065-874A-4D4C-B50B-5433B9C46410}",
     "BasePlatform": "Windows",
     "BasePlatformGUID": "{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}",
-    "Path": "."
+    "Path": "Windows"
    }
   ],
   "Languages": [
@@ -38,6 +31,6 @@
     "UseAsStandIn": "true"
    }
   ],
-  "FileHash": "{ECEEF646-1DAB-573D-FC78-8F5653F07BD0}"
+  "FileHash": "{FE9EE66A-DAF0-A4F0-11B6-F753297DD9CA}"
  }
 }

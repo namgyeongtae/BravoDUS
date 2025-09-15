@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{FABFC6F1-1A71-46B5-A64F-2DF817CE71AC}" SchemaVersion="123">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{FABFC6F1-1A71-46B5-A64F-2DF817CE71AC}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="Main" ID="{305E95DD-F47B-45C7-94FD-8A692CD15879}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Card_Game_UI_Button_Mechanical_Metal_01" ID="{D1428F28-B6DB-4E36-9531-63C7E7D6DFBC}" WorkUnitID="{857F3761-A92F-4F98-BCE4-6F0F4243D2FF}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>
