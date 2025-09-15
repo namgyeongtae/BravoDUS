@@ -49,6 +49,10 @@ public class ResourceCollectHandler : RoleHandler
 
     private void CollectResource()
     {
+        var building = GetComponentInParent<Building>();
+        if (building.CurrentState == Building.State.Ruin || building.CurrentState == Building.State.Constructing)
+            return;
+
         switch (_resourceType)
         {
             case IngredientType.Wood:

@@ -35,7 +35,11 @@ public class FireEventController : EventController
 
     protected override void OnSpawned_Event()
     {
-        var buildings = CraftingManager.Instance.Buildings.Where(b => b.GetComponent<RoleHandler>()?.DebuffCount <= 0);
+        // 현재 완공이 되었고 디버프가 없는 건물 리스트
+        var buildings = CraftingManager.Instance.Buildings.Where(b => 
+                                                b.GetComponent<RoleHandler>()?.DebuffCount <= 0
+                                             && b.CurrentState != Building.State.Ruin 
+                                             && b.CurrentState != Building.State.Constructing);
 
         if (buildings.Count() == 0)
         {
