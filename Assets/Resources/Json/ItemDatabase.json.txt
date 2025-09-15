@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Wood",
+      "description": "기본 자원: 나무",
+      "value": 1,
+      "type": 1,  // 0 -> 1 (Wood)
+      "stackSize": 999,
+      "productionRate": 10.0,
+      "craftingRequirements": []
+    },
+    {
+      "id": 2,
+      "name": "Iron",
+      "description": "고급 자원: 철광석",
+      "value": 5,
+      "type": 2,  // 1 -> 2 (Iron)
+      "stackSize": 500,
+      "productionRate": 5.0,
+      "craftingRequirements": []
+    }
+  ]
+}
