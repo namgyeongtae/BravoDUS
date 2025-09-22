@@ -2,7 +2,6 @@
 using UnityEngine;
 using System;
 using System.Text;
-using System.Text.RegularExpressions; // RemoveComments에서 Regex 사용
 
 [System.Serializable]
 public class ItemData
@@ -65,12 +64,19 @@ public class CommodityManager : IManagerBase
             Debug.LogError("No TextAssets in Json subfolder! Check Assets/Resources/Json/ItemDatabase.json exists. UGS.Generated/Resources is ignored.");
             goto Fallback;
         }
-        // 파일 1개라 무조건 첫 번째 가져옴 (이름 매치 우회)
-        TextAsset jsonAsset = allTextsInJson[0];
-        Debug.Log($"Using first asset: '{jsonAsset.name}' (assuming it's ItemDatabase)");
-        if (!jsonAsset.name.Contains("ItemDatabase"))
+        // 수정: 이름으로 검색해서 ItemDatabase.json 찾기 (첫 번째 무조건 피함)
+        TextAsset jsonAsset = null;
+        foreach (var asset in allTextsInJson)
         {
-            Debug.LogError($"First asset name '{jsonAsset.name}' doesn't contain 'ItemDatabase'! Falling back.");
+            if (asset.name.Contains("ItemDatabase"))
+            {
+                jsonAsset = asset;
+                break;
+            }
+        }
+        if (jsonAsset == null)
+        {
+            Debug.LogError("ItemDatabase.json not found in Json subfolder! Falling back.");
             goto Fallback;
         }
         Debug.Log($"Loaded: {jsonAsset.name} (length: {jsonAsset.text.Length}, preview: {jsonAsset.text.Substring(0, Math.Min(50, jsonAsset.text.Length))}...)");
@@ -117,7 +123,6 @@ public class CommodityManager : IManagerBase
             Debug.LogError($"Unexpected JSON error: {e.Message}. Falling back.");
             goto Fallback;
         }
-
     Fallback:
         Debug.Log("=== Falling back to hardcoded ===");
         _ingredients.Clear();
@@ -129,10 +134,8 @@ public class CommodityManager : IManagerBase
         Debug.Log("=== LoadIngredientFromDB End (Fallback) ===");
     }
 
-    // 헬퍼 메서드: JSON 주석 제거 (Google Sheets exporter 주석 문제 해결)
     private string RemoveComments(string json)
     {
-        // // 주석 제거 (한 줄 주석만, 다중 줄 /* */은 필요 시 확장)
         string[] lines = json.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
         var cleanedLines = new StringBuilder();
         foreach (string line in lines)
@@ -140,7 +143,6 @@ public class CommodityManager : IManagerBase
             int commentIndex = line.IndexOf("//");
             if (commentIndex >= 0)
             {
-                // 줄 끝까지 // 제거 (문자열 안 주석은 무시 – 간단 버전, 실제 JSON에서 문자열 안 //은 드물음)
                 string cleanLine = line.Substring(0, commentIndex).TrimEnd();
                 cleanedLines.Append(cleanLine);
             }
@@ -152,7 +154,7 @@ public class CommodityManager : IManagerBase
         }
         string result = cleanedLines.ToString().Trim();
         // 빈 줄/불필요 공백 정리 (옵션)
-        result = Regex.Replace(result, @"\s+", " "); // 공백 압축
+        result = System.Text.RegularExpressions.Regex.Replace(result, @"\s+", " "); // 공백 압축
         result = result.Replace(" {", "{").Replace("} ", "}").Replace(", ", ","); // 간단 포맷팅
         Debug.Log($"Cleaned JSON preview: {result.Substring(0, Math.Min(100, result.Length))}...");
         return result;

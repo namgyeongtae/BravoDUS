@@ -25,6 +25,7 @@ public class Building : MonoBehaviour
     private ObjectPool<GameObject> basePool; // 기본 풀
     private ObjectPool<GameObject> upgradedPool; // 업그레이드 풀
     private GameObject currentEffect; // 현재 이펙트 인스턴스
+
     private ResourceProducer resourceProducer;
     private RoleHandler roleHandler;
 
@@ -32,7 +33,6 @@ public class Building : MonoBehaviour
     {
         FixedPosition = transform.position;
         Debug.Log($"Building Awake: Prefab references - Ruin: {ruinPrefab != null}, Base: {basePrefab != null}, Upgraded: {upgradedPrefab != null}, Effect: {constructionEffectPrefab != null}");
-
         ruinPool = new ObjectPool<GameObject>(
             () => {
                 GameObject obj = Instantiate(ruinPrefab);
@@ -42,7 +42,6 @@ public class Building : MonoBehaviour
             m => m.SetActive(true),
             m => m.SetActive(false),
             Destroy, false, 10, 20);
-
         basePool = new ObjectPool<GameObject>(
             () => {
                 GameObject obj = Instantiate(basePrefab);
@@ -52,7 +51,6 @@ public class Building : MonoBehaviour
             m => m.SetActive(true),
             m => m.SetActive(false),
             Destroy, false, 10, 20);
-
         upgradedPool = new ObjectPool<GameObject>(
             () => {
                 GameObject obj = Instantiate(upgradedPrefab);
@@ -62,7 +60,6 @@ public class Building : MonoBehaviour
             m => m.SetActive(true),
             m => m.SetActive(false),
             Destroy, false, 10, 20);
-
         SwapModel(ruinPrefab);
         resourceProducer = GetComponent<ResourceProducer>();
         roleHandler = GetComponent<RoleHandler>();
@@ -77,10 +74,12 @@ public class Building : MonoBehaviour
         Building[] buildings = obj.GetComponentsInChildren<Building>(true);
         foreach (var b in buildings)
         {
-            Destroy(b);
-            Debug.Log($"Removed duplicate Building from {obj.name}");
+            if (b != this) // 자신 제외
+            {
+                Destroy(b);
+                Debug.Log($"Removed duplicate Building from {obj.name}");
+            }
         }
-
         // ChildModelClickHandler 중복 제거 (하나만 유지)
         ChildModelClickHandler[] handlers = obj.GetComponentsInChildren<ChildModelClickHandler>(true);
         if (handlers.Length > 1)
@@ -108,10 +107,10 @@ public class Building : MonoBehaviour
             {
                 StartConstruction();
             }
-           // else if (CurrentState == State.Base)
-           // {
-           //     Upgrade();
-           // }
+            // else if (CurrentState == State.Base)
+            // {
+            // Upgrade();
+            // }
         }
 #endif
     }
@@ -119,12 +118,8 @@ public class Building : MonoBehaviour
     public void StartConstruction()
     {
         Debug.Log($"StartConstruction - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
-        if (CurrentState != State.Ruin) return;
-        if (!_isTestMode)
-        {
-            if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 50 ||
-                Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 30) return;
-        }
+        if (CurrentState != State.Ruin || constructionCoroutine != null) return; // 중복 방지 추가
+        if (!_isTestMode && !CraftingManager.Instance.CheckResources(this, 1)) return; // JSON 체크 통합 (CraftingManager 연동 가정)
         CurrentState = State.Constructing;
         Debug.Log($"State changed to Constructing: {gameObject.name}");
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
@@ -164,7 +159,7 @@ public class Building : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(constructionTime / 5f);
-            Debug.Log($"건설 진행: {((i + 1) * 20)}% - {gameObject.name} (State: {CurrentState})");
+            Debug.Log("건설 진행: " + ((i + 1) * 20) + "% - " + gameObject.name + " (State: " + CurrentState + ")");
         }
         CurrentState = State.Base;
         Level = 0; // Base 상태에서 레벨 0부터 시작으로 초기화
@@ -215,45 +210,38 @@ public class Building : MonoBehaviour
     public void Upgrade()
     {
         Debug.Log($"Upgrade - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
-
         // --- 중복 호출 방지 ---
-        if (upgradeCoroutine != null) return;       // 업그레이드 코루틴이 이미 실행 중이면 무시
-        if (CurrentState != State.Base) return;     // Base 상태에서만 업그레이드 가능
-
+        if (CurrentState != State.Base || upgradeCoroutine != null) return;
         // --- 최대 레벨 체크 ---
         if (Level >= maxLevel)
         {
             Debug.Log($"최대 레벨 도달: {gameObject.name}, Level: {Level}");
             return;
         }
-
         // --- 자원 체크 (테스트 모드 아닐 때만) ---
-        if (!_isTestMode)
-        {
-            if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 100 ||
-                Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 50) return;
-            if (GetGovernmentLevel() < Level + 1) return;
-        }
-
+        if (!_isTestMode && !CraftingManager.Instance.CheckResources(this, Level + 1)) return;
         // --- 레벨 증가 ---
         Level++;
         Debug.Log($"Level increased to {Level} for {gameObject.name}");
-
         // --- 최종 업그레이드 처리 ---
         if (Level == maxLevel)
         {
             CurrentState = State.Upgrading;
             upgradeCoroutine = StartCoroutine(UpgradeCoroutine());
             Debug.Log($"Upgrade (to Upgraded) called for {gameObject.name}");
+            Debug.Log("조건이 만족되었으므로 건물을 업그레이드 하였습니다");
         }
         else
         {
             // 레벨업은 즉시 적용, 모델은 Base 유지
             SwapModel(basePrefab);
             Debug.Log($"Level up completed: {gameObject.name}, Level: {Level}, State: {CurrentState}");
+            Debug.Log("조건이 만족되었으므로 건물 레벨이 올라갔습니다");
         }
+        // --- OnUpgrade 호출 ---
+        if (resourceProducer != null) resourceProducer.OnUpgrade(Level);
+        if (roleHandler != null) roleHandler.OnUpgrade(Level);
     }
-
 
     private IEnumerator UpgradeCoroutine()
     {
@@ -350,15 +338,16 @@ public class Building : MonoBehaviour
     {
         if (currentModel != null)
         {
-            if (ruinPool != null && currentModel.name.Contains(ruinPrefab.name))
+            // 수정: name.Contains 대신 prefab 참조 비교 (Clone 문제 방지)
+            if (newPrefab == ruinPrefab)
             {
                 ruinPool.Release(currentModel);
             }
-            else if (basePool != null && currentModel.name.Contains(basePrefab.name))
+            else if (newPrefab == basePrefab)
             {
                 basePool.Release(currentModel);
             }
-            else if (upgradedPool != null && currentModel.name.Contains(upgradedPrefab.name))
+            else
             {
                 upgradedPool.Release(currentModel);
             }
@@ -398,5 +387,13 @@ public class Building : MonoBehaviour
             if (building.name == "Government") return building.Level;
         }
         return 0;
+    }
+
+    void OnDestroy()
+    {
+        // 추가: 코루틴 정리 (메모리 누수 방지)
+        if (constructionCoroutine != null) StopCoroutine(constructionCoroutine);
+        if (upgradeCoroutine != null) StopCoroutine(upgradeCoroutine);
+        if (currentEffect != null) Destroy(currentEffect);
     }
 }

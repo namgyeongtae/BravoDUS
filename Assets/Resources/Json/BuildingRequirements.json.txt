@@ -1,0 +1,265 @@
+{
+  "requirements": [
+    {
+      "buildingName": "목공소",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 0},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
+      "buildingName": "목공소",
+      "level": 2,
+      "requiredResources": [
+        {"type": 1, "amount": 10},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 1,
+      "constructionTime": 10,
+      "productionRate": 5.5,
+      "cycleSeconds": 5,
+      "description": "소량 목재 보상"
+    },
+    {
+      "buildingName": "목공소",
+      "level": 3,
+      "requiredResources": [
+        {"type": 1, "amount": 10},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 2,
+      "constructionTime": 15,
+      "productionRate": 6.0,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "목공소",
+      "level": 4,
+      "requiredResources": [
+        {"type": 1, "amount": 15},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 3,
+      "constructionTime": 20,
+      "productionRate": 6.5,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "목공소",
+      "level": 5,
+      "requiredResources": [
+        {"type": 1, "amount": 15},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 4,
+      "constructionTime": 25,
+      "productionRate": 7.0,
+      "cycleSeconds": 5,
+      "description": "중간 성장 체감"
+    },
+    {
+      "buildingName": "목공소",
+      "level": 6,
+      "requiredResources": [
+        {"type": 1, "amount": 20},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 5,
+      "constructionTime": 30,
+      "productionRate": 7.5,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "목공소",
+      "level": 7,
+      "requiredResources": [
+        {"type": 1, "amount": 20},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 6,
+      "constructionTime": 35,
+      "productionRate": 8.0,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "목공소",
+      "level": 8,
+      "requiredResources": [
+        {"type": 1, "amount": 25},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 7,
+      "constructionTime": 40,
+      "productionRate": 8.5,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "목공소",
+      "level": 9,
+      "requiredResources": [
+        {"type": 1, "amount": 25},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 8,
+      "constructionTime": 45,
+      "productionRate": 9.0,
+      "cycleSeconds": 5,
+      "description": "거의 최대치"
+    },
+    {
+      "buildingName": "목공소",
+      "level": 10,
+      "requiredResources": [
+        {"type": 1, "amount": 30},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 9,
+      "constructionTime": 50,
+      "productionRate": 10.0,
+      "cycleSeconds": 3,
+      "description": "Lv.2 완료, 최대 생산량, 기능 해금"
+    },
+    {
+      "buildingName": "제철소",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 0},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 3.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
+      "buildingName": "제철소",
+      "level": 2,
+      "requiredResources": [
+        {"type": 1, "amount": 10},
+        {"type": 2, "amount": 2}
+      ],
+      "requiredGovernmentLevel": 1,
+      "constructionTime": 10,
+      "productionRate": 3.3,
+      "cycleSeconds": 5,
+      "description": "소량 철 보상"
+    },
+    {
+      "buildingName": "제철소",
+      "level": 3,
+      "requiredResources": [
+        {"type": 1, "amount": 10},
+        {"type": 2, "amount": 2}
+      ],
+      "requiredGovernmentLevel": 2,
+      "constructionTime": 15,
+      "productionRate": 3.6,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "제철소",
+      "level": 4,
+      "requiredResources": [
+        {"type": 1, "amount": 15},
+        {"type": 2, "amount": 3}
+      ],
+      "requiredGovernmentLevel": 3,
+      "constructionTime": 20,
+      "productionRate": 4.0,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "제철소",
+      "level": 5,
+      "requiredResources": [
+        {"type": 1, "amount": 15},
+        {"type": 2, "amount": 4}
+      ],
+      "requiredGovernmentLevel": 4,
+      "constructionTime": 25,
+      "productionRate": 4.3,
+      "cycleSeconds": 5,
+      "description": "중간 성장 체감"
+    },
+    {
+      "buildingName": "제철소",
+      "level": 6,
+      "requiredResources": [
+        {"type": 1, "amount": 20},
+        {"type": 2, "amount": 5}
+      ],
+      "requiredGovernmentLevel": 5,
+      "constructionTime": 30,
+      "productionRate": 4.6,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "제철소",
+      "level": 7,
+      "requiredResources": [
+        {"type": 1, "amount": 20},
+        {"type": 2, "amount": 6}
+      ],
+      "requiredGovernmentLevel": 6,
+      "constructionTime": 35,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "제철소",
+      "level": 8,
+      "requiredResources": [
+        {"type": 1, "amount": 25},
+        {"type": 2, "amount": 7}
+      ],
+      "requiredGovernmentLevel": 7,
+      "constructionTime": 40,
+      "productionRate": 5.5,
+      "cycleSeconds": 5,
+      "description": ""
+    },
+    {
+      "buildingName": "제철소",
+      "level": 9,
+      "requiredResources": [
+        {"type": 1, "amount": 25},
+        {"type": 2, "amount": 8}
+      ],
+      "requiredGovernmentLevel": 8,
+      "constructionTime": 45,
+      "productionRate": 6.0,
+      "cycleSeconds": 5,
+      "description": "거의 최대치"
+    },
+    {
+      "buildingName": "제철소",
+      "level": 10,
+      "requiredResources": [
+        {"type": 1, "amount": 40},
+        {"type": 2, "amount": 10}
+      ],
+      "requiredGovernmentLevel": 9,
+      "constructionTime": 50,
+      "productionRate": 8.0,
+      "cycleSeconds": 3,
+      "description": "Lv.2 완료, 최대 생산량, 병목 완화 가능"
+    }
+
+  ]
+}

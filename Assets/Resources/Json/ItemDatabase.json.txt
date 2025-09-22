@@ -15,7 +15,7 @@
       "name": "Iron",
       "description": "고급 자원: 철광석",
       "value": 5,
-      "type": 2,  // 1 -> 2 (Iron)
+      "type": 2, 
       "stackSize": 500,
       "productionRate": 5.0,
       "craftingRequirements": []
