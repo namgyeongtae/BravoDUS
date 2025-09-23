@@ -10,7 +10,7 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject constructionEffectPrefab; // 건축 중 이펙트 Prefab (Particle System)
     [SerializeField] private float upgradeTime = 1f; // 업그레이드 시간 (초, 테스트용 짧게 설정)
     [SerializeField] private int maxLevel = 10; // 업그레이드 최대 레벨
-    [SerializeField] private bool _isTestMode = true; // 테스트 모드 플래그
+    [SerializeField] private bool _isTestMode = false; // 기본 false
     [SerializeField] public float constructionTime = 5f; // 건설 시간 (초)
 
     public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
@@ -25,6 +25,7 @@ public class Building : MonoBehaviour
     private ObjectPool<GameObject> basePool; // 기본 풀
     private ObjectPool<GameObject> upgradedPool; // 업그레이드 풀
     private GameObject currentEffect; // 현재 이펙트 인스턴스
+
     private ResourceProducer resourceProducer;
     private RoleHandler roleHandler;
 
@@ -32,7 +33,6 @@ public class Building : MonoBehaviour
     {
         FixedPosition = transform.position;
         Debug.Log($"Building Awake: Prefab references - Ruin: {ruinPrefab != null}, Base: {basePrefab != null}, Upgraded: {upgradedPrefab != null}, Effect: {constructionEffectPrefab != null}");
-
         ruinPool = new ObjectPool<GameObject>(
             () => {
                 GameObject obj = Instantiate(ruinPrefab);
@@ -42,7 +42,6 @@ public class Building : MonoBehaviour
             m => m.SetActive(true),
             m => m.SetActive(false),
             Destroy, false, 10, 20);
-
         basePool = new ObjectPool<GameObject>(
             () => {
                 GameObject obj = Instantiate(basePrefab);
@@ -52,7 +51,6 @@ public class Building : MonoBehaviour
             m => m.SetActive(true),
             m => m.SetActive(false),
             Destroy, false, 10, 20);
-
         upgradedPool = new ObjectPool<GameObject>(
             () => {
                 GameObject obj = Instantiate(upgradedPrefab);
@@ -62,7 +60,6 @@ public class Building : MonoBehaviour
             m => m.SetActive(true),
             m => m.SetActive(false),
             Destroy, false, 10, 20);
-
         SwapModel(ruinPrefab);
         resourceProducer = GetComponent<ResourceProducer>();
         roleHandler = GetComponent<RoleHandler>();
@@ -80,7 +77,6 @@ public class Building : MonoBehaviour
             Destroy(b);
             Debug.Log($"Removed duplicate Building from {obj.name}");
         }
-
         // ChildModelClickHandler 중복 제거 (하나만 유지)
         ChildModelClickHandler[] handlers = obj.GetComponentsInChildren<ChildModelClickHandler>(true);
         if (handlers.Length > 1)
@@ -108,23 +104,19 @@ public class Building : MonoBehaviour
             {
                 StartConstruction();
             }
-           // else if (CurrentState == State.Base)
-           // {
-           //     Upgrade();
-           // }
+            // else if (CurrentState == State.Base)
+            // {
+            // Upgrade();
+            // }
         }
 #endif
     }
 
     public void StartConstruction()
     {
+        Managers.Commodity.LogAmounts(); // 추가: 체크 직전 Amount 로그 (필요 시 유지/삭제)
         Debug.Log($"StartConstruction - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
         if (CurrentState != State.Ruin) return;
-        if (!_isTestMode)
-        {
-            if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 50 ||
-                Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 30) return;
-        }
         CurrentState = State.Constructing;
         Debug.Log($"State changed to Constructing: {gameObject.name}");
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
@@ -164,7 +156,7 @@ public class Building : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(constructionTime / 5f);
-            Debug.Log($"건설 진행: {((i + 1) * 20)}% - {gameObject.name} (State: {CurrentState})");
+            Debug.Log("건설 진행: " + ((i + 1) * 20) + "% - " + gameObject.name + " (State: " + CurrentState + ")");
         }
         CurrentState = State.Base;
         Level = 0; // Base 상태에서 레벨 0부터 시작으로 초기화
@@ -215,30 +207,18 @@ public class Building : MonoBehaviour
     public void Upgrade()
     {
         Debug.Log($"Upgrade - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
-
         // --- 중복 호출 방지 ---
-        if (upgradeCoroutine != null) return;       // 업그레이드 코루틴이 이미 실행 중이면 무시
-        if (CurrentState != State.Base) return;     // Base 상태에서만 업그레이드 가능
-
-        // --- 최대 레벨 체크 ---
+        if (upgradeCoroutine != null) return; // 업그레이드 코루틴이 이미 실행 중이면 무시
+        if (CurrentState != State.Base) return; // Base 상태에서만 업그레이드 가능
+                                                // --- 최대 레벨 체크 ---
         if (Level >= maxLevel)
         {
             Debug.Log($"최대 레벨 도달: {gameObject.name}, Level: {Level}");
             return;
         }
-
-        // --- 자원 체크 (테스트 모드 아닐 때만) ---
-        if (!_isTestMode)
-        {
-            if (Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount < 100 ||
-                Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount < 50) return;
-            if (GetGovernmentLevel() < Level + 1) return;
-        }
-
         // --- 레벨 증가 ---
         Level++;
         Debug.Log($"Level increased to {Level} for {gameObject.name}");
-
         // --- 최종 업그레이드 처리 ---
         if (Level == maxLevel)
         {
@@ -253,7 +233,6 @@ public class Building : MonoBehaviour
             Debug.Log($"Level up completed: {gameObject.name}, Level: {Level}, State: {CurrentState}");
         }
     }
-
 
     private IEnumerator UpgradeCoroutine()
     {
@@ -275,7 +254,7 @@ public class Building : MonoBehaviour
             }
             currentEffect.transform.SetParent(transform, false);
             Renderer modelRenderer = currentModel != null ? currentModel.GetComponent<Renderer>() : null;
-            float heightOffset = modelRenderer != null ? modelRenderer.bounds.size.y / 2f : 1f;
+            float heightOffset = modelRenderer != null ? modelRenderer.bounds.size.y / 2f : 1f; // 모델 중앙 높이
             currentEffect.transform.position = FixedPosition + Vector3.up * heightOffset;
             ParticleSystem ps = currentEffect.GetComponent<ParticleSystem>();
             if (ps != null) ps.Play();
@@ -350,15 +329,15 @@ public class Building : MonoBehaviour
     {
         if (currentModel != null)
         {
-            if (ruinPool != null && currentModel.name.Contains(ruinPrefab.name))
+            if (newPrefab == ruinPrefab)
             {
                 ruinPool.Release(currentModel);
             }
-            else if (basePool != null && currentModel.name.Contains(basePrefab.name))
+            else if (newPrefab == basePrefab)
             {
                 basePool.Release(currentModel);
             }
-            else if (upgradedPool != null && currentModel.name.Contains(upgradedPrefab.name))
+            else
             {
                 upgradedPool.Release(currentModel);
             }

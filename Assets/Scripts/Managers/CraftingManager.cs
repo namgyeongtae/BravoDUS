@@ -1,13 +1,39 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using System.Text;
+using System.Text.RegularExpressions;
+
+[System.Serializable]
+public class BuildingRequirement
+{
+    public string buildingName;
+    public int level;
+    public List<RequiredResource> requiredResources;
+    public int requiredGovernmentLevel;
+    public int constructionTime;
+    public float productionRate;
+    public int cycleSeconds;
+    public string description;
+}
+
+[System.Serializable]
+public class BuildingRequirementsWrapper
+{
+    public List<BuildingRequirement> requirements;
+}
 
 public class CraftingManager : MonoBehaviour
 {
     public static CraftingManager Instance { get; private set; }
-    [SerializeField] private List<Building> buildings = new List<Building>(); // 모든 빌딩 객체 목록
-    private bool isDragging = false; // 드래그 중 클릭 무시 플래그
-    private float lastInputTime = 0f; // 마지막 입력 타임스탬프
-    private const float inputCooldown = 0.2f; // 0.2초 내 중복 입력 무시
+
+    [SerializeField] private List<Building> buildings = new List<Building>();
+
+    private bool isDragging = false;
+    private float lastInputTime = 0f;
+    private const float inputCooldown = 0.2f;
+
+    private Dictionary<string, List<BuildingRequirement>> _buildingReqs = new Dictionary<string, List<BuildingRequirement>>();
 
     public List<Building> Buildings => buildings;
 
@@ -19,8 +45,8 @@ public class CraftingManager : MonoBehaviour
 
     void Start()
     {
-        // 씬 안에 있는 모든 Building 자동 등록
         buildings.AddRange(FindObjectsOfType<Building>());
+        LoadBuildingRequirements();
     }
 
     void Update()
@@ -32,7 +58,6 @@ public class CraftingManager : MonoBehaviour
         HandleKeyInput();
     }
 
-    // ------------------- 📱 터치 처리 -------------------
     private void HandleTouchInput()
     {
         if (Input.touchCount == 1)
@@ -61,7 +86,6 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // ------------------- 🖱️ 마우스 처리 -------------------
     private void HandleMouseInput()
     {
         if (Input.GetMouseButtonDown(0))
@@ -77,13 +101,12 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // ------------------- ⌨️ 키 입력 처리 -------------------
     private void HandleKeyInput()
     {
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R))
         {
-            Building building = GetComponent<Building>(); // 현재 객체의 Building 컴포넌트
+            Building building = GetComponent<Building>();
             if (building != null)
             {
                 Debug.Log($"Key press detected for {gameObject.name} - CurrentState: {building.CurrentState}");
@@ -100,7 +123,6 @@ public class CraftingManager : MonoBehaviour
 #endif
     }
 
-    // ------------------- 🔍 공통 Raycast 처리 -------------------
     private void ProcessRaycast(Ray ray)
     {
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Default")))
@@ -112,11 +134,11 @@ public class CraftingManager : MonoBehaviour
                 Debug.Log($"Raycast hit: {hit.transform.name}, Building: {building.name}");
                 if (building.CurrentState == Building.State.Ruin)
                 {
-                    building.StartConstruction();
+                    StartBuildingConstruction(building);
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
-                    building.Upgrade();
+                    UpgradeBuilding(building);
                 }
             }
         }
@@ -126,7 +148,6 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // ------------------- 🏗️ 유틸 함수 -------------------
     public void AddBuilding(Building newBuilding)
     {
         buildings.Add(newBuilding);
@@ -134,18 +155,89 @@ public class CraftingManager : MonoBehaviour
 
     public void StartBuildingConstruction(Building building)
     {
+        if (!CheckResources(building, 1))
+        {
+            Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
+            Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
+            Debug.LogWarning($"Construction failed for {building.name}: Insufficient resources or government level.");
+            return;
+        }
+        ConsumeResources(building, 1);
         building.StartConstruction();
     }
 
     public void UpgradeBuilding(Building building)
     {
+        int nextLevel = building.Level + 1;
+        if (nextLevel > 10 || !CheckResources(building, nextLevel))
+        {
+            Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
+            Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
+            Debug.LogWarning($"Upgrade failed for {building.name}: Max level reached or insufficient resources/government level.");
+            return;
+        }
+        ConsumeResources(building, nextLevel);
         building.Upgrade();
+        var req = GetRequirement(building.name, nextLevel);
+        if (req != null)
+        {
+            Debug.Log($"Applying productionRate {req.productionRate} and cycle {req.cycleSeconds} for {building.name} level {nextLevel}. Update ResourceProducer if needed.");
+        }
     }
 
-    public bool CheckResources(int wood, int iron)
+    public bool CheckResources(Building building, int targetLevel)
     {
-        return Managers.Commodity.GetIngredient(IngredientType.Wood)?.Amount >= wood &&
-               Managers.Commodity.GetIngredient(IngredientType.Iron)?.Amount >= iron;
+        if (!_buildingReqs.TryGetValue(building.name, out var reqs))
+        {
+            Debug.LogError($"No requirements found for building: {building.name}");
+            return false;
+        }
+        var req = reqs.Find(r => r.level == targetLevel);
+        if (req == null)
+        {
+            Debug.LogError($"No requirement for level {targetLevel} in {building.name}");
+            return false;
+        }
+        // 수정: Government 빌딩은 정부 레벨 체크 스킵 (초기 업그레이드 허용)
+        if (building.name != "Government" && GetGovernmentLevel() < req.requiredGovernmentLevel)
+        {
+            Debug.LogWarning($"Government level too low: Required {req.requiredGovernmentLevel}, Current {GetGovernmentLevel()}");
+            return false;
+        }
+        foreach (var res in req.requiredResources)
+        {
+            IngredientType type = (IngredientType)res.type;
+            var ingredient = Managers.Commodity.GetIngredient(type);
+            if (ingredient == null || ingredient.Amount < res.amount)
+            {
+                Debug.LogWarning($"Insufficient {type}: Required {res.amount}, Available {ingredient?.Amount ?? 0}");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void ConsumeResources(Building building, int targetLevel)
+    {
+        if (!_buildingReqs.TryGetValue(building.name, out var reqs)) return;
+
+        var req = reqs.Find(r => r.level == targetLevel);
+        if (req == null) return;
+
+        foreach (var res in req.requiredResources)
+        {
+            IngredientType type = (IngredientType)res.type;
+            Managers.Commodity.GetIngredient(type)?.Consume(res.amount);
+        }
+    }
+
+    private BuildingRequirement GetRequirement(string buildingName, int level)
+    {
+        if (_buildingReqs.TryGetValue(buildingName, out var reqs))
+        {
+            return reqs.Find(r => r.level == level);
+        }
+        return null;
     }
 
     public void RefundResources(int wood, int iron)
@@ -172,5 +264,76 @@ public class CraftingManager : MonoBehaviour
     public void HealPopulation(float amount)
     {
         Debug.Log("인구 치료: " + amount);
+    }
+
+    private void LoadBuildingRequirements()
+    {
+        Debug.Log("=== LoadBuildingRequirements Start ===");
+        TextAsset[] allTextsInJson = Resources.LoadAll<TextAsset>("Json");
+        TextAsset jsonAsset = null;
+        foreach (var asset in allTextsInJson)
+        {
+            if (asset.name.Contains("BuildingRequirements"))
+            {
+                jsonAsset = asset;
+                break;
+            }
+        }
+        if (jsonAsset == null)
+        {
+            Debug.LogError("BuildingRequirements.json not found in Resources/Json! Using hardcoded if available.");
+            return;
+        }
+        Debug.Log($"Loaded: {jsonAsset.name} (length: {jsonAsset.text.Length})");
+
+        string cleanJson = RemoveComments(jsonAsset.text);
+
+        try
+        {
+            BuildingRequirementsWrapper wrapper = JsonUtility.FromJson<BuildingRequirementsWrapper>(cleanJson);
+            if (wrapper == null || wrapper.requirements == null || wrapper.requirements.Count == 0)
+            {
+                Debug.LogError("Invalid/empty JSON! Falling back.");
+                return;
+            }
+            _buildingReqs.Clear();
+            foreach (var req in wrapper.requirements)
+            {
+                if (!_buildingReqs.ContainsKey(req.buildingName))
+                    _buildingReqs[req.buildingName] = new List<BuildingRequirement>();
+                _buildingReqs[req.buildingName].Add(req);
+                Debug.Log($"Added: {req.buildingName} level {req.level}");
+            }
+            Debug.Log("=== LoadBuildingRequirements End (Success) ===");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"JSON Parse error: {e.Message}. Raw JSON: {jsonAsset.text}. Falling back.");
+        }
+    }
+
+    private string RemoveComments(string json)
+    {
+        string[] lines = json.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+        var cleanedLines = new StringBuilder();
+        foreach (string line in lines)
+        {
+            int commentIndex = line.IndexOf("//");
+            if (commentIndex >= 0)
+            {
+                string cleanLine = line.Substring(0, commentIndex).TrimEnd();
+                cleanedLines.Append(cleanLine);
+            }
+            else
+            {
+                cleanedLines.Append(line);
+            }
+            cleanedLines.AppendLine();
+        }
+        string result = cleanedLines.ToString().Trim();
+        result = Regex.Replace(result, @"\s+", " ");
+        result = result.Replace(" {", "{").Replace("} ", "}").Replace(", ", ",");
+        Debug.Log($"Cleaned JSON preview: {result.Substring(0, Math.Min(100, result.Length))}...");
+        return result;
     }
 }
