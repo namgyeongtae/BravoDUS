@@ -10,14 +10,16 @@ public enum BuildingType
     Hospital,
     PoliceStation,
     FireStation,
-    ConvenienceStore
+    ConvenienceStore,
+    ResourceCollector
 }
 
 public enum BuildingActionType
 {
     None,
     Info,
-    Upgrade
+    Upgrade,
+    HumanResource
 }
 
 [Serializable]

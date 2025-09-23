@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BuildingSelectionSO
   m_EditorClassIdentifier: 
   actionSets:
-  - buildingType: 1
+  - buildingType: 6
     availableActions:
     - actionType: 1
       actionName: Info
@@ -21,3 +21,6 @@ MonoBehaviour:
     - actionType: 2
       actionName: Upgrade
       icon: {fileID: -2134627542, guid: a5e645d0b2507ac42807ef8e886f7d45, type: 3}
+    - actionType: 3
+      actionName: HR
+      icon: {fileID: -488235204, guid: 9a81049f87851064c82f8bcfb5a6419e, type: 3}
