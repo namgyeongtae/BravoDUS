@@ -35,6 +35,8 @@ public class CraftingManager : MonoBehaviour
 
     private Dictionary<string, List<BuildingRequirement>> _buildingReqs = new Dictionary<string, List<BuildingRequirement>>();
 
+    public List<Building> Buildings => buildings;
+
     void Awake()
     {
         if (Instance == null) Instance = this;

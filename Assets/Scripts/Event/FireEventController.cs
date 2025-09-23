@@ -1,8 +1,10 @@
+using System.Linq;
 using UnityEngine;
 
 public class FireEventController : EventController
 {
     private readonly float _baseRatePerMin;
+    private Building _targetBuilding;
 
     public FireEventController(float baseRatePerMin) : base(EventType.FireRiskEvent)
     {
@@ -11,7 +13,7 @@ public class FireEventController : EventController
 
     protected override float ScheduleNext(float now, CityStat stats)
     {
-        // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록 epsilon
+        // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
         float lambda = Mathf.Max(0.08f, _baseRatePerMin * Mathf.Clamp01(1 - stats.FireRate));
         // 지수분포: Δt(분) = -ln(1-u)/λ
         float u = Random.value;
@@ -21,32 +23,46 @@ public class FireEventController : EventController
 
     protected override Incident ExecuteSpawn(float now, CityStat stats)
     {
-        // 화재 이벤트는 고정된 interval로 스케줄링되므로, 랜덤으로 화재 이벤트를 발생시킴
-        
         var incident = new Incident() {
             EventType = EventType.FireRiskEvent,
-            CreatedAt = now,
-            Deadline = now + 120f,
             ResolvingProgress = 0f,
-            OnResolved = () => {
-                // TODO
-                // 화재 이벤트 해결 시 건물 수복 (기능 정상화)
-                Debug.Log("화재 이벤트 해결");
-            },
-            OnSpawned = () => {
-                // TODO
-                // 화재 이벤트 알람 UI 띄우기
-                    
-                // 화재 대상 건물에 디버프 부여
-                // 적용할 디버프 기획 파악 필요
-                // var building = Managers.Building.GetRandomBuilding();
-                // building.GetDebuff();
-                Debug.Log("화재 이벤트 스폰");
-            }
+            OnResolved = OnResolved_Event,
+            OnSpawned = OnSpawned_Event,
+            OnUpdateTick = OnUpdateTick_Event
         };
-
-        Managers.Event.AddIncident(incident);
-
         return incident;
+    }
+
+    protected override void OnSpawned_Event()
+    {
+        var buildings = CraftingManager.Instance.Buildings.Where(b => b.GetComponent<RoleHandler>()?.DebuffCount <= 0);
+
+        if (buildings.Count() == 0)
+        {
+            Debug.LogError("화재 이벤트 스폰 실패: 화재 가능한 건물이 없습니다.");
+            return;
+        }
+
+        _targetBuilding = buildings.ElementAt(Random.Range(0, buildings.Count()));
+        _targetBuilding.GetComponent<RoleHandler>()?.OnDeBuff();
+
+        var fireVFX = Managers.Resource.Instantiate("VFX/FireSmokeVFX", _targetBuilding.transform).GetComponent<ParticleSystem>();
+        fireVFX.transform.localPosition = Vector3.zero;
+        fireVFX.Play();
+
+        Managers.UI.AddPanel<UIEventWarning>(_targetBuilding, true);
+    }
+
+    protected override void OnResolved_Event()
+    {
+        _targetBuilding.GetComponent<RoleHandler>()?.OnResolved();
+
+        var fireVFX = _targetBuilding.GetComponent<ParticleSystem>();
+        Managers.Resource.Destroy(fireVFX.gameObject);
+    }
+
+    protected override void OnUpdateTick_Event()
+    {
+        _targetBuilding.GetComponent<RoleHandler>()?.OnDeBuff();
     }
 }

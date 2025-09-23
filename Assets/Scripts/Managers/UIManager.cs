@@ -9,10 +9,10 @@ public class UIManager : IManagerBase
         
     }
 
-   // public T GetUI<T>(string name) where T : CanvasPanel
-   // {
-   //     return CanvasManager.Instance.GetPanel<T>(name);
-   // }
+    public T GetUI<T>(string name) where T : CanvasPanel
+    {
+        return CanvasManager.Instance.GetPanel<T>(name);
+    }
 
     public T GetPopup<T>(string name) where T : UIPopupBase
     {
@@ -41,10 +41,10 @@ public class UIManager : IManagerBase
         return panel;
     }
 
-    public T AddPanel<T>(object param = null) where T : CanvasPanel
+    public T AddPanel<T>(object param = null, bool isStackable = false) where T : CanvasPanel
     {
         string name = typeof(T).Name;
-        T panel = CanvasManager.Instance?.AddPanel<T>(name, param);
+        T panel = CanvasManager.Instance?.AddPanel<T>(name, param, isStackable);
         if (panel == null)
         {
             Debug.LogError($"Failed to add panel : {name}");

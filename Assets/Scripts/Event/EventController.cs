@@ -39,7 +39,7 @@ public abstract class EventController
         }
     }
 
-    public void TickSchedule(float now, CityStat stats, Action<Incident> onSpawn = null)
+    public void TickSchedule(float now, CityStat stats)
     {
         if (!_initialized)
         {
@@ -51,13 +51,19 @@ public abstract class EventController
         while (now >= _nextSpawnAt) // while: 같은 프레임에 여러 번도 가능
         {
             var inc = ExecuteSpawn(now, stats);
-            if (inc != null) onSpawn?.Invoke(inc);
+            if (inc != null) 
+            {
+                Managers.Event.AddIncident(inc);
+            }
 
             // 다음 스케줄
             _nextSpawnAt = ScheduleNext(now, stats);
         }
     }
 
+    protected abstract void OnSpawned_Event();
+    protected abstract void OnResolved_Event();
+    protected abstract void OnUpdateTick_Event();
     protected abstract float ScheduleNext(float now, CityStat stats);
     protected abstract Incident ExecuteSpawn(float now, CityStat stat);
 }
