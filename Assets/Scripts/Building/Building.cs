@@ -10,7 +10,7 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject constructionEffectPrefab; // 건축 중 이펙트 Prefab (Particle System)
     [SerializeField] private float upgradeTime = 1f; // 업그레이드 시간 (초, 테스트용 짧게 설정)
     [SerializeField] private int maxLevel = 10; // 업그레이드 최대 레벨
-    [SerializeField] private bool _isTestMode = true; // 테스트 모드 플래그
+    [SerializeField] private bool _isTestMode = false; // 기본 false
     [SerializeField] public float constructionTime = 5f; // 건설 시간 (초)
 
     public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
@@ -74,11 +74,8 @@ public class Building : MonoBehaviour
         Building[] buildings = obj.GetComponentsInChildren<Building>(true);
         foreach (var b in buildings)
         {
-            if (b != this) // 자신 제외
-            {
-                Destroy(b);
-                Debug.Log($"Removed duplicate Building from {obj.name}");
-            }
+            Destroy(b);
+            Debug.Log($"Removed duplicate Building from {obj.name}");
         }
         // ChildModelClickHandler 중복 제거 (하나만 유지)
         ChildModelClickHandler[] handlers = obj.GetComponentsInChildren<ChildModelClickHandler>(true);
@@ -117,9 +114,9 @@ public class Building : MonoBehaviour
 
     public void StartConstruction()
     {
+        Managers.Commodity.LogAmounts(); // 추가: 체크 직전 Amount 로그 (필요 시 유지/삭제)
         Debug.Log($"StartConstruction - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
-        if (CurrentState != State.Ruin || constructionCoroutine != null) return; // 중복 방지 추가
-        if (!_isTestMode && !CraftingManager.Instance.CheckResources(this, 1)) return; // JSON 체크 통합 (CraftingManager 연동 가정)
+        if (CurrentState != State.Ruin) return;
         CurrentState = State.Constructing;
         Debug.Log($"State changed to Constructing: {gameObject.name}");
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
@@ -211,15 +208,14 @@ public class Building : MonoBehaviour
     {
         Debug.Log($"Upgrade - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
         // --- 중복 호출 방지 ---
-        if (CurrentState != State.Base || upgradeCoroutine != null) return;
-        // --- 최대 레벨 체크 ---
+        if (upgradeCoroutine != null) return; // 업그레이드 코루틴이 이미 실행 중이면 무시
+        if (CurrentState != State.Base) return; // Base 상태에서만 업그레이드 가능
+                                                // --- 최대 레벨 체크 ---
         if (Level >= maxLevel)
         {
             Debug.Log($"최대 레벨 도달: {gameObject.name}, Level: {Level}");
             return;
         }
-        // --- 자원 체크 (테스트 모드 아닐 때만) ---
-        if (!_isTestMode && !CraftingManager.Instance.CheckResources(this, Level + 1)) return;
         // --- 레벨 증가 ---
         Level++;
         Debug.Log($"Level increased to {Level} for {gameObject.name}");
@@ -229,18 +225,13 @@ public class Building : MonoBehaviour
             CurrentState = State.Upgrading;
             upgradeCoroutine = StartCoroutine(UpgradeCoroutine());
             Debug.Log($"Upgrade (to Upgraded) called for {gameObject.name}");
-            Debug.Log("조건이 만족되었으므로 건물을 업그레이드 하였습니다");
         }
         else
         {
             // 레벨업은 즉시 적용, 모델은 Base 유지
             SwapModel(basePrefab);
             Debug.Log($"Level up completed: {gameObject.name}, Level: {Level}, State: {CurrentState}");
-            Debug.Log("조건이 만족되었으므로 건물 레벨이 올라갔습니다");
         }
-        // --- OnUpgrade 호출 ---
-        if (resourceProducer != null) resourceProducer.OnUpgrade(Level);
-        if (roleHandler != null) roleHandler.OnUpgrade(Level);
     }
 
     private IEnumerator UpgradeCoroutine()
@@ -263,7 +254,7 @@ public class Building : MonoBehaviour
             }
             currentEffect.transform.SetParent(transform, false);
             Renderer modelRenderer = currentModel != null ? currentModel.GetComponent<Renderer>() : null;
-            float heightOffset = modelRenderer != null ? modelRenderer.bounds.size.y / 2f : 1f;
+            float heightOffset = modelRenderer != null ? modelRenderer.bounds.size.y / 2f : 1f; // 모델 중앙 높이
             currentEffect.transform.position = FixedPosition + Vector3.up * heightOffset;
             ParticleSystem ps = currentEffect.GetComponent<ParticleSystem>();
             if (ps != null) ps.Play();
@@ -338,7 +329,6 @@ public class Building : MonoBehaviour
     {
         if (currentModel != null)
         {
-            // 수정: name.Contains 대신 prefab 참조 비교 (Clone 문제 방지)
             if (newPrefab == ruinPrefab)
             {
                 ruinPool.Release(currentModel);
@@ -387,13 +377,5 @@ public class Building : MonoBehaviour
             if (building.name == "Government") return building.Level;
         }
         return 0;
-    }
-
-    void OnDestroy()
-    {
-        // 추가: 코루틴 정리 (메모리 누수 방지)
-        if (constructionCoroutine != null) StopCoroutine(constructionCoroutine);
-        if (upgradeCoroutine != null) StopCoroutine(upgradeCoroutine);
-        if (currentEffect != null) Destroy(currentEffect);
     }
 }

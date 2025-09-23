@@ -2,19 +2,19 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Text;
-using System.Text.RegularExpressions; // RemoveComments에서 Regex 사용
+using System.Text.RegularExpressions;
 
 [System.Serializable]
 public class BuildingRequirement
 {
     public string buildingName;
     public int level;
-    public List<RequiredResource> requiredResources; // type(int), amount(int)
+    public List<RequiredResource> requiredResources;
     public int requiredGovernmentLevel;
-    public int constructionTime; // 초 단위
-    public float productionRate; // 생산량
-    public int cycleSeconds; // 주기 초
-    public string description; // 비고
+    public int constructionTime;
+    public float productionRate;
+    public int cycleSeconds;
+    public string description;
 }
 
 [System.Serializable]
@@ -27,11 +27,11 @@ public class CraftingManager : MonoBehaviour
 {
     public static CraftingManager Instance { get; private set; }
 
-    [SerializeField] private List<Building> buildings = new List<Building>(); // 모든 빌딩 객체 목록 (에디터 할당 or 자동 로드)
+    [SerializeField] private List<Building> buildings = new List<Building>();
 
-    private bool isDragging = false; // 드래그 중 클릭 무시 플래그
-    private float lastInputTime = 0f; // 마지막 입력 타임스탬프
-    private const float inputCooldown = 0.2f; // 0.2초 내 중복 입력 무시
+    private bool isDragging = false;
+    private float lastInputTime = 0f;
+    private const float inputCooldown = 0.2f;
 
     private Dictionary<string, List<BuildingRequirement>> _buildingReqs = new Dictionary<string, List<BuildingRequirement>>();
 
@@ -43,8 +43,8 @@ public class CraftingManager : MonoBehaviour
 
     void Start()
     {
-        buildings.AddRange(FindObjectsOfType<Building>()); // 자동 초기화 – 씬에 배치된 Building 객체 찾기 (논리: 동적 로드 용이)
-        LoadBuildingRequirements(); // 추가: JSON 로드
+        buildings.AddRange(FindObjectsOfType<Building>());
+        LoadBuildingRequirements();
     }
 
     void Update()
@@ -56,7 +56,6 @@ public class CraftingManager : MonoBehaviour
         HandleKeyInput();
     }
 
-    // ------------------- 📱 터치 처리 -------------------
     private void HandleTouchInput()
     {
         if (Input.touchCount == 1)
@@ -85,7 +84,6 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // ------------------- 🖱️ 마우스 처리 -------------------
     private void HandleMouseInput()
     {
         if (Input.GetMouseButtonDown(0))
@@ -101,13 +99,12 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // ------------------- ⌨️ 키 입력 처리 -------------------
     private void HandleKeyInput()
     {
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R))
         {
-            Building building = GetComponent<Building>(); // 현재 객체의 Building 컴포넌트
+            Building building = GetComponent<Building>();
             if (building != null)
             {
                 Debug.Log($"Key press detected for {gameObject.name} - CurrentState: {building.CurrentState}");
@@ -124,7 +121,6 @@ public class CraftingManager : MonoBehaviour
 #endif
     }
 
-    // ------------------- 🔍 공통 Raycast 처리 -------------------
     private void ProcessRaycast(Ray ray)
     {
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Default")))
@@ -136,11 +132,11 @@ public class CraftingManager : MonoBehaviour
                 Debug.Log($"Raycast hit: {hit.transform.name}, Building: {building.name}");
                 if (building.CurrentState == Building.State.Ruin)
                 {
-                    StartBuildingConstruction(building); // 수정: 체크 추가된 메서드 호출
+                    StartBuildingConstruction(building);
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
-                    UpgradeBuilding(building); // 수정: 체크 추가된 메서드 호출
+                    UpgradeBuilding(building);
                 }
             }
         }
@@ -150,54 +146,43 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // ------------------- 🏗️ 유틸 함수 -------------------
     public void AddBuilding(Building newBuilding)
     {
-        buildings.Add(newBuilding); // 동적 추가 – 나중 확장 (레벨업 해금) 용이
+        buildings.Add(newBuilding);
     }
 
     public void StartBuildingConstruction(Building building)
     {
-        // 수정: JSON 기반 체크 (level 1 = 건설)
         if (!CheckResources(building, 1))
         {
+            Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
+            Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
             Debug.LogWarning($"Construction failed for {building.name}: Insufficient resources or government level.");
             return;
         }
-
-        // 자원 소모
         ConsumeResources(building, 1);
-
-        building.StartConstruction(); // 빌딩 객체 호출 – 논리 분리 (SOLID 준수)
+        building.StartConstruction();
     }
 
     public void UpgradeBuilding(Building building)
     {
         int nextLevel = building.Level + 1;
-
-        // 수정: maxLevel 하드코딩 대신 10으로 (Building.cs private라 접근 대신)
         if (nextLevel > 10 || !CheckResources(building, nextLevel))
         {
+            Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
+            Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
             Debug.LogWarning($"Upgrade failed for {building.name}: Max level reached or insufficient resources/government level.");
             return;
         }
-
-        // 자원 소모
         ConsumeResources(building, nextLevel);
-
-        building.Upgrade(); // 빌딩 객체 호출
-
-        // 수정: OnUpgrade 인수 에러 fix – 추가 인수 제거, productionRate 로그만 (ResourceProducer 확장 필요 시 별도)
+        building.Upgrade();
         var req = GetRequirement(building.name, nextLevel);
         if (req != null)
         {
-            // ResourceProducer.OnUpgrade(nextLevel); // 기존처럼 level만 호출 (Building.cs 내부에서 호출됨)
             Debug.Log($"Applying productionRate {req.productionRate} and cycle {req.cycleSeconds} for {building.name} level {nextLevel}. Update ResourceProducer if needed.");
-            // TODO: ResourceProducer.cs에 SetProduction(float rate, int cycle) 추가 추천
         }
     }
 
-    // 수정: CheckResources를 JSON 기반으로 변경 (정부 레벨 + 자원 체크)
     public bool CheckResources(Building building, int targetLevel)
     {
         if (!_buildingReqs.TryGetValue(building.name, out var reqs))
@@ -205,22 +190,18 @@ public class CraftingManager : MonoBehaviour
             Debug.LogError($"No requirements found for building: {building.name}");
             return false;
         }
-
         var req = reqs.Find(r => r.level == targetLevel);
         if (req == null)
         {
             Debug.LogError($"No requirement for level {targetLevel} in {building.name}");
             return false;
         }
-
-        // 정부 레벨 체크
-        if (GetGovernmentLevel() < req.requiredGovernmentLevel)
+        // 수정: Government 빌딩은 정부 레벨 체크 스킵 (초기 업그레이드 허용)
+        if (building.name != "Government" && GetGovernmentLevel() < req.requiredGovernmentLevel)
         {
             Debug.LogWarning($"Government level too low: Required {req.requiredGovernmentLevel}, Current {GetGovernmentLevel()}");
             return false;
         }
-
-        // 자원 체크
         foreach (var res in req.requiredResources)
         {
             IngredientType type = (IngredientType)res.type;
@@ -231,12 +212,10 @@ public class CraftingManager : MonoBehaviour
                 return false;
             }
         }
-
         return true;
     }
 
-    // 추가: 자원 소모 헬퍼
-    private void ConsumeResources(Building building, int targetLevel)
+    public void ConsumeResources(Building building, int targetLevel)
     {
         if (!_buildingReqs.TryGetValue(building.name, out var reqs)) return;
 
@@ -250,7 +229,6 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // 추가: 요구사항 getter (productionRate 등에 사용)
     private BuildingRequirement GetRequirement(string buildingName, int level)
     {
         if (_buildingReqs.TryGetValue(buildingName, out var reqs))
@@ -286,7 +264,6 @@ public class CraftingManager : MonoBehaviour
         Debug.Log("인구 치료: " + amount);
     }
 
-    // 추가: JSON 로드 메서드
     private void LoadBuildingRequirements()
     {
         Debug.Log("=== LoadBuildingRequirements Start ===");
@@ -303,7 +280,7 @@ public class CraftingManager : MonoBehaviour
         if (jsonAsset == null)
         {
             Debug.LogError("BuildingRequirements.json not found in Resources/Json! Using hardcoded if available.");
-            return; // fallback: 하드코딩 없으니 에러 로그만
+            return;
         }
         Debug.Log($"Loaded: {jsonAsset.name} (length: {jsonAsset.text.Length})");
 
@@ -333,7 +310,6 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
-    // 추가: JSON 주석 제거 헬퍼 (CommodityManager에서 복사)
     private string RemoveComments(string json)
     {
         string[] lines = json.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);

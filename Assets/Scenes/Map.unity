@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 154033883}
   - component: {fileID: 154033882}
   m_Layer: 0
-  m_Name: Test2
+  m_Name: "\uC81C\uCCA0\uC18C"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   constructionEffectPrefab: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
   upgradeTime: 1
   maxLevel: 10
-  _isTestMode: 1
+  _isTestMode: 0
   constructionTime: 5
 --- !u!4 &154033883
 Transform:
@@ -865,7 +865,7 @@ GameObject:
   - component: {fileID: 1413297786}
   - component: {fileID: 1413297785}
   m_Layer: 0
-  m_Name: Test
+  m_Name: "\uBAA9\uACF5\uC18C"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -889,7 +889,7 @@ MonoBehaviour:
   constructionEffectPrefab: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
   upgradeTime: 1
   maxLevel: 10
-  _isTestMode: 1
+  _isTestMode: 0
   constructionTime: 5
 --- !u!4 &1413297786
 Transform:

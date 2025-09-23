@@ -30,8 +30,8 @@
       "buildingName": "목공소",
       "level": 3,
       "requiredResources": [
-        {"type": 1, "amount": 10},
-        {"type": 2, "amount": 0}
+        {"type": 1, "amount": 100},
+        {"type": 2, "amount": 50}
       ],
       "requiredGovernmentLevel": 2,
       "constructionTime": 15,

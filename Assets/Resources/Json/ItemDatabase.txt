@@ -5,9 +5,10 @@
       "name": "Wood",
       "description": "기본 자원: 나무",
       "value": 1,
-      "type": 1,  // 0 -> 1 (Wood)
+      "type": 1,
       "stackSize": 999,
       "productionRate": 10.0,
+      "amount": 10, // 추가: 초기 100개
       "craftingRequirements": []
     },
     {
@@ -15,9 +16,10 @@
       "name": "Iron",
       "description": "고급 자원: 철광석",
       "value": 5,
-      "type": 2, 
+      "type": 2,
       "stackSize": 500,
       "productionRate": 5.0,
+      "amount": 5, // 추가: 초기 50개
       "craftingRequirements": []
     }
   ]
