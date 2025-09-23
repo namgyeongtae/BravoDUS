@@ -16,6 +16,7 @@ public class UIBuildingSelection : CanvasPanel
     private List<UIBuildingActionButton> _actionButtons = new();
 
     private BuildingType _selectedBuildingType = BuildingType.None;
+    private Building _selectedBuilding = null;
 
     private Coroutine _animateCoroutine = null;
 
@@ -24,6 +25,10 @@ public class UIBuildingSelection : CanvasPanel
     protected override void Initialize()
     {
         InitActionDict();
+    }
+    public void SetSelectedBuilding(Building building)
+    {
+        _selectedBuilding = building;
     }
 
     public void DespawnButtons()
@@ -43,18 +48,18 @@ public class UIBuildingSelection : CanvasPanel
         _selectedBuildingType = BuildingType.None;
     }
 
-    public void SpawnButtons(BuildingType type)
+    public void SpawnButtons()
     {
         if (_isOpen)
             return;
 
-        var buildingActionSet = GetActionSetForBuilding(type);
+        var buildingActionSet = GetActionSetForBuilding(_selectedBuilding.BuildingType);
 
         var actions = buildingActionSet.availableActions;
 
         foreach (var action in actions)
         {
-            var button = SpawnActionButton(action);
+            var button = SpawnActionButton(_selectedBuilding, action);
             _actionButtons.Add(button);
         }
 
@@ -69,10 +74,10 @@ public class UIBuildingSelection : CanvasPanel
         _isOpen = true;
         _animateCoroutine = StartCoroutine(ActiveActionButtons());
 
-        _selectedBuildingType = type;
+        _selectedBuildingType = _selectedBuilding.BuildingType;
     }
 
-    private UIBuildingActionButton SpawnActionButton(BuildingAction buildingAction)
+    private UIBuildingActionButton SpawnActionButton(Building building, BuildingAction buildingAction)
     {
         UIBuildingActionButton button = Managers.Resource.Instantiate("UI/Buttons/BuildingActionButton")
                                                 .GetComponent<UIBuildingActionButton>();
@@ -103,6 +108,7 @@ public class UIBuildingSelection : CanvasPanel
 
     private BuildingActionSet GetActionSetForBuilding(BuildingType type)
     {
+        Debug.Log($"GetActionSetForBuilding: {type}");
         return _buildingSelectionSO.actionSets.Find(set => set.buildingType == type);
     }
 
@@ -148,6 +154,7 @@ public class UIBuildingSelection : CanvasPanel
         Debug.Log("InitActionDict");
         _actionDict.Add(BuildingActionType.Info, Action_ShowInfo);
         _actionDict.Add(BuildingActionType.Upgrade, Action_Upgrade);
+        _actionDict.Add(BuildingActionType.HumanResource, Action_HumanResource);
     }
 
     private void Action_ShowInfo()
@@ -184,5 +191,16 @@ public class UIBuildingSelection : CanvasPanel
         // 선택된 빌딩을 어떻게든 가져와서 Upgrade 함수 호출출
     }
 
+    private void Action_HumanResource()
+    {
+        Debug.Log("Start Human Resource");
+
+        // TODO 
+        // 선택된 빌딩의 인력 정보를 나타내는 UI 표시
+        var uiWorkForce = Managers.UI.AddPanel<UIWorkForce>(_selectedBuilding);
+
+        // 인력 정보 세팅
+        // uiWorkForce.SetWorkForceInfo(_selectedBuilding);
+    }
     #endregion
 }

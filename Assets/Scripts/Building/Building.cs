@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Pool;
+using System.Collections.Generic;
 
 public class Building : MonoBehaviour
 {
@@ -13,10 +14,14 @@ public class Building : MonoBehaviour
     [SerializeField] private bool _isTestMode = false; // 기본 false
     [SerializeField] public float constructionTime = 5f; // 건설 시간 (초)
 
+    private List<WorkForce> _workForceList = new(); // 건물에 할당된 인력 리스트
+
     public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
     public State CurrentState { get; private set; } = State.Ruin; // 현재 상태
     public int Level { get; private set; } = 0; // 레벨
     public Vector3 FixedPosition { get; private set; } // 고정 위치
+    public BuildingType BuildingType; // 건물 타입
+    public List<WorkForce> WorkForceList => _workForceList; // 건물에 할당된 인력 리스트
 
     private GameObject currentModel; // 현재 모델 인스턴스
     private Coroutine constructionCoroutine; // 건설 코루틴 참조
@@ -118,6 +123,7 @@ public class Building : MonoBehaviour
         Debug.Log($"StartConstruction - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
         if (CurrentState != State.Ruin) return;
         CurrentState = State.Constructing;
+
         Debug.Log($"State changed to Constructing: {gameObject.name}");
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
         Debug.Log($"StartConstruction called for {gameObject.name}");
@@ -377,5 +383,14 @@ public class Building : MonoBehaviour
             if (building.name == "Government") return building.Level;
         }
         return 0;
+    }
+
+    public void AssignWorkForce(WorkForce workForce)
+    {
+        _workForceList.Add(workForce);
+        workForce.Assign();
+
+        // TODO 
+        // 유저 데이터에 저장장
     }
 }

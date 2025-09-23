@@ -112,11 +112,13 @@ public class CraftingManager : MonoBehaviour
                 Debug.Log($"Key press detected for {gameObject.name} - CurrentState: {building.CurrentState}");
                 if (building.CurrentState == Building.State.Ruin)
                 {
-                    building.StartConstruction();
+                    // building.StartConstruction();
+                    Managers.UI.AddPanel<UIBuildButtonGroup>(building);
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
-                    building.Upgrade();
+                    //building.Upgrade();
+                    Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(building);
                 }
             }
         }
@@ -134,11 +136,14 @@ public class CraftingManager : MonoBehaviour
                 Debug.Log($"Raycast hit: {hit.transform.name}, Building: {building.name}");
                 if (building.CurrentState == Building.State.Ruin)
                 {
-                    StartBuildingConstruction(building);
+                    // building.StartConstruction();
+                    Managers.UI.AddPanel<UIBuildButtonGroup>(building);
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
-                    UpgradeBuilding(building);
+                    //building.Upgrade();
+                    Debug.Log($"Key press detected for {gameObject.name} - BuildingType: {building.BuildingType}");
+                    Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(building);
                 }
             }
         }
@@ -153,17 +158,18 @@ public class CraftingManager : MonoBehaviour
         buildings.Add(newBuilding);
     }
 
-    public void StartBuildingConstruction(Building building)
+    public bool StartBuildingConstruction(Building building)
     {
         if (!CheckResources(building, 1))
         {
             Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
             Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
             Debug.LogWarning($"Construction failed for {building.name}: Insufficient resources or government level.");
-            return;
+            return false;
         }
         ConsumeResources(building, 1);
         building.StartConstruction();
+        return true;
     }
 
     public void UpgradeBuilding(Building building)

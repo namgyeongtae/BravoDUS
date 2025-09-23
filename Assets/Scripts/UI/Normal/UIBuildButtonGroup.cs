@@ -54,14 +54,16 @@ public class UIBuildButtonGroup : CanvasPanel
     }
     private void OnClickBuildButton()
     {
+        bool isSuccess = CraftingManager.Instance.StartBuildingConstruction(_selectedBuilding);
+        if (!isSuccess)
+            return;
+
         _immediateButton.gameObject.SetActive(true);
         _buildProgress.gameObject.SetActive(true);
         _buildProgress.value = 0;
 
         StartCoroutine(UpdateBuildProgress());
-
-        CraftingManager.Instance.StartBuildingConstruction(_selectedBuilding);
-
+        
         _buildButton.gameObject.SetActive(false);
         _cancelButton.gameObject.SetActive(false);
     }

@@ -22,7 +22,7 @@ public class SceneUI : CanvasPanel
     [Bind("MenuButton")] private UIButton _menuButton;
 
     [Header("Build")]
-    [Bind("UIBuildingSelection")]private UIBuildingSelection _buildingSelection;
+    [Bind("UIBuildingSelection")] private UIBuildingSelection _buildingSelection;
 
     public UIBuildingSelection BuildingSelection => _buildingSelection;
 
@@ -30,8 +30,6 @@ public class SceneUI : CanvasPanel
     protected override void Initialize()
     {
         base.Initialize();
-
-        Debug.Log("SceneUI Initialize");
 
         BindEvent(_homeButton, OnShopButtonClicked);
     }
@@ -151,9 +149,11 @@ public class SceneUI : CanvasPanel
     }
 
     // 빌딩 선택 창 열기 혹은 닫기
-    public void ToggleBuildingSelection(BuildingType type)
+    public void ToggleBuildingSelection(Building building)
     {
         bool isOpen = _buildingSelection.IsOpen;
+
+        _buildingSelection.SetSelectedBuilding(building);
 
         if (isOpen)
         {
@@ -161,7 +161,7 @@ public class SceneUI : CanvasPanel
         }
         else
         {
-            _buildingSelection.SpawnButtons(type);
+            _buildingSelection.SpawnButtons();
         }
     }
 }
