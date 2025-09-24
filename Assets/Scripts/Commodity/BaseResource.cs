@@ -10,13 +10,13 @@ public abstract class BaseResource
     public void Gather(float addValue)
     {
         _amount += addValue;
-        OnAmountChanged(_amount);
+        OnAmountChanged(_amount, isAdd: true);
     }
     public void Consume(float subValue)
     {
-        _amount -= subValue;
-        OnAmountChanged(_amount);
+        _amount = Mathf.Max(0, _amount - subValue);
+        OnAmountChanged(_amount, isAdd: false);
     }
 
-    protected virtual void OnAmountChanged(float amount) { }
+    protected virtual void OnAmountChanged(float amount, bool isAdd) { }
 }

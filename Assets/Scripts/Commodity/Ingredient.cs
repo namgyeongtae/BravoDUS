@@ -21,13 +21,13 @@ public class Ingredient : BaseResource
         _amount = 0;
     }
 
-    protected override void OnAmountChanged(float amount)
+    protected override void OnAmountChanged(float amount, bool isAdd)
     {
-        if (amount > 0)
+        if (isAdd)
         {
             Managers.UI.GetUI<SceneUI>("SceneUI").AddCommodity(this, amount);
         }
-        else if (amount < 0)
+        else
         {
             Managers.UI.GetUI<SceneUI>("SceneUI").SubCommodity(this, amount);
         }
