@@ -10,13 +10,25 @@ public class UIWorkForce : CanvasPanel
     [Bind("WorkForceGroup")] private GridLayoutGroup _workForceGroup;
 
     private Building _building;
-    private int _maxWorkForceCount;
-    private int _validWorkForceCount;
+    private int _maxWorkForceCount = 4;
+    private int _validWorkForceCount = 2;
     private List<UIWorkForceSlot> _workForceSlots = new();
 
     protected override void Initialize()
     {
 
+    }
+
+    void Update()
+    {
+        // 터치할 때 UI를 터치한 게 아니면 Close
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (!RectTransformUtility.RectangleContainsScreenPoint(_background.rectTransform, Input.mousePosition))
+            {
+                Close();
+            }
+        }
     }
 
     public override void Open()
@@ -70,7 +82,8 @@ public class UIWorkForce : CanvasPanel
             {
                 // 남은 인덱스는 validWorkForceCount 만큼 빈 슬롯으로 채우기
                 int remainValidCount = _validWorkForceCount - filledCount;
-                if (i <= remainValidCount)
+                int validIndex = i - filledCount;
+                if (validIndex < remainValidCount)
                 {
                     slot.State = WorkForceSlotState.Unassigned;
                 }
