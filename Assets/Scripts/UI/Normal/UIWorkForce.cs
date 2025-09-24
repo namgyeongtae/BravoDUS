@@ -14,6 +14,8 @@ public class UIWorkForce : CanvasPanel
     private int _validWorkForceCount = 2;
     private List<UIWorkForceSlot> _workForceSlots = new();
 
+    public Building Building => _building;
+
     protected override void Initialize()
     {
 

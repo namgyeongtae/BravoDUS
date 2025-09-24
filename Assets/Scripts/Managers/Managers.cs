@@ -6,12 +6,14 @@ public class Managers
     private static ResourceManager _resource = new ResourceManager();
     private static UIManager _ui = new UIManager();
     private static EventManager _event = new EventManager();
+    private static HRManager _hr = new HRManager();
     // ����: _game new ���� (�� ��ġ GameManager.Instance ���)
 
     public static CommodityManager Commodity => _commodity;
     public static ResourceManager Resource => _resource;
     public static UIManager UI => _ui;
     public static EventManager Event => _event;
+    public static HRManager HR => _hr;
     public static GameManager Game => GameManager.Instance; // ����: Instance ����
 
     public void Init()
@@ -19,20 +21,18 @@ public class Managers
         _commodity.Init();
         _ui.Init();
         _event.Init();
-      
+        _hr.Init();
     }
 
     public void Update()
     {
         _event.Update();
-       
-       
+        _hr.Update();
     }
 
     public void Release()
     {
         _commodity.Release();
         _event.Release();
-      
     }
 }
