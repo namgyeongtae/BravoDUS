@@ -388,9 +388,5 @@ public class Building : MonoBehaviour
     public void AssignWorkForce(WorkForce workForce)
     {
         _workForceList.Add(workForce);
-        workForce.Assign();
-
-        // TODO 
-        // 유저 데이터에 저장장
     }
 }

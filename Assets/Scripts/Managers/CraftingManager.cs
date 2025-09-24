@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class BuildingRequirement
@@ -63,6 +64,10 @@ public class CraftingManager : MonoBehaviour
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
+
+            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                return;
+
             if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude > 10f)
             {
                 isDragging = true;
@@ -90,6 +95,9 @@ public class CraftingManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
+
             if (Time.time - lastInputTime < inputCooldown)
             {
                 Debug.Log("Mouse input ignored due to cooldown.");

@@ -199,6 +199,8 @@ public class UIBuildingSelection : CanvasPanel
         // 선택된 빌딩의 인력 정보를 나타내는 UI 표시
         var uiWorkForce = Managers.UI.AddPanel<UIWorkForce>(_selectedBuilding);
 
+        Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(_selectedBuilding);
+
         // 인력 정보 세팅
         // uiWorkForce.SetWorkForceInfo(_selectedBuilding);
     }
