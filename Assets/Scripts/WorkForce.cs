@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum JobType
 {
-    None,
+    None = -1,
     WoodWorker,
     IronWorker,
     Doctor,
@@ -28,6 +28,7 @@ public class WorkForceData
     public float Stamina;
     public JobType JobType;
     public HRState HRState;
+    public string Icon;
 }
 
 public class WorkForce
@@ -35,43 +36,92 @@ public class WorkForce
     private WorkForceData _data;
 
     private bool _isAssigned;
-
-    public Sprite Icon { get; private set;}
+    private float _stamina;
+    private HRState _hrState;
 
     public bool isAssigned => _isAssigned;
     public JobType JobType => _data.JobType;
+    public HRState HRState => _hrState;
+    public string Icon => _data.Icon;
+    public float Stamina => _stamina;
 
     public WorkForce(WorkForceData data)
     {
         _data = data;
+        _stamina = data.Stamina;
+        _hrState = data.HRState;
     }
+
+    public void Update()
+    {
+        switch (_hrState)
+        {
+            case HRState.Work:
+                WorkTickUpdate();
+                break;
+            case HRState.Rest:
+                RestTickUpdate();
+                break;
+        }
+    }
+
+    float _timer = 0f;
+    float _intervalTime = 3f;
 
     public void WorkTickUpdate()
     {
-        if (_data.HRState != HRState.Work)
-            return;
+        if (_hrState != HRState.Work)
+                return;
 
-        if (_data.Stamina > 0)
+        _timer += Time.deltaTime;
+        if (_timer >= _intervalTime)
         {
-            _data.Stamina -= 1f;
+            _timer = 0f;
+
+            if (_stamina > 0)
+            {
+                _stamina -= 2f;
+            }
+            else
+            {
+                _hrState = HRState.Tired;
+            }
         }
-        else
+        
+    }
+
+    public void RestTickUpdate()
+    {
+        if (_hrState != HRState.Rest)
+            return;
+        
+        if (_stamina < 100)
         {
-            _data.HRState = HRState.Tired;
+            _stamina += 2f;
         }
     }
 
-    public void Assign()
+    public bool Assign()
     {
-        _isAssigned = true;
+        if (_stamina > 0.1f)
+        {
+            _hrState = HRState.Work;
+            _isAssigned = true;
+        }
+        else
+        {
+            var toast = Managers.UI.AddPanel<UIToastPopup>();
+            toast.SettingPopup("스태미나가 부족해서 일을 할 수 없습니다.");
 
-        // Managers.HR.Assign(this);
+            _isAssigned = false;
+        }
+
+        return _isAssigned;
     }
 
     public void Unassign()
     {
         _isAssigned = false;
-
-        // Managers.HR.Unassign(this);
+        _hrState = HRState.None;
     }
 }
