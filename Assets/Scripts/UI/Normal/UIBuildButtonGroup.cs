@@ -56,14 +56,19 @@ public class UIBuildButtonGroup : CanvasPanel
     {
         bool isSuccess = CraftingManager.Instance.StartBuildingConstruction(_selectedBuilding);
         if (!isSuccess)
+        {
+            var toast = Managers.UI.AddPanel<UIToastPopup>();
+            toast.SettingPopup("자원이 부족해서 실패하였습니다.");
+            OnClickCancelButton();
             return;
+        }
 
         _immediateButton.gameObject.SetActive(true);
         _buildProgress.gameObject.SetActive(true);
         _buildProgress.value = 0;
 
         StartCoroutine(UpdateBuildProgress());
-        
+
         _buildButton.gameObject.SetActive(false);
         _cancelButton.gameObject.SetActive(false);
     }
