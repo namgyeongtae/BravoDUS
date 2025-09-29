@@ -9,8 +9,10 @@ public class UIManager : IManagerBase
         
     }
 
-    public T GetUI<T>(string name) where T : CanvasPanel
+    public T GetUI<T>(string name = null) where T : CanvasPanel
     {
+        if (name == null) name = typeof(T).Name;
+
         return CanvasManager.Instance.GetPanel<T>(name);
     }
 
