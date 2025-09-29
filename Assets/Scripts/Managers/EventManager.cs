@@ -10,7 +10,7 @@ public class EventManager : IManagerBase
 
     public EventController Fire => _events[EventType.FireRiskEvent];
     public EventController Security => _events[EventType.SecurityEvent];
-
+    public EventController Injure => _events[EventType.InjureEvent];
     public void Init()
     {
         // Load Events from Database
@@ -19,6 +19,7 @@ public class EventManager : IManagerBase
     
         _events.Add(EventType.FireRiskEvent, new FireEventController(0.01f));
         // _events.Add(EventType.SecurityEvent, new SecurityEventController(0.01f));
+        _events.Add(EventType.InjureEvent, new InjureEventController(0.01f));
     }
 
     public void Update()
@@ -47,11 +48,6 @@ public class EventManager : IManagerBase
         {
             case IncidentState.Progressing:
                 {
-                    // TODO
-                    // 소방대 혹은 경찰대가 출동하는 등 해결하기 위한 조건이 충족된다면 Resolving으로 전환
-                    // if (소방대 or 경찰대 배치 시)
-                    //    inc.State = IncidentState.Resolving;
-                    // else
                     inc.Tick();
                 }
                 break;
@@ -62,11 +58,13 @@ public class EventManager : IManagerBase
                     {
                         EventType.SecurityEvent => _cityStat.ResponsePower,
                         EventType.FireRiskEvent => _cityStat.SuppressPower,
+                        EventType.InjureEvent => _cityStat.HealPower,
                         _ => throw new System.Exception($"Unknown event type: {inc.EventType}")
                     };
 
                     float resolveSeconds = Mathf.Max(5f, 20f / Mathf.Max(1f, power)); // 최소 5초
                     inc.ResolvingProgress += dt / resolveSeconds;
+                    inc.RemainTime = inc.ResolvingProgress * resolveSeconds;
 
                     if (inc.ResolvingProgress >= 1f) 
                         inc.State = IncidentState.Resolved;
@@ -103,13 +101,13 @@ public class EventManager : IManagerBase
 
     public void AddIncident(Incident incident)
     {
-        incident.OnSpawned?.Invoke();
+        incident.OnSpawned?.Invoke(incident);
         _incidents.Add(incident);
     }
 
     public void RemoveIncident(Incident incident)
     {
-        incident.OnResolved?.Invoke();
+        incident.OnResolved?.Invoke(incident);
         _incidents.Remove(incident);
     }
     public void Release() // �߰�: ��ü ����

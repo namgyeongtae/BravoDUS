@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class SecurityEventController : EventController
 {
-    private readonly float _baseRatePerMin;
-
     public SecurityEventController(float baseRatePerMin) : base(EventType.SecurityEvent)
     {
         _baseRatePerMin = baseRatePerMin;
@@ -17,22 +15,7 @@ public class SecurityEventController : EventController
         return now + minutes * 60f;
     }
 
-    protected override Incident ExecuteSpawn(float now, CityStat stat)
-    {
-        var incident = new Incident() {
-            EventType = EventType.SecurityEvent,
-            ResolvingProgress = 0f,
-            OnResolved = OnResolved_Event,
-            OnSpawned = OnSpawned_Event,
-            OnUpdateTick = OnUpdateTick_Event
-        };
-
-        Managers.Event.AddIncident(incident);
-
-        return incident;
-    }
-
-    protected override void OnSpawned_Event()
+    protected override void OnSpawned_Event(Incident inc)
     {
         // TODO
         // 치안 이벤트 알람 UI 띄우기
@@ -43,14 +26,14 @@ public class SecurityEventController : EventController
         Debug.Log("치안안 이벤트 스폰");
     }
 
-    protected override void OnResolved_Event()
+    protected override void OnResolved_Event(Incident inc)
     {
         // TODO
         // 치안 이벤트 해결 시 도시 디버프 해제
         Debug.Log("치안 이벤트 해결");
     }
 
-    protected override void OnUpdateTick_Event()
+    protected override void OnUpdateTick_Event(Incident inc)
     {
         // TODO
         // 치안 이벤트 도시 디버프 중첩 부여여

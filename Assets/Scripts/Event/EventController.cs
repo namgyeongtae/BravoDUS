@@ -4,7 +4,8 @@ using UnityEngine;
 public enum EventType
 {
     SecurityEvent,
-    FireRiskEvent
+    FireRiskEvent,
+    InjureEvent
 }
 
 public abstract class EventController
@@ -12,6 +13,7 @@ public abstract class EventController
     protected EventType _eventType;
     protected float _nextSpawnAt;
     protected bool _initialized = false;
+    protected float _baseRatePerMin;
 
     public string RemainTime
     {
@@ -60,10 +62,20 @@ public abstract class EventController
             _nextSpawnAt = ScheduleNext(now, stats);
         }
     }
+    protected Incident ExecuteSpawn(float now, CityStat stat)
+    {
+        var incident = new Incident() {
+            EventType = _eventType,
+            ResolvingProgress = 0f,
+            OnResolved = OnResolved_Event,
+            OnSpawned = OnSpawned_Event,
+            OnUpdateTick = OnUpdateTick_Event
+        };
+        return incident;
+    }
 
-    protected abstract void OnSpawned_Event();
-    protected abstract void OnResolved_Event();
-    protected abstract void OnUpdateTick_Event();
+    protected abstract void OnSpawned_Event(Incident inc);
+    protected abstract void OnResolved_Event(Incident inc);
+    protected abstract void OnUpdateTick_Event(Incident inc);
     protected abstract float ScheduleNext(float now, CityStat stats);
-    protected abstract Incident ExecuteSpawn(float now, CityStat stat);
 }

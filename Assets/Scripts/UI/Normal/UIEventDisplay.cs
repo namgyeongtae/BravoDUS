@@ -6,6 +6,7 @@ public class UIEventDisplay : CanvasPanel
 {
     [Bind("FireTime")] protected Text _fireTime;
     [Bind("SecurityTime")] protected Text _securityTime;
+    [Bind("InjureTime")] protected Text _injureTime;
     [Bind("OpenButton")] protected UIButton _openButton;
     [Bind("CloseButton")] protected UIButton _closeButton;
 
@@ -42,6 +43,7 @@ public class UIEventDisplay : CanvasPanel
     void Update()
     {
         _fireTime.text = Managers.Event.Fire.RemainTime;
+        _injureTime.text = Managers.Event.Injure.RemainTime;
         // _securityTime.text = Managers.Event.Security.RemainTime;
     }
 
