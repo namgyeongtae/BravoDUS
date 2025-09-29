@@ -1,21 +1,52 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HospitalRole : RoleHandler
 {
-    [SerializeField] private float baseHealRate = 5f; // ±âº» °Ç°­ °ü¸®À²
+    [SerializeField] private float baseHealRate = 5f;
+
+    private int _maxPatients = 3;
+    private int _currentPatients => _injurePatients.Count;
+
+    private List<Incident> _injurePatients = new List<Incident>();
 
     public override void HandleEvent(string eventType)
     {
-        if (eventType == "Disease")
+        foreach (var inc in _injurePatients)
         {
-            Debug.Log("Áúº´ Ä¡·á: " + (baseHealRate * buildingLevel));
+            if (inc.State == IncidentState.Resolved)
+            {
+                RemovePatient(inc);
+            }
         }
     }
 
     public override void OnUpgrade(int newLevel)
     {
         base.OnUpgrade(newLevel);
-        // ¾÷±×·¹ÀÌµå Æ¯¼ö ·ÎÁ÷ (¿¹½Ã Ãß°¡: healRate ·¹º§ ±â¹İ Áõ°¡, ³ªÁß Ä¿½ºÅÍ¸¶ÀÌÁî)
-        baseHealRate *= 1.1f; // ·¹º§´ç 10% Áõ°¡ (Å×½ºÆ® ¿ë, ½ÇÁ¦ ÄÁ¼Á ¸ÂÃç Á¶Á¤)
+    }
+
+    public void AddPatient(Incident inc)
+    {
+        if (inc.EventType != EventType.InjureEvent)
+        {
+            Debug.LogError("InjureEventê°€ ì•„ë‹Œ ì´ë²¤íŠ¸ì— í™˜ìê°€ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.");
+            return;
+        }
+
+        if (_currentPatients >= _maxPatients)
+        {
+            Managers.UI.AddPanel<UIToastPopup>().SettingPopup("ë³‘ë™ì´ ê°€ë“ ì°¼ìŠµë‹ˆë‹¤.");
+            return;
+        }
+            
+        _injurePatients.Add(inc);
+
+        inc.State = IncidentState.Resolving;
+    }
+
+    public void RemovePatient(Incident inc)
+    {
+        _injurePatients.Remove(inc);
     }
 }

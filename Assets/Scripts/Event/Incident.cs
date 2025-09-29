@@ -7,10 +7,11 @@ public sealed class Incident
     public EventType EventType;
     public IncidentState State;
     public float ResolvingProgress;        // Resolving 진행도(0~1)
+    public float RemainTime;
 
-    public Action OnSpawned;
-    public Action OnResolved;
-    public Action OnUpdateTick;
+    public Action<Incident> OnSpawned;
+    public Action<Incident> OnResolved;
+    public Action<Incident> OnUpdateTick;
 
     private int _tickCount = 0;
 
@@ -21,7 +22,7 @@ public sealed class Incident
         {
             _tickCount = 0;
             // 디버프 누적 (강화)
-            OnUpdateTick?.Invoke();
+            OnUpdateTick?.Invoke(this);
         }
     }
 }

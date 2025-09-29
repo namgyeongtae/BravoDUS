@@ -6,6 +6,8 @@ public class CityStat
     public float ResponsePower;// 경찰 대응력
     public float FireRate;     // 화재율(0~1)
     public float SuppressPower;// 소방 진압력
+    public float InjureRate; // 부상율(0~1)
+    public float HealPower; // 치료력(0~1)
 
     // Temp Code
     // 나중에 DB에서 로드하도록 수정 필요
@@ -16,5 +18,7 @@ public class CityStat
         ResponsePower = 10f;
         FireRate = 0.5f;
         SuppressPower = 10f;
+        InjureRate = 0.3f;
+        HealPower = 10f;
     }
 }
