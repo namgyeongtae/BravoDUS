@@ -84,6 +84,7 @@ public class UIBuildingSelection : CanvasPanel
         button.SettingUI(buildingAction);
         button.BindEvent(_actionDict[buildingAction.actionType]);
         button.transform.SetParent(transform);
+        button.transform.localScale = Vector3.one;
 
         return button;
     }

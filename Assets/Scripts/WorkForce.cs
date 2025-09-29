@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public enum JobType
@@ -68,7 +69,7 @@ public class WorkForce
     float _timer = 0f;
     float _intervalTime = 3f;
 
-    public void WorkTickUpdate()
+    private void WorkTickUpdate()
     {
         if (_hrState != HRState.Work)
                 return;
@@ -90,7 +91,7 @@ public class WorkForce
         
     }
 
-    public void RestTickUpdate()
+    private void RestTickUpdate()
     {
         if (_hrState != HRState.Rest)
             return;
@@ -101,6 +102,28 @@ public class WorkForce
         }
     }
 
+    private void InjuredTickUpdate()
+    {
+        
+    }
+
+    public void OnInjured()
+    {
+        _hrState = HRState.Injured;
+
+        var workForceUI = Managers.UI.GetUI<UIWorkForce>();
+
+        if (workForceUI != null)
+        {
+            var slot = workForceUI.GetComponentsInChildren<UIWorkForceSlot>().First(x => x.WorkForce == this);
+            if (slot != null) slot.DisplayWarning();
+        }
+    }
+    public void OnHealed()
+    {
+        _hrState = HRState.None;
+        _stamina = 100f;
+    }
     public bool Assign()
     {
         if (_stamina > 0.1f)

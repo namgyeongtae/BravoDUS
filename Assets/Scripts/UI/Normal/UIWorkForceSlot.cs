@@ -14,10 +14,13 @@ public class UIWorkForceSlot : UIBind
     [SerializeField] private Sprite[] _stateSprites;    // 나중에는 Resources.Load를 하든 Addressable을 사용하든 해야할듯?
     [Bind("Icon")] private Image _icon;
     [Bind("Stamina")] private Image _stamina;
+    [Bind("Warning")] private Image _warning;
 
     private UIButton _slotButton;
     private UIWorkForce _parentUIWorkForce;
     private WorkForce _assignedWorkForce;
+
+    public WorkForce WorkForce => _assignedWorkForce;
 
     private WorkForceSlotState _state = WorkForceSlotState.Locked;
 
@@ -54,6 +57,12 @@ public class UIWorkForceSlot : UIBind
             _slotButton.interactable = true;
 
         _slotButton.BindEvent(OnClickSlotButton, ClickType.Up);
+
+        if (_assignedWorkForce != null)
+        {
+            if (_assignedWorkForce.HRState == HRState.Injured)
+                DisplayWarning();
+        }
     }
 
     void Update()
@@ -81,6 +90,11 @@ public class UIWorkForceSlot : UIBind
         _stamina.gameObject.SetActive(true);
         _stamina.fillAmount = workForce.Stamina / 100f;
         _state = WorkForceSlotState.Assigned;
+    }
+
+    public void DisplayWarning()
+    {
+        _warning.gameObject.SetActive(true);
     }
 
     private void OnClickSlotButton()
