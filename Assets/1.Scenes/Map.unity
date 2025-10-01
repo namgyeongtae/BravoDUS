@@ -380,7 +380,7 @@ MonoBehaviour:
   ruinPrefab: {fileID: 1796308223114320457, guid: 0a7a6bef058008f469ccb039500153cf, type: 3}
   basePrefab: {fileID: 1392075550277909093, guid: 883c9b8e60f057047bed21c2e9c5021f, type: 3}
   upgradedPrefab: {fileID: 7104219932296855556, guid: cef69dfe69a5d884b8998ffaa9664aa5, type: 3}
-  constructionEffectPrefab: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
+  constructionEffectPrefab: {fileID: 1541352577665823825, guid: 3535ca9d47f2b634e8d624b4b50de4b8, type: 3}
   upgradeTime: 1
   maxLevel: 10
   _isTestMode: 0
@@ -1103,7 +1103,7 @@ Transform:
   m_GameObject: {fileID: 429001256}
   serializedVersion: 2
   m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -19, y: 19.5, z: -19}
+  m_LocalPosition: {x: -48, y: 43, z: -48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1165,8 +1165,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44247f59b0b2f348ae9a2bdb7fa8b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 80
+  panSpeed: 0.5
   boundsPadding: {x: 0, y: 0, z: 0}
+  clampX: {x: -74, y: -24}
+  clampZ: {x: -74, y: -24}
+  fixedY: 43
+  fixedRotation: {x: 30, y: 45, z: 0}
 --- !u!1 &451158736
 GameObject:
   m_ObjectHideFlags: 0
@@ -3107,7 +3111,7 @@ MonoBehaviour:
   ruinPrefab: {fileID: 1796308223114320457, guid: 0a7a6bef058008f469ccb039500153cf, type: 3}
   basePrefab: {fileID: 1392075550277909093, guid: 883c9b8e60f057047bed21c2e9c5021f, type: 3}
   upgradedPrefab: {fileID: 7104219932296855556, guid: cef69dfe69a5d884b8998ffaa9664aa5, type: 3}
-  constructionEffectPrefab: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
+  constructionEffectPrefab: {fileID: 1541352577665823825, guid: 3535ca9d47f2b634e8d624b4b50de4b8, type: 3}
   upgradeTime: 1
   maxLevel: 10
   _isTestMode: 0
