@@ -66,5 +66,9 @@ public class UIBuildProgress : CanvasPanel
         // TODO
         // 즉시완료 아이템 효과 적용
         Debug.Log("즉시완료 아이템 효과 적용");
+
+        Managers.Item.UseItem(0, _selectedBuilding);
+
+        Close();
     }
 }
