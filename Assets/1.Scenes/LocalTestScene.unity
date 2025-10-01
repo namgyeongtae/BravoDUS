@@ -1720,7 +1720,7 @@ Camera:
   far clip plane: 5000
   field of view: 60
   orthographic: 1
-  orthographic size: 18
+  orthographic size: 23
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1745,7 +1745,7 @@ Transform:
   m_GameObject: {fileID: 342107396}
   serializedVersion: 2
   m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -19, y: 19.5, z: -19}
+  m_LocalPosition: {x: -48, y: 43, z: -48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1807,8 +1807,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44247f59b0b2f348ae9a2bdb7fa8b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 80
+  panSpeed: 0.5
   boundsPadding: {x: 0, y: 0, z: 0}
+  clampX: {x: -74, y: -24}
+  clampZ: {x: -74, y: -24}
+  fixedY: 43
+  fixedRotation: {x: 30, y: 45, z: 0}
 --- !u!1 &384446538
 GameObject:
   m_ObjectHideFlags: 0
@@ -3198,7 +3202,7 @@ MonoBehaviour:
   ruinPrefab: {fileID: 1796308223114320457, guid: 0a7a6bef058008f469ccb039500153cf, type: 3}
   basePrefab: {fileID: 8357843188404427177, guid: b092e4e1929b12f48895d677d8234bb0, type: 3}
   upgradedPrefab: {fileID: 919132149155446097, guid: fed7e7137b7783e49bfec36701803fef, type: 3}
-  constructionEffectPrefab: {fileID: 0}
+  constructionEffectPrefab: {fileID: 1541352577665823825, guid: 3535ca9d47f2b634e8d624b4b50de4b8, type: 3}
   upgradeTime: 1
   maxLevel: 10
   _isTestMode: 1
@@ -4016,7 +4020,7 @@ MonoBehaviour:
   ruinPrefab: {fileID: 1796308223114320457, guid: 0a7a6bef058008f469ccb039500153cf, type: 3}
   basePrefab: {fileID: 8357843188404427177, guid: b092e4e1929b12f48895d677d8234bb0, type: 3}
   upgradedPrefab: {fileID: 919132149155446097, guid: fed7e7137b7783e49bfec36701803fef, type: 3}
-  constructionEffectPrefab: {fileID: 0}
+  constructionEffectPrefab: {fileID: 1541352577665823825, guid: 3535ca9d47f2b634e8d624b4b50de4b8, type: 3}
   upgradeTime: 1
   maxLevel: 10
   _isTestMode: 1
@@ -6190,10 +6194,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 794229311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 141, y: -21}
-  m_SizeDelta: {x: 285, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1276529236
 MonoBehaviour:
@@ -7908,10 +7912,10 @@ RectTransform:
   - {fileID: 852321140}
   m_Father: {fileID: 794229311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 141, y: -101}
-  m_SizeDelta: {x: 285, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1705144283
 MonoBehaviour:
