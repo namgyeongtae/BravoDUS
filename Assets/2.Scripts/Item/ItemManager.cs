@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 // 아이템 인벤토리를 관리하는 매니저
-public class ItemManager : MonoBehaviour
+public class ItemManager : IManagerBase
 {
     public List<Item> items = new List<Item>(); // 현재 보유 중인 아이템 리스트
 
-    private void Start()
+    public void Init()
     {
         // 게임 시작 시 JSON에서 아이템 불러오기
         // Assets/Resources/items.json

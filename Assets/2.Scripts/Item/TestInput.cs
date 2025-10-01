@@ -4,21 +4,20 @@
 // 빈 오브젝트에 붙여서 ItemManager, Building 연결하면 됨
 public class TestInput : MonoBehaviour
 {
-    public ItemManager itemManager; // 인벤토리를 관리하는 매니저
-    public Building targetBuilding; // 아이템을 적용할 대상 건물 (테스트용)
+        public Building targetBuilding; // 아이템을 적용할 대상 건물 (테스트용)
 
     void Update()
     {
         // 1번 키 → 첫 번째 아이템 사용
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            itemManager.UseItem(0, targetBuilding);
+            Managers.Item.UseItem(0, targetBuilding);
         }
 
         // 2번 키 → 두 번째 아이템 사용
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            itemManager.UseItem(1, targetBuilding);
+            Managers.Item.UseItem(1, targetBuilding);
         }
     }
 }
