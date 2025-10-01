@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
+[DefaultExecutionOrder(0)]
 public class CanvasManager : MonoBehaviour
 {
     private Dictionary<string, CanvasPanel> panelList = new();
