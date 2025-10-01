@@ -41,8 +41,8 @@ public class UIToastPopup : CanvasPanel
             _background.transform.localPosition = new Vector3(_background.transform.localPosition.x, startPos + (endPos - startPos) * easedT, _background.transform.localPosition.z);
             
             // 원래 색상으로 복원 (투명도도 복원)
-            _background.color = new Color(originalColor.r, originalColor.g, originalColor.b, originalColor.a * easedT);
-            _message.color = new Color(originalMessageColor.r, originalMessageColor.g, originalMessageColor.b, originalMessageColor.a * easedT);
+            _background.color = new Color(originalColor.r, originalColor.g, originalColor.b, easedT);
+            _message.color = new Color(originalMessageColor.r, originalMessageColor.g, originalMessageColor.b, easedT);
 
             time += Time.deltaTime;
             yield return null;
