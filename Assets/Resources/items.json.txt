@@ -1,0 +1,20 @@
+﻿{
+  "items": [
+    {
+      "itemName": "즉시 건설",
+      "description": "건설을 즉시 완료한다",
+      "comment": "InstantBuild",
+      "itemType": 0,
+      "value": 0,
+      "quantity": 2
+    },
+    {
+      "itemName": "건설 가속",
+      "description": "건설 시간을 단축한다",
+      "comment": "SpeedUp",
+      "itemType": 1,
+      "value": 5,
+      "quantity": 3
+    }
+  ]
+}
