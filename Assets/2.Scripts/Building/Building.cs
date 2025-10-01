@@ -132,6 +132,9 @@ public class Building : MonoBehaviour
     private IEnumerator ConstructCoroutine()
     {
         Debug.Log($"ConstructCoroutine started for {gameObject.name}");
+        
+        CreateConstructor(); // 건설자 프리팹 생성
+
         // 건물 숨김
         if (currentModel != null)
         {
@@ -164,9 +167,18 @@ public class Building : MonoBehaviour
             yield return new WaitForSeconds(constructionTime / 5f);
             Debug.Log("건설 진행: " + ((i + 1) * 20) + "% - " + gameObject.name + " (State: " + CurrentState + ")");
         }
+        
+        CompleteConstruction();
+    }
+
+    public void CompleteConstruction()
+    {
+        DestroyConstructor();  // 건설자 프리팹 제거
+
         CurrentState = State.Base;
         Level = 0; // Base 상태에서 레벨 0부터 시작으로 초기화
         SwapModel(basePrefab);
+        StopCoroutine(constructionCoroutine);
         constructionCoroutine = null;
         // 이펙트 및 건물 상태 복구
         if (currentEffect != null)
@@ -385,6 +397,25 @@ public class Building : MonoBehaviour
         return 0;
     }
 
+    private void CreateConstructor()
+    {
+        var bounds = GetComponentInChildren<BoxCollider>().bounds;
+
+        GameObject constructor = Managers.Resource.Instantiate("Avatar/Constructor");
+        constructor.transform.SetParent(transform);
+        constructor.transform.position = transform.position 
+                    + transform.forward * (bounds.size.z / 2f * 1.5f) * -1
+                    + transform.up * (bounds.size.y / 2f * 0.5f) * -1;
+    }
+
+    private void DestroyConstructor()
+    {
+        var constructors = transform.Find("Constructor");
+        foreach (Transform constructor in constructors)
+        {
+            Managers.Resource.Destroy(constructor.gameObject);
+        }
+    }
     public void AssignWorkForce(WorkForce workForce)
     {
         _workForceList.Add(workForce);
