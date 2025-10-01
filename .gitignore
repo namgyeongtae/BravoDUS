@@ -7,5 +7,10 @@ Assets/TutorialInfo.meta
 BravoProject.sln
 Assembly-CSharp.csproj
 Assembly-CSharp-Editor.csproj
+.vs/
+*.suo
+*.user
 *.cache
+*.db
+*.vsidx
 *.csproj
