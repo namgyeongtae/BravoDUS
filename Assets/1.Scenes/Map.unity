@@ -4859,21 +4859,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!4 &652942182741623663
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7009758345361603574}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -21.201117, y: 30.394611, z: -2.5419278}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &703231404260491859
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6177,19 +6162,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6030132775649903705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7009758345361603574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d23e7e15d3e23f54592636f7e050f4eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  items: []
 --- !u!4 &6059367592984992803
 Transform:
   m_ObjectHideFlags: 0
@@ -6386,7 +6358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 431e286baab5d7841b76c215a57e35d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 6030132775649903705}
   targetBuilding: {fileID: 1413297785}
 --- !u!114 &6695770717609613138
 MonoBehaviour:
@@ -6440,23 +6411,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7009758345361603574
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 652942182741623663}
-  - component: {fileID: 6030132775649903705}
-  m_Layer: 0
-  m_Name: ItemManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &7077840637678056972
 GameObject:
   m_ObjectHideFlags: 0
@@ -6948,6 +6902,5 @@ SceneRoots:
   - {fileID: 154033883}
   - {fileID: 2521825444664086195}
   - {fileID: 706617145141813046}
-  - {fileID: 652942182741623663}
   - {fileID: 6978352518031080884}
   - {fileID: 462721777}

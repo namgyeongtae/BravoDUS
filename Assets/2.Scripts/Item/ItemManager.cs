@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 // 아이템 인벤토리를 관리하는 매니저
-public class ItemManager : IManagerBase
+public class ItemManager : IManagerBase 
 {
     public List<Item> items = new List<Item>(); // 현재 보유 중인 아이템 리스트
 
