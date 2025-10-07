@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Tile_Ground_01
+  m_Name: M_Tile_Concrete_PaintdCoral
   m_Shader: {fileID: -6465566751694194690, guid: e2aff6b006f7e7a41b004fcc482f4c70, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColor:
-        m_Texture: {fileID: 2800000, guid: 653806b3938360d48956700286a117cd, type: 3}
+        m_Texture: {fileID: 2800000, guid: de2434977cc8f4e4e97ab627f5e46ae4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -57,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
-        m_Texture: {fileID: 2800000, guid: 80fa1bae0d55a4642940e9b58532010c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3ed2aafb5ef4d2a44ac82d095bc2cc80, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -65,7 +65,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
-        m_Texture: {fileID: 2800000, guid: 9137ef553f1fff04bb37e5460097d7ca, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5249830ca8a513041bd34328ebc27d3c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -113,7 +113,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _MaskColor: 0
+    - _MaskColor: 1
     - _Metallic: 0
     - _Normal_Strength: 1
     - _OcclusionStrength: 1
@@ -121,7 +121,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 1
+    - _Smoothness: 0.95
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -134,10 +134,10 @@ Material:
     - _BaseColor_Multiply: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Mask_Color_Multiply: {r: 0.6156272, g: 0.76819396, b: 0.5580276, a: 0}
+    - _Mask_Color_Multiply: {r: 0.7987421, g: 0.5875126, b: 0.54505354, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tiling: {r: 2, g: 2, b: 0, a: 0}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5189596441509131276
