@@ -345,22 +345,26 @@ public class Building : MonoBehaviour
 
     private void SwapModel(GameObject newPrefab)
     {
+        // 🔹 1. 현재 모델 반환
         if (currentModel != null)
         {
-            if (newPrefab == ruinPrefab)
+            // 현재 모델이 어떤 풀에서 나온 건지에 따라 반환
+            if (currentModel.CompareTag("Ruin"))
             {
                 ruinPool.Release(currentModel);
             }
-            else if (newPrefab == basePrefab)
+            else if (currentModel.CompareTag("Base"))
             {
                 basePool.Release(currentModel);
             }
-            else
+            else if (currentModel.CompareTag("Upgraded"))
             {
                 upgradedPool.Release(currentModel);
             }
             currentModel = null;
         }
+
+        // 🔹 2. 새 모델 생성
         if (newPrefab == ruinPrefab)
         {
             currentModel = ruinPool.Get();
@@ -373,19 +377,22 @@ public class Building : MonoBehaviour
         {
             currentModel = upgradedPool.Get();
         }
+
+        // 🔹 3. 배치 및 설정
         if (currentModel != null)
         {
             currentModel.transform.SetParent(transform, false);
             currentModel.transform.position = FixedPosition;
             currentModel.transform.rotation = Quaternion.identity;
-            currentModel.SetActive(true); // 새 모델 활성화
-            Debug.Log($"모델 교체 완료: {gameObject.name}, 새 모델: {currentModel.name}, Position: {currentModel.transform.position}");
+            currentModel.SetActive(true);
+            Debug.Log($"✅ 모델 교체 완료: {gameObject.name}, 새 모델: {currentModel.name}, Position: {currentModel.transform.position}");
         }
         else
         {
-            Debug.LogError($"모델 생성 실패: {gameObject.name}, 프리팹: {newPrefab.name}");
+            Debug.LogError($"❌ 모델 생성 실패: {gameObject.name}, 프리팹: {newPrefab.name}");
         }
     }
+
 
     private int GetGovernmentLevel()
     {
