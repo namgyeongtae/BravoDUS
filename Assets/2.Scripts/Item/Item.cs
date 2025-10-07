@@ -29,7 +29,7 @@ public class Item
         switch (itemType)
         {
             case ItemType.InstantBuild:
-                building.constructionTime = 0f; // 즉시 건설 완료
+                building.CompleteConstruction(); // 즉시 건설 완료
                 Debug.Log($"{itemName} 사용! 건설 즉시 완료됨");
                 break;
 

@@ -7,6 +7,7 @@ public class Managers
     private static UIManager _ui = new UIManager();
     private static EventManager _event = new EventManager();
     private static HRManager _hr = new HRManager();
+    private static ItemManager _item = new ItemManager();
     // ����: _game new ���� (�� ��ġ GameManager.Instance ���)
 
     public static CommodityManager Commodity => _commodity;
@@ -14,6 +15,7 @@ public class Managers
     public static UIManager UI => _ui;
     public static EventManager Event => _event;
     public static HRManager HR => _hr;
+    public static ItemManager Item => _item;
     public static GameManager Game => GameManager.Instance; // ����: Instance ����
 
     public void Init()
@@ -22,6 +24,7 @@ public class Managers
         _ui.Init();
         _event.Init();
         _hr.Init();
+        _item.Init();
     }
 
     public void Update()
