@@ -150,7 +150,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _M0_BaseColor_Multiply: {r: 1, g: 1, b: 1, a: 0}
     - _M0_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _M0_Tiling: {r: 8, g: 8, b: 0, a: 0}
+    - _M0_Tiling: {r: 10, g: 10, b: 0, a: 0}
     - _M1_BaseColor_Multiply: {r: 1, g: 1, b: 1, a: 0}
     - _M1_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _M1_Tiling: {r: 5, g: 5, b: 0, a: 0}
