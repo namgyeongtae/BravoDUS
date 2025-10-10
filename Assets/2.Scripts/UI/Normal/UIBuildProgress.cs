@@ -36,7 +36,7 @@ public class UIBuildProgress : CanvasPanel
 
     void Update()
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(_selectedBuilding.transform.position + Vector3.up * 5f);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(_selectedBuilding.transform.position + Vector3.up * 15f);
 
         Rect.position = screenPos;
     }

@@ -104,12 +104,16 @@ public class UIWorkForceSlot : UIBind
 
         var jobType = GetJobTypeByBuilding();
         var workForce = Managers.HR.HoldResources.Find(x => x.JobType == jobType && x.HRState == HRState.None);
-        if (workForce != null)
+        if (workForce == null)
         {
-            Managers.HR.AssignWorkForce(_parentUIWorkForce.Building, workForce);
-            State = WorkForceSlotState.Assigned;
-            SetSlot(workForce); 
+            var toast = Managers.UI.AddPanel<UIToastPopup>();
+            toast.SettingPopup("인력이 부족해서 일을 할 수 없습니다.");
+            return;
         }
+
+        Managers.HR.AssignWorkForce(_parentUIWorkForce.Building, workForce);
+        State = WorkForceSlotState.Assigned;
+        SetSlot(workForce); 
     }
 
     private JobType GetJobTypeByBuilding()

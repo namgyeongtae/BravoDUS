@@ -35,7 +35,7 @@ public class UIResourceGather : CanvasPanel
     private void SettingUI()
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(_rh.transform.position);
-        Rect.position = screenPos;
+        transform.position = screenPos + Vector3.up * 130f;
 
         _resourceIcon.sprite = _rh.ResourceType == IngredientType.Wood ? _woodIcon : _ironIcon;
         _amountText.text = $"+{_rh.Quantity}";
