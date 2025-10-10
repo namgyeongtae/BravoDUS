@@ -1,0 +1,26 @@
+{
+  "items": [
+    { "Id": 1, "Name": "Jonny", "Stamina": 100, "JobType": "WoodWorker", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 2, "Name": "Ellen", "Stamina": 100, "JobType": "WoodWorker", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 3, "Name": "Marcus", "Stamina": 100, "JobType": "WoodWorker", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 4, "Name": "Hana", "Stamina": 100, "JobType": "WoodWorker", "HRState": "None", "Icon": "PersonIcon" },
+
+    { "Id": 5, "Name": "Natasha", "Stamina": 100, "JobType": "IronWorker", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 6, "Name": "Ivan", "Stamina": 100, "JobType": "IronWorker", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 7, "Name": "Clark", "Stamina": 100, "JobType": "IronWorker", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 8, "Name": "Mila", "Stamina": 100, "JobType": "IronWorker", "HRState": "None", "Icon": "PersonIcon" },
+
+    { "Id": 9, "Name": "Dr. Sophia", "Stamina": 100, "JobType": "Doctor", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 10, "Name": "Dr. Lee", "Stamina": 100, "JobType": "Doctor", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 11, "Name": "Dr. Noah", "Stamina": 100, "JobType": "Doctor", "HRState": "None", "Icon": "PersonIcon" },
+
+    { "Id": 12, "Name": "Officer Kim", "Stamina": 100, "JobType": "PoliceOfficer", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 13, "Name": "Officer Jane", "Stamina": 100, "JobType": "PoliceOfficer", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 14, "Name": "Officer Park", "Stamina": 100, "JobType": "PoliceOfficer", "HRState": "None", "Icon": "PersonIcon" },
+
+    { "Id": 15, "Name": "Blaze", "Stamina": 100, "JobType": "FireFighter", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 16, "Name": "Helena", "Stamina": 100, "JobType": "FireFighter", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 17, "Name": "Rex", "Stamina": 100, "JobType": "FireFighter", "HRState": "None", "Icon": "PersonIcon" },
+    { "Id": 18, "Name": "Irene", "Stamina": 100, "JobType": "FireFighter", "HRState": "None", "Icon": "PersonIcon" }
+  ]
+}
