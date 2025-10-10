@@ -9,12 +9,18 @@ public class UIBindBase : MonoBehaviour
 
    protected virtual void Awake()
    {
-        InstallBindings();
+        if (!_isBindingDone)
+            InstallBindings();
    }
 
    public void InstallBindings()
    {
-        if (_isBindingDone) return;
+        if (_isBindingDone)
+        {
+            Debug.Log($"Bind already done. {this.gameObject.name}");
+            return;
+        }
+        Debug.Log($"Start Bind : {this.gameObject.name}");
         BindAttribute.InstallBindings(this);
         _isBindingDone = true;
    }

@@ -66,6 +66,14 @@ public class BindAttribute
                         Array filledArray = Array.CreateInstance(type, components.Length);
                         Array.Copy(components, filledArray, components.Length);
                         item.FieldInfo.SetValue(target, filledArray);
+
+                        foreach (var component in components)
+                        {
+                            if (component.TryGetComponent<UIBindBase>(out var bindUI))
+                            {
+                                bindUI.InstallBindings();
+                            }
+                        }
                     }
                     else
                     {
@@ -73,13 +81,17 @@ public class BindAttribute
                         if (component == null)
                             continue;
                         item.FieldInfo.SetValue(target, component);
+
+                        if (component.TryGetComponent<UIBindBase>(out var bindUI))
+                            bindUI.InstallBindings();
                     }
                 }
-                if (outTransform.TryGetComponent<UIBindBase>(out var bindBase))
-                {
-                    // BindBase 오브젝트 하위에 있는 또 다른 BindBase 먼저 Binding
-                    bindBase.InstallBindings();
-                }
+                //if (outTransform.TryGetComponent<UIBindBase>(out var bindBase))
+                //{
+                //    // BindBase 오브젝트 하위에 있는 또 다른 BindBase 먼저 Binding
+                //    Debug.Log($"Install Bindings : {bindBase.name}");
+                //    bindBase.InstallBindings();
+                //}
             }
         }
 
