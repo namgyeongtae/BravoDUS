@@ -8,9 +8,9 @@ public class EventManager : IManagerBase
 
     private CityStat _cityStat = new CityStat();    // Temp Code -> 생성자로 안 할 거임
 
-    public EventController Fire => _events[EventType.FireRiskEvent];
-    public EventController Security => _events[EventType.SecurityEvent];
-    public EventController Injure => _events[EventType.InjureEvent];
+    public EventController Fire => _events[EventType.FireRiskEvent] as FireEventController;
+    public EventController Security => _events[EventType.SecurityEvent] as SecurityEventController;
+    public EventController Injure => _events[EventType.InjureEvent] as InjureEventController;
     public void Init()
     {
         // Load Events from Database
@@ -37,8 +37,6 @@ public class EventManager : IManagerBase
         {
             var inc = _incidents[i];
             TickIncident(inc, Time.deltaTime, now);
-            if (inc.State == IncidentState.Resolved)
-                _incidents.RemoveAt(i);
         }
     }
 
@@ -72,7 +70,7 @@ public class EventManager : IManagerBase
                 break;
             case IncidentState.Resolved:
                 {
-                    // OnResolved는 EventController에서 생성성
+                    // OnResolved는 EventController에서 생성
                     RemoveIncident(inc);
                 }
                 break;

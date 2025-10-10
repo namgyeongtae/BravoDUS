@@ -65,7 +65,7 @@ public class CraftingManager : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (UIUtils.IsPointerOverUIObject(touch.position))
             {
                 Debug.Log("Touch input ignored due to pointer over game object.");
                 return;
