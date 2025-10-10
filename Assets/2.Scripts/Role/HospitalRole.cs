@@ -10,6 +10,8 @@ public class HospitalRole : RoleHandler
 
     private List<Incident> _injurePatients = new List<Incident>();
 
+    public List<Incident> InjurePatients => _injurePatients;
+
     public override void HandleEvent(string eventType)
     {
         foreach (var inc in _injurePatients)
