@@ -19,7 +19,9 @@ public enum BuildingActionType
     None,
     Info,
     Upgrade,
-    HumanResource
+    HumanResource,
+    PatientManage,
+    Hire
 }
 
 [Serializable]

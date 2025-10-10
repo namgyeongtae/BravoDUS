@@ -156,6 +156,8 @@ public class UIBuildingSelection : CanvasPanel
         _actionDict.Add(BuildingActionType.Info, Action_ShowInfo);
         _actionDict.Add(BuildingActionType.Upgrade, Action_Upgrade);
         _actionDict.Add(BuildingActionType.HumanResource, Action_HumanResource);
+        _actionDict.Add(BuildingActionType.PatientManage, Action_PatientManage);
+        _actionDict.Add(BuildingActionType.Hire, Action_Hire);
     }
 
     private void Action_ShowInfo()
@@ -196,14 +198,23 @@ public class UIBuildingSelection : CanvasPanel
     {
         Debug.Log("Start Human Resource");
 
-        // TODO 
-        // 선택된 빌딩의 인력 정보를 나타내는 UI 표시
         var uiWorkForce = Managers.UI.AddPanel<UIWorkForce>(_selectedBuilding);
 
         Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(_selectedBuilding);
+    }
 
-        // 인력 정보 세팅
-        // uiWorkForce.SetWorkForceInfo(_selectedBuilding);
+    private void Action_PatientManage()
+    {
+        Managers.UI.AddPanel<UIPatientManage>(_selectedBuilding);
+
+        Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(_selectedBuilding);
+    }
+
+    private void Action_Hire()
+    {
+        Managers.UI.AddPanel<UIHirePanel>();
+
+        Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(_selectedBuilding);
     }
     #endregion
 }

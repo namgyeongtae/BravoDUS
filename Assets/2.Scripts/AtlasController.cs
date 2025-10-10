@@ -5,7 +5,8 @@ public class AtlasController
 {
     public static Sprite GetSprite(string name, string subName)
     {
-        SpriteAtlas atlas = Managers.Resource.Load<SpriteAtlas>(name);
+        string path = "Atlas/" + name;
+        SpriteAtlas atlas = Managers.Resource.Load<SpriteAtlas>(path);
 
         if (atlas == null)
         {
