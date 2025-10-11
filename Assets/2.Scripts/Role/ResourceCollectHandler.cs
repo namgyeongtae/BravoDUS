@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ResourceCollectHandler : RoleHandler
@@ -7,9 +8,23 @@ public class ResourceCollectHandler : RoleHandler
     private float _lastCollectTime = 0f;
     private float _intervalTime = 3f;
     private float _quantity = 4f;
+    private Building _building;
+
+    private UIAlarmNotWorkForce _alarmNotWorkForce = null;
 
     public IngredientType ResourceType => _resourceType;
     public float Quantity => _quantity;
+
+    void Start()
+    {
+        _building = GetComponent<Building>();
+        _building.OnWorkForceChanged += OnWorkForceChanged;
+    }
+
+    void OnDestroy()
+    {
+        _building.OnWorkForceChanged -= OnWorkForceChanged;
+    }
 
     public override void HandleEvent(string eventType)
     {
@@ -53,16 +68,31 @@ public class ResourceCollectHandler : RoleHandler
         if (building.CurrentState == Building.State.Ruin || building.CurrentState == Building.State.Constructing)
             return;
 
-        switch (_resourceType)
-        {
-            case IngredientType.Wood:
-                Managers.Commodity.AddIngredient(IngredientType.Wood, _quantity);
-                break;
-            case IngredientType.Iron:
-                Managers.Commodity.AddIngredient(IngredientType.Iron, _quantity);
-                break;
-        }
+        if (building.WorkForceList.Count <= 0)
+            return;
+
+        Managers.Commodity.AddIngredient(_resourceType, _quantity);
 
         Managers.UI.AddPanel<UIResourceGather>(this, true);
+    }
+
+    private void OnWorkForceChanged()
+    {
+        if (_building.CurrentState == Building.State.Ruin)
+            return;
+        
+        if (_building.WorkForceList.Count <= 0)
+        {
+            // 인력 없음 Alarm UI 띄우기
+            _alarmNotWorkForce = Managers.UI.AddPanel<UIAlarmNotWorkForce>(_building, true);
+        }
+        else
+        {
+            if (_alarmNotWorkForce != null)
+            {
+                _alarmNotWorkForce?.Close();
+                _alarmNotWorkForce = null;
+            }
+        }
     }
 }

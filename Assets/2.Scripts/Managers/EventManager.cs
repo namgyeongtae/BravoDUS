@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EventManager : IManagerBase
@@ -51,7 +52,17 @@ public class EventManager : IManagerBase
                 break;
             case IncidentState.Resolving:
                 {
-                    // 예시: 단순 진행도 → 해결력/진압력 반영 가능
+                    bool canResolve = inc.EventType switch
+                    {
+                        EventType.SecurityEvent => _cityStat.ResponsePower > 0,
+                        EventType.FireRiskEvent => _cityStat.SuppressPower > 0,
+                        EventType.InjureEvent => Managers.HR.HoldResources.Where(x => x.JobType == JobType.Doctor && x.HRState == HRState.Work).Count() > 0,
+                        _ => false
+                    };
+
+                    if (!canResolve)
+                        return;
+
                     float power = inc.EventType switch
                     {
                         EventType.SecurityEvent => _cityStat.ResponsePower,

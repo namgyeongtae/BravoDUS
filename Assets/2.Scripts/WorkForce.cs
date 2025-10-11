@@ -56,8 +56,8 @@ public class WorkForce
 
     public string Name => _data.Name;
     public bool isAssigned => _isAssigned;
-    public JobType JobType => Enum.TryParse<JobType>(_data.JobType, out var jobType) ? jobType : JobType.None;
-    public HRState HRState => Enum.TryParse<HRState>(_data.HRState, out var hrState) ? hrState : HRState.None;
+    public JobType JobType => _jobType;
+    public HRState HRState => _hrState;
     public string Icon => _data.Icon;
     public float Stamina => _stamina;
     public WorkForce(WorkForceData data)
@@ -66,8 +66,8 @@ public class WorkForce
         _id = data.Id;
         _name = data.Name;
         _stamina = data.Stamina;
-        _jobType = JobType;
-        _hrState = HRState;
+        _jobType = Enum.TryParse<JobType>(data.JobType, out var jobType) ? jobType : JobType.None;
+        _hrState = Enum.TryParse<HRState>(data.HRState, out var hrState) ? hrState : HRState.None;
         _icon = data.Icon;
     }
 
