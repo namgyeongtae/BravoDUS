@@ -15,6 +15,8 @@ public class UIWorkForceSlot : UIBind
     [Bind("Icon")] private Image _icon;
     [Bind("Stamina")] private Image _stamina;
     [Bind("Warning")] private Image _warning;
+    [Bind("NameBackground")] private Image _nameBackground;
+    [Bind("Name")] private Text _name;
 
     private UIButton _slotButton;
     private UIWorkForce _parentUIWorkForce;
@@ -80,10 +82,13 @@ public class UIWorkForceSlot : UIBind
             return;
         }
 
+        _nameBackground.gameObject.SetActive(true);
+
         // TODO
         // _icon.sprite = workForce.Icon;
         var subName = workForce.Icon.Split('/').Last();
         _icon.sprite = AtlasController.GetSprite(workForce.Icon, subName + $"_{(int)workForce.JobType}");
+        _name.text = workForce.Name;
 
         _assignedWorkForce = workForce;
         
@@ -118,11 +123,18 @@ public class UIWorkForceSlot : UIBind
 
     private JobType GetJobTypeByBuilding()
     {
-        var buildingType = _parentUIWorkForce.Building.BuildingType;
+        var building = _parentUIWorkForce.Building;
+        var buildingType = building.BuildingType;
         switch (buildingType)
         {
             case BuildingType.ResourceCollector:
-                return JobType.WoodWorker;
+                {
+                    var ingredient = building.GetComponent<ResourceCollectHandler>().ResourceType;
+
+                    if (ingredient == IngredientType.Wood) return JobType.WoodWorker;
+                    else
+                        return JobType.IronWorker;
+                }
             case BuildingType.Hospital:
                 return JobType.Doctor;
             case BuildingType.PoliceStation:
