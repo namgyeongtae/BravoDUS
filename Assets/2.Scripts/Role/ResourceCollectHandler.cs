@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+﻿using Unity.VisualScripting;
 using UnityEngine;
 
 public class ResourceCollectHandler : RoleHandler
@@ -8,7 +8,9 @@ public class ResourceCollectHandler : RoleHandler
     private float _lastCollectTime = 0f;
     private float _intervalTime = 3f;
     private float _quantity = 4f;
+
     private Building _building;
+    private HappinessSystem _happinessSystem;
 
     private UIAlarmNotWorkForce _alarmNotWorkForce = null;
 
@@ -19,6 +21,8 @@ public class ResourceCollectHandler : RoleHandler
     {
         _building = GetComponent<Building>();
         _building.OnWorkForceChanged += OnWorkForceChanged;
+
+        _happinessSystem = FindFirstObjectByType<HappinessSystem>();
     }
 
     void OnDestroy()
@@ -39,7 +43,7 @@ public class ResourceCollectHandler : RoleHandler
     void Update()
     {
         HandleEvent("ResourceCollect");
-    }   
+    }
 
     public override void OnUpgrade(int newLevel)
     {
@@ -71,7 +75,9 @@ public class ResourceCollectHandler : RoleHandler
         if (building.WorkForceList.Count <= 0)
             return;
 
-        Managers.Commodity.AddIngredient(_resourceType, _quantity);
+        float multiplier = _happinessSystem.GetProductivityMultiplier();
+
+        Managers.Commodity.AddIngredient(_resourceType, _quantity * multiplier);
 
         Managers.UI.AddPanel<UIResourceGather>(this, true);
     }
@@ -80,7 +86,7 @@ public class ResourceCollectHandler : RoleHandler
     {
         if (_building.CurrentState == Building.State.Ruin)
             return;
-        
+
         if (_building.WorkForceList.Count <= 0)
         {
             // 인력 없음 Alarm UI 띄우기
