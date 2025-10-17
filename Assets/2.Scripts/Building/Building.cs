@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Pool;
 using System.Collections.Generic;
+using System;
 
 public class Building : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class Building : MonoBehaviour
     [SerializeField] public float constructionTime = 5f; // 건설 시간 (초)
 
     private List<WorkForce> _workForceList = new(); // 건물에 할당된 인력 리스트
+    public Action OnWorkForceChanged;
+
 
     public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
     public State CurrentState { get; private set; } = State.Ruin; // 현재 상태
@@ -193,6 +196,8 @@ public class Building : MonoBehaviour
             Debug.Log($"Building restored: {currentModel.name}");
         }
         Debug.Log($"건설 완료: {gameObject.name}, Level: {Level}, State: {CurrentState}");
+
+        OnWorkForceChanged?.Invoke();
     }
 
     public void CancelConstruction()
@@ -355,7 +360,7 @@ public class Building : MonoBehaviour
             }
             else if (currentModel.CompareTag("Base"))
             {
-                basePool.Release(currentModel);
+                // basePool.Release(currentModel);
             }
             else if (currentModel.CompareTag("Upgraded"))
             {
@@ -406,25 +411,34 @@ public class Building : MonoBehaviour
 
     private void CreateConstructor()
     {
-        var bounds = GetComponentInChildren<BoxCollider>().bounds;
+        var collider = ruinPrefab.GetComponent<BoxCollider>();
+
+        Debug.Log($"Log Bounds : {collider.size}");
 
         GameObject constructor = Managers.Resource.Instantiate("Avatar/Constructor");
         constructor.transform.SetParent(transform);
         constructor.transform.position = transform.position 
-                    + transform.forward * (bounds.size.z / 2f * 1.5f) * -1
-                    + transform.up * (bounds.size.y / 2f * 0.5f) * -1;
+                    + transform.forward * (collider.size.z / 2f * 3.5f) * -1
+                    + transform.up * (collider.size.y / 2f * 0.5f) * -1;
     }
 
     private void DestroyConstructor()
     {
         var constructors = transform.Find("Constructor");
-        foreach (Transform constructor in constructors)
+        /* foreach (Transform constructor in constructors)
         {
             Managers.Resource.Destroy(constructor.gameObject);
-        }
+        } */
+        Managers.Resource.Destroy(constructors.gameObject);
     }
     public void AssignWorkForce(WorkForce workForce)
     {
         _workForceList.Add(workForce);
+        OnWorkForceChanged?.Invoke();
+    }
+    public void UnassignWorkForce(WorkForce workForce)
+    {
+        _workForceList.Remove(workForce);
+        OnWorkForceChanged?.Invoke();
     }
 }

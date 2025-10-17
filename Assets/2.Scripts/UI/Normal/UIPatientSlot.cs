@@ -93,7 +93,8 @@ public class UIPatientSlot : UIBind
 
         _assignedIncident = inc;
         _assignedPatient = patient;
-        _assignedPatient.SetHRState(HRState.Recovering);
+
+        Debug.Log(Managers.HR.HoldResources[0].HRState);
 
          var subName = patient.Icon.Split('/').Last();
         _patientIcon.sprite = AtlasController.GetSprite(patient.Icon, subName + $"_{(int)patient.JobType}");
@@ -122,8 +123,10 @@ public class UIPatientSlot : UIBind
 
         SetSlot(injureEvent.IncidentWorkForces[inc]);
 
-        hospital.InjurePatients.Add(inc);
-
         Managers.HR.UnassignWorkForce(_assignedPatient);
+        
+        _assignedPatient.SetHRState(HRState.Recovering);
+
+        hospital.InjurePatients.Add(inc);
     }
 }

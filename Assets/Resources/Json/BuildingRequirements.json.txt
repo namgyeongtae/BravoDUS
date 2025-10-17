@@ -1,7 +1,7 @@
 {
   "requirements": [
     {
-      "buildingName": "목공소",
+      "buildingName": "Government",
       "level": 1,
       "requiredResources": [
         {"type": 1, "amount": 0},
@@ -14,7 +14,59 @@
       "description": "기본"
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "SmallStore",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 0},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
+      "buildingName": "Hospital",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 0},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
+      "buildingName": "PoliceOffice",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 0},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
+      "buildingName": "WoodCraft",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 5000},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
+      "buildingName": "WoodCraft",
       "level": 2,
       "requiredResources": [
         {"type": 1, "amount": 10},
@@ -27,7 +79,7 @@
       "description": "소량 목재 보상"
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 3,
       "requiredResources": [
         {"type": 1, "amount": 100},
@@ -40,7 +92,7 @@
       "description": ""
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 4,
       "requiredResources": [
         {"type": 1, "amount": 15},
@@ -53,7 +105,7 @@
       "description": ""
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 5,
       "requiredResources": [
         {"type": 1, "amount": 15},
@@ -66,7 +118,7 @@
       "description": "중간 성장 체감"
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 6,
       "requiredResources": [
         {"type": 1, "amount": 20},
@@ -79,7 +131,7 @@
       "description": ""
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 7,
       "requiredResources": [
         {"type": 1, "amount": 20},
@@ -92,7 +144,7 @@
       "description": ""
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 8,
       "requiredResources": [
         {"type": 1, "amount": 25},
@@ -105,7 +157,7 @@
       "description": ""
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 9,
       "requiredResources": [
         {"type": 1, "amount": 25},
@@ -118,7 +170,7 @@
       "description": "거의 최대치"
     },
     {
-      "buildingName": "목공소",
+      "buildingName": "WoodCraft",
       "level": 10,
       "requiredResources": [
         {"type": 1, "amount": 30},
@@ -131,7 +183,7 @@
       "description": "Lv.2 완료, 최대 생산량, 기능 해금"
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 1,
       "requiredResources": [
         {"type": 1, "amount": 0},
@@ -144,7 +196,7 @@
       "description": "기본"
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 2,
       "requiredResources": [
         {"type": 1, "amount": 10},
@@ -157,7 +209,7 @@
       "description": "소량 철 보상"
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 3,
       "requiredResources": [
         {"type": 1, "amount": 10},
@@ -170,7 +222,7 @@
       "description": ""
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 4,
       "requiredResources": [
         {"type": 1, "amount": 15},
@@ -183,7 +235,7 @@
       "description": ""
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 5,
       "requiredResources": [
         {"type": 1, "amount": 15},
@@ -196,7 +248,7 @@
       "description": "중간 성장 체감"
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 6,
       "requiredResources": [
         {"type": 1, "amount": 20},
@@ -209,7 +261,7 @@
       "description": ""
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 7,
       "requiredResources": [
         {"type": 1, "amount": 20},
@@ -222,7 +274,7 @@
       "description": ""
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 8,
       "requiredResources": [
         {"type": 1, "amount": 25},
@@ -235,7 +287,7 @@
       "description": ""
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 9,
       "requiredResources": [
         {"type": 1, "amount": 25},
@@ -248,7 +300,7 @@
       "description": "거의 최대치"
     },
     {
-      "buildingName": "제철소",
+      "buildingName": "IronCraft",
       "level": 10,
       "requiredResources": [
         {"type": 1, "amount": 40},

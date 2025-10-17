@@ -20,7 +20,7 @@ public class UIBindBase : MonoBehaviour
             Debug.Log($"Bind already done. {this.gameObject.name}");
             return;
         }
-        Debug.Log($"Start Bind : {this.gameObject.name}");
+        
         BindAttribute.InstallBindings(this);
         _isBindingDone = true;
    }

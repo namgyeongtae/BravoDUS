@@ -36,13 +36,12 @@ public class InjureEventController : EventController
 
     protected override void OnSpawned_Event(Incident inc)
     {
-        var buildings = CraftingManager.Instance.Buildings.Where(b => b.WorkForceList.Count > 0);
+        var workForces = Managers.HR.HoldResources.Where(x => x.JobType != JobType.Doctor && x.HRState == HRState.Work);
         
-        if (buildings.Count() <= 0)
+        if (workForces.Count() <= 0)
             return;
 
-        var building = buildings.ElementAt(Random.Range(0, buildings.Count()));
-        var workForce = building.WorkForceList.ElementAt(Random.Range(0, building.WorkForceList.Count()));
+        var workForce = workForces.ElementAt(Random.Range(0, workForces.Count()));
 
         _incidentWorkForces.Add(inc, workForce);
 
