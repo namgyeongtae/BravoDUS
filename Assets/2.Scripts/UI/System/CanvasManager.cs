@@ -135,6 +135,7 @@ public class CanvasManager : MonoBehaviour
         
         obj.name = name;
         CanvasPanel canvasPanel = obj.GetComponent<CanvasPanel>();
+        canvasPanel.InstallBindings();  // Open 혹은 SetPanelInfo 전 Binding 작업
         canvasPanel.Open();
 
         RectTransform rect = obj.GetComponent<RectTransform>();

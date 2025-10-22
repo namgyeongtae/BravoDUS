@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Pool;
 using System.Collections.Generic;
+using System;
 
 public class Building : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class Building : MonoBehaviour
     [SerializeField] public float constructionTime = 5f; // 건설 시간 (초)
 
     private List<WorkForce> _workForceList = new(); // 건물에 할당된 인력 리스트
+    public Action OnWorkForceChanged;
+
 
     public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
     public State CurrentState { get; private set; } = State.Ruin; // 현재 상태
@@ -132,6 +135,9 @@ public class Building : MonoBehaviour
     private IEnumerator ConstructCoroutine()
     {
         Debug.Log($"ConstructCoroutine started for {gameObject.name}");
+        
+        CreateConstructor(); // 건설자 프리팹 생성
+
         // 건물 숨김
         if (currentModel != null)
         {
@@ -164,9 +170,18 @@ public class Building : MonoBehaviour
             yield return new WaitForSeconds(constructionTime / 5f);
             Debug.Log("건설 진행: " + ((i + 1) * 20) + "% - " + gameObject.name + " (State: " + CurrentState + ")");
         }
+        
+        CompleteConstruction();
+    }
+
+    public void CompleteConstruction()
+    {
+        DestroyConstructor();  // 건설자 프리팹 제거
+
         CurrentState = State.Base;
         Level = 0; // Base 상태에서 레벨 0부터 시작으로 초기화
         SwapModel(basePrefab);
+        StopCoroutine(constructionCoroutine);
         constructionCoroutine = null;
         // 이펙트 및 건물 상태 복구
         if (currentEffect != null)
@@ -181,6 +196,8 @@ public class Building : MonoBehaviour
             Debug.Log($"Building restored: {currentModel.name}");
         }
         Debug.Log($"건설 완료: {gameObject.name}, Level: {Level}, State: {CurrentState}");
+
+        OnWorkForceChanged?.Invoke();
     }
 
     public void CancelConstruction()
@@ -333,22 +350,26 @@ public class Building : MonoBehaviour
 
     private void SwapModel(GameObject newPrefab)
     {
+        // 🔹 1. 현재 모델 반환
         if (currentModel != null)
         {
-            if (newPrefab == ruinPrefab)
+            // 현재 모델이 어떤 풀에서 나온 건지에 따라 반환
+            if (currentModel.CompareTag("Ruin"))
             {
                 ruinPool.Release(currentModel);
             }
-            else if (newPrefab == basePrefab)
+            else if (currentModel.CompareTag("Base"))
             {
-                basePool.Release(currentModel);
+                // basePool.Release(currentModel);
             }
-            else
+            else if (currentModel.CompareTag("Upgraded"))
             {
                 upgradedPool.Release(currentModel);
             }
             currentModel = null;
         }
+
+        // 🔹 2. 새 모델 생성
         if (newPrefab == ruinPrefab)
         {
             currentModel = ruinPool.Get();
@@ -361,19 +382,22 @@ public class Building : MonoBehaviour
         {
             currentModel = upgradedPool.Get();
         }
+
+        // 🔹 3. 배치 및 설정
         if (currentModel != null)
         {
             currentModel.transform.SetParent(transform, false);
             currentModel.transform.position = FixedPosition;
             currentModel.transform.rotation = Quaternion.identity;
-            currentModel.SetActive(true); // 새 모델 활성화
-            Debug.Log($"모델 교체 완료: {gameObject.name}, 새 모델: {currentModel.name}, Position: {currentModel.transform.position}");
+            currentModel.SetActive(true);
+            Debug.Log($"✅ 모델 교체 완료: {gameObject.name}, 새 모델: {currentModel.name}, Position: {currentModel.transform.position}");
         }
         else
         {
-            Debug.LogError($"모델 생성 실패: {gameObject.name}, 프리팹: {newPrefab.name}");
+            Debug.LogError($"❌ 모델 생성 실패: {gameObject.name}, 프리팹: {newPrefab.name}");
         }
     }
+
 
     private int GetGovernmentLevel()
     {
@@ -385,8 +409,36 @@ public class Building : MonoBehaviour
         return 0;
     }
 
+    private void CreateConstructor()
+    {
+        var collider = ruinPrefab.GetComponent<BoxCollider>();
+
+        Debug.Log($"Log Bounds : {collider.size}");
+
+        GameObject constructor = Managers.Resource.Instantiate("Avatar/Constructor");
+        constructor.transform.SetParent(transform);
+        constructor.transform.position = transform.position 
+                    + transform.forward * (collider.size.z / 2f * 3.5f) * -1
+                    + transform.up * (collider.size.y / 2f * 0.5f) * -1;
+    }
+
+    private void DestroyConstructor()
+    {
+        var constructors = transform.Find("Constructor");
+        /* foreach (Transform constructor in constructors)
+        {
+            Managers.Resource.Destroy(constructor.gameObject);
+        } */
+        Managers.Resource.Destroy(constructors.gameObject);
+    }
     public void AssignWorkForce(WorkForce workForce)
     {
         _workForceList.Add(workForce);
+        OnWorkForceChanged?.Invoke();
+    }
+    public void UnassignWorkForce(WorkForce workForce)
+    {
+        _workForceList.Remove(workForce);
+        OnWorkForceChanged?.Invoke();
     }
 }

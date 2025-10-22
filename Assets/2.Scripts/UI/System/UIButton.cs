@@ -76,6 +76,10 @@ public class UIButton : Button
 
         _scaleCoroutine = StartCoroutine(CoScaleInit(SCALE_DURATION));
 
+        // 드래그한 상태일 때는 Invoke 하지 않음
+        if (eventData.dragging)
+            return;
+
         onClickUp?.Invoke();
         Debug.Log("OnPointerUp");
     }

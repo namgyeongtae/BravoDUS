@@ -24,3 +24,28 @@ MonoBehaviour:
     - actionType: 3
       actionName: HR
       icon: {fileID: -488235204, guid: 9a81049f87851064c82f8bcfb5a6419e, type: 3}
+  - buildingType: 2
+    availableActions:
+    - actionType: 1
+      actionName: Info
+      icon: {fileID: -732196714, guid: a5e645d0b2507ac42807ef8e886f7d45, type: 3}
+    - actionType: 2
+      actionName: Upgrade
+      icon: {fileID: -2134627542, guid: a5e645d0b2507ac42807ef8e886f7d45, type: 3}
+    - actionType: 3
+      actionName: HR
+      icon: {fileID: -488235204, guid: 9a81049f87851064c82f8bcfb5a6419e, type: 3}
+    - actionType: 4
+      actionName: PatientManage
+      icon: {fileID: 21300000, guid: 646403bdc64d2f44198e33d79c3022a9, type: 3}
+  - buildingType: 1
+    availableActions:
+    - actionType: 1
+      actionName: Info
+      icon: {fileID: -732196714, guid: a5e645d0b2507ac42807ef8e886f7d45, type: 3}
+    - actionType: 2
+      actionName: Upgrade
+      icon: {fileID: -2134627542, guid: a5e645d0b2507ac42807ef8e886f7d45, type: 3}
+    - actionType: 5
+      actionName: Hire
+      icon: {fileID: 21300000, guid: 8dc2a76da8568214d912311444eb3538, type: 3}

@@ -65,8 +65,11 @@ public class CraftingManager : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (UIUtils.IsPointerOverUIObject(touch.position))
+            {
+                Debug.Log("Touch input ignored due to pointer over game object.");
                 return;
+            }
 
             if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude > 10f)
             {
@@ -121,7 +124,7 @@ public class CraftingManager : MonoBehaviour
                 if (building.CurrentState == Building.State.Ruin)
                 {
                     // building.StartConstruction();
-                    Managers.UI.AddPanel<UIBuildButtonGroup>(building);
+                    Managers.UI.AddPanel<UIBuildButtonGroup>(building, true);
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
@@ -145,6 +148,12 @@ public class CraftingManager : MonoBehaviour
                 if (building.CurrentState == Building.State.Ruin)
                 {
                     // building.StartConstruction();
+                    var buildButtonGroup = Managers.UI.GetUI<UIBuildButtonGroup>();
+                    if (buildButtonGroup != null && buildButtonGroup.SelectedBuilding != building)
+                    {
+                        buildButtonGroup.Close();
+                    }
+                    
                     Managers.UI.AddPanel<UIBuildButtonGroup>(building);
                 }
                 else if (building.CurrentState == Building.State.Base)

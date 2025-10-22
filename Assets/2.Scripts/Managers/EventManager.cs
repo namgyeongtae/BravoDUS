@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EventManager : IManagerBase
@@ -8,9 +9,9 @@ public class EventManager : IManagerBase
 
     private CityStat _cityStat = new CityStat();    // Temp Code -> 생성자로 안 할 거임
 
-    public EventController Fire => _events[EventType.FireRiskEvent];
-    public EventController Security => _events[EventType.SecurityEvent];
-    public EventController Injure => _events[EventType.InjureEvent];
+    public EventController Fire => _events[EventType.FireRiskEvent] as FireEventController;
+    public EventController Security => _events[EventType.SecurityEvent] as SecurityEventController;
+    public EventController Injure => _events[EventType.InjureEvent] as InjureEventController;
     public void Init()
     {
         // Load Events from Database
@@ -37,8 +38,6 @@ public class EventManager : IManagerBase
         {
             var inc = _incidents[i];
             TickIncident(inc, Time.deltaTime, now);
-            if (inc.State == IncidentState.Resolved)
-                _incidents.RemoveAt(i);
         }
     }
 
@@ -53,7 +52,17 @@ public class EventManager : IManagerBase
                 break;
             case IncidentState.Resolving:
                 {
-                    // 예시: 단순 진행도 → 해결력/진압력 반영 가능
+                    bool canResolve = inc.EventType switch
+                    {
+                        EventType.SecurityEvent => _cityStat.ResponsePower > 0,
+                        EventType.FireRiskEvent => _cityStat.SuppressPower > 0,
+                        EventType.InjureEvent => Managers.HR.HoldResources.Where(x => x.JobType == JobType.Doctor && x.HRState == HRState.Work).Count() > 0,
+                        _ => false
+                    };
+
+                    if (!canResolve)
+                        return;
+
                     float power = inc.EventType switch
                     {
                         EventType.SecurityEvent => _cityStat.ResponsePower,
@@ -72,7 +81,7 @@ public class EventManager : IManagerBase
                 break;
             case IncidentState.Resolved:
                 {
-                    // OnResolved는 EventController에서 생성성
+                    // OnResolved는 EventController에서 생성
                     RemoveIncident(inc);
                 }
                 break;

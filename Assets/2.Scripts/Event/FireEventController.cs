@@ -21,6 +21,23 @@ public class FireEventController : EventController
         return now + minutes * 60f;
     }
 
+    protected override Incident ExecuteSpawn(float now, CityStat stat)
+    {
+        // 현재 완공이 되었고 디버프가 없는 건물 리스트
+        var buildings = CraftingManager.Instance.Buildings.Where(b => 
+                                                b.GetComponent<RoleHandler>()?.DebuffCount <= 0
+                                             && b.CurrentState != Building.State.Ruin 
+                                             && b.CurrentState != Building.State.Constructing);
+
+        if (buildings.Count() == 0)
+        {
+            Debug.LogError("FireEventController: No fireable buildings");
+            return null;
+        }
+
+        return base.ExecuteSpawn(now, stat);
+    }
+
     protected override void OnSpawned_Event(Incident inc)
     {
         // 현재 완공이 되었고 디버프가 없는 건물 리스트
@@ -32,6 +49,7 @@ public class FireEventController : EventController
         if (buildings.Count() == 0)
         {
             Debug.LogError("화재 이벤트 스폰 실패: 화재 가능한 건물이 없습니다.");
+            Managers.Event.RemoveIncident(inc);
             return;
         }
 

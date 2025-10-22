@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UIUtils
 {
@@ -34,5 +36,21 @@ public class UIUtils
             return -(Mathf.Pow(2f, 20f * t - 10f) * Mathf.Sin((20f * t - 11.125f) * c5)) / 2f;
         else
             return (Mathf.Pow(2f, -20f * t + 10f) * Mathf.Sin((20f * t - 11.125f) * c5)) / 2f + 1f;
+    }
+
+    public static bool IsPointerOverUIObject(Vector2 touchPos)
+    {
+        PointerEventData eventDataCurrentPosition
+        = new PointerEventData(EventSystem.current);
+
+        eventDataCurrentPosition.position = touchPos;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+
+
+        EventSystem.current
+        .RaycastAll(eventDataCurrentPosition, results);
+
+        return results.Count > 0;
     }
 }

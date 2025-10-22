@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,32 +26,49 @@ public enum HRState
 [Serializable]
 public class WorkForceData
 {
+    public int Id;
     public string Name;
     public float Stamina;
-    public JobType JobType;
-    public HRState HRState;
+    public string JobType;
+    public string HRState;
     public string Icon;
+}
+
+[Serializable]
+public class WorkForceDataWrapper : List<WorkForceData>
+{
+    
 }
 
 public class WorkForce
 {
     private WorkForceData _data;
 
-    private bool _isAssigned;
+    private int _id;
+    private string _name;
     private float _stamina;
+    private JobType _jobType;
     private HRState _hrState;
+    private string _icon;
+    
+    private bool _isAssigned;
+    private Building _assignedBuilding;
 
+    public string Name => _data.Name;
     public bool isAssigned => _isAssigned;
-    public JobType JobType => _data.JobType;
+    public JobType JobType => _jobType;
     public HRState HRState => _hrState;
     public string Icon => _data.Icon;
     public float Stamina => _stamina;
-
     public WorkForce(WorkForceData data)
     {
         _data = data;
+        _id = data.Id;
+        _name = data.Name;
         _stamina = data.Stamina;
-        _hrState = data.HRState;
+        _jobType = Enum.TryParse<JobType>(data.JobType, out var jobType) ? jobType : JobType.None;
+        _hrState = Enum.TryParse<HRState>(data.HRState, out var hrState) ? hrState : HRState.None;
+        _icon = data.Icon;
     }
 
     public void Update()
@@ -124,12 +142,13 @@ public class WorkForce
         _hrState = HRState.None;
         _stamina = 100f;
     }
-    public bool Assign()
+    public bool Assign(Building building)
     {
         if (_stamina > 0.1f)
         {
             _hrState = HRState.Work;
             _isAssigned = true;
+            _assignedBuilding = building;
         }
         else
         {
@@ -144,7 +163,17 @@ public class WorkForce
 
     public void Unassign()
     {
+        if (_isAssigned == false)
+            return;
+
         _isAssigned = false;
         _hrState = HRState.None;
+        _assignedBuilding.UnassignWorkForce(this);
+        _assignedBuilding = null;
+    }
+
+    public void SetHRState(HRState state)
+    {
+        _hrState = state;
     }
 }

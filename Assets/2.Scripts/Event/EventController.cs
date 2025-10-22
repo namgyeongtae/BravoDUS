@@ -62,7 +62,7 @@ public abstract class EventController
             _nextSpawnAt = ScheduleNext(now, stats);
         }
     }
-    protected Incident ExecuteSpawn(float now, CityStat stat)
+    protected virtual Incident ExecuteSpawn(float now, CityStat stat)
     {
         var incident = new Incident() {
             EventType = _eventType,
