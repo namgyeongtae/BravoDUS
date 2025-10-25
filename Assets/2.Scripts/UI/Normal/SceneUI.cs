@@ -10,11 +10,14 @@ public class SceneUI : CanvasPanel
     [Bind("Level")] private Text _levelText;
 
     [Header("Commodity")]
+    [Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
+    [Bind("IronIcon")] private UIParticleAttractor _ironParticleAttractor;
     [Bind("WoodAmount")] private Text _woodAmount;
     [Bind("IronAmount")] private Text _ironAmount;
-    private Coroutine _woodCoroutine = null;
-    private Coroutine _ironCoroutine = null;
-
+    private Coroutine _woodAddCoroutine = null;
+    private Coroutine _ironAddCoroutine = null;
+    private Coroutine _woodSubCoroutine = null;
+    private Coroutine _ironSubCoroutine = null;
     [Header("SideGroup")]
     [Bind("HomeButton")] private UIButton _homeButton;
     [Bind("SettingButton")] private UIButton _settingButton;
@@ -25,6 +28,9 @@ public class SceneUI : CanvasPanel
     [Bind("UIBuildingSelection")] private UIBuildingSelection _buildingSelection;
 
     public UIBuildingSelection BuildingSelection => _buildingSelection;
+
+    public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
+    public UIParticleAttractor IronParticleAttractor => _ironParticleAttractor;
 
 
     protected override void Initialize()
@@ -60,6 +66,7 @@ public class SceneUI : CanvasPanel
         while (currentAmount < amount)
         {
             currentAmount += 1;
+            Debug.Log($"AddCommodity : {currentAmount} / {amount}");
             yield return new WaitForSeconds(0.01f);
 
             switch (type)
@@ -71,6 +78,15 @@ public class SceneUI : CanvasPanel
                     _ironAmount.text = currentAmount.ToString();
                     break;
             }
+        }
+
+        if (ingredient.Type == IngredientType.Wood)
+        {
+            _woodAddCoroutine = null;
+        }
+        else if (ingredient.Type == IngredientType.Iron)
+        {
+            _ironAddCoroutine = null;
         }
     }
 
@@ -100,6 +116,15 @@ public class SceneUI : CanvasPanel
                     break;
             }
         }
+
+        if (ingredient.Type == IngredientType.Wood)
+        {
+            _woodSubCoroutine = null;
+        }
+        else if (ingredient.Type == IngredientType.Iron)
+        {
+            _ironSubCoroutine = null;
+        }
     }
 
     public void AddCommodity(Ingredient ingredient, float amount)
@@ -107,20 +132,22 @@ public class SceneUI : CanvasPanel
         switch (ingredient.Type)
         {
             case IngredientType.Wood:
-                if (_woodCoroutine != null)
+                /* if (_woodCoroutine != null)
                 {
                     StopCoroutine(_woodCoroutine);
                     _woodCoroutine = null;
-                }
-                _woodCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
+                } */
+                if (_woodAddCoroutine == null)
+                    _woodAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
                 break;
             case IngredientType.Iron:
-                if (_ironCoroutine != null)
+                /* if (_ironCoroutine != null)
                 {
                     StopCoroutine(_ironCoroutine);
                     _ironCoroutine = null;
-                }
-                _ironCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
+                } */
+                if (_ironAddCoroutine == null)
+                    _ironAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
                 break;
         }
     }
@@ -130,20 +157,20 @@ public class SceneUI : CanvasPanel
         switch (ingredient.Type)
         {
             case IngredientType.Wood:
-                if (_woodCoroutine != null)
+                /* if (_woodSubCoroutine != null)
                 {
-                    StopCoroutine(_woodCoroutine);
-                    _woodCoroutine = null;
-                }
-                _woodCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
+                    StopCoroutine(_woodSubCoroutine);
+                    _woodSubCoroutine = null;
+                } */
+                _woodSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
                 break;
             case IngredientType.Iron:
-                if (_ironCoroutine != null)
+                /* if (_ironSubCoroutine != null)
                 {
-                    StopCoroutine(_ironCoroutine);
-                    _ironCoroutine = null;
-                }
-                _ironCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
+                    StopCoroutine(_ironSubCoroutine);
+                    _ironSubCoroutine = null;
+                } */
+                _ironSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
                 break;
         }
     }
@@ -162,6 +189,19 @@ public class SceneUI : CanvasPanel
         else
         {
             _buildingSelection.SpawnButtons();
+        }
+    }
+
+    public void AddParticleToAttractor(IngredientType type, UIParticle particle)
+    {
+        switch (type)
+        {
+            case IngredientType.Wood:
+                _woodParticleAttractor.AddParticle(particle);
+                break;
+            case IngredientType.Iron:
+                _ironParticleAttractor.AddParticle(particle);
+                break;
         }
     }
 }
