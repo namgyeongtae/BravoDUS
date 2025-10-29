@@ -148,7 +148,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1164527293}
   - {fileID: 147775866}
   - {fileID: 1382883969}
   m_Father: {fileID: 0}
@@ -182,6 +181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1164527293}
   - {fileID: 350528638}
   - {fileID: 2089463380}
   - {fileID: 639977762}
@@ -1086,7 +1086,7 @@ Transform:
   m_LocalScale: {x: 18, y: 1, z: 18}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 44116238}
+  m_Father: {fileID: 147775866}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1164527294
 MeshCollider:
