@@ -1,12 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlacementMode
+{
+    Install,
+    UnInstall
+}
+
 public class PlacementSystem : MonoBehaviour
 {
     [SerializeField] private Material _previewMaterial;
     [SerializeField] private GridHandler _gridHandler;
 
     [SerializeField] private GameObject _testBuildingPrefab;
+    [SerializeField] private PlacementMode _placementMode = PlacementMode.Install;
 
     private GameObject _currentBuilding = null;
     private List<Material> _cachedOriginMaterials = new();
@@ -20,15 +27,22 @@ public class PlacementSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            if (_currentBuilding == null)
-            {
-                StartPlacement(_testBuildingPrefab);
-            }
-        }
+        if (Input.GetKeyDown(KeyCode.I))
+            _placementMode = (_placementMode == PlacementMode.Install) ? PlacementMode.UnInstall : PlacementMode.Install;
 
-        UpdatePlacement();
+        if (_placementMode == PlacementMode.Install)
+        {
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                if (_currentBuilding == null)
+                {
+                    StartPlacement(_testBuildingPrefab);
+                }
+            }
+            UpdatePlacement();
+        }
+        else
+            UnInstallPlacement();
     }
 
     public void StartPlacement(GameObject buildingPrefab)
@@ -61,25 +75,48 @@ public class PlacementSystem : MonoBehaviour
     {
         if (_currentBuilding == null) return;
 
+#if UNITY_EDITOR
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+#elif UNITY_ANDROID || UNITY_IOS
+        Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+#endif
         if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
         {
             Vector3Int cell = _gridHandler.WorldToCell(hit.point);
             if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
             {
-                UpdateBuildingPosition(cell, isEven: true);
+                UpdateBuildingPosition(cell, isEven: false);
             }
         }
 
+        // TODO:
+        // 이후 모바일에서는 그냥 터치로 끝내는 게 아닌 중간 과정의 UI/UX가 필요해 보임(정책 결정 필요)
         if (Input.GetMouseButtonDown(0))
         {
             EndPlacement();
         }
     }
 
+    private void UnInstallPlacement()
+    {
+        // TODO:
+        // 마찬가지로 이후 모바일에서 그냥 터치한다고 파괴되는 게 아니라 UI/UX 정책이 필요하다.
+        // 현재는 테스트 용으로 PC 기준 입력만 고려
+        if (Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Building")))
+            {
+                Managers.Resource.Destroy(hit.collider.gameObject);
+                _currentBuilding = null;
+            }
+        }
+    }
+
     private void UpdateBuildingPosition(Vector3Int cell,bool isEven)
     {
-        if (!isEven)
+        if (isEven)
         {
             Vector3 cellToWorld = _gridHandler.CellToWorld(cell.x, cell.y);
             Vector3 buildPos = new Vector3(cellToWorld.x + _gridHandler.CellSize.x / 2, 0, cellToWorld.z + _gridHandler.CellSize.y / 2);
@@ -91,7 +128,7 @@ public class PlacementSystem : MonoBehaviour
             _currentBuilding.transform.position = _gridHandler.CellToWorld(cell.x, cell.y);
         }
 
-        DetectCollision(buildingSize: 4);
+        DetectCollision(buildingSize: 3);
     }
 
     private void DetectCollision(int buildingSize)
@@ -102,8 +139,8 @@ public class PlacementSystem : MonoBehaviour
 
         if (!isEven)
         {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (buildingSize / 2));
+            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (buildingSize / 2));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }

@@ -94,7 +94,7 @@ public class GridHandler : MonoBehaviour
 
     public Vector3 CellToWorld(int x, int y)
     {
-        return _grid.CellToWorld(new Vector3Int(x, y, 0));
+        return _grid.CellToWorld(new Vector3Int(x, y, 0)) + new Vector3(CellSize.x / 2, 0, CellSize.y / 2);
     }
 
     public Vector3Int WorldToCell(Vector3 worldPosition)
@@ -114,6 +114,11 @@ public class GridHandler : MonoBehaviour
     {
         int xIndex = x + _width / 2;
         int yIndex = y + _height / 2;
+
+        if (xIndex < 0 || xIndex >= _width || yIndex < 0 || yIndex >= _height)
+        {
+            return TileType.Field;
+        }
 
         return _gridTileTypes[xIndex, yIndex];
     }

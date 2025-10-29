@@ -28,23 +28,25 @@ public enum RoadDir
     LeftRightUpDown = 15
 }
 
-public enum Dir
+public enum RoadMode
 {
-    Up = 0,
-    Right,
-    Down,
-    Left
+    Install,
+    UnInstall
 }
 
 public class RoadSystem : MonoBehaviour
 {
+    [SerializeField] private int _size = 1;
+    [SerializeField] private GameObject _constructIndicator;
     [SerializeField] private GridHandler _gridHandler;
     [SerializeField] private RoadTileSO _roadTileSO;
 
     [SerializeField] private RoadType _roadType = RoadType.Dirt;
+    [SerializeField] private RoadMode _roadMode = RoadMode.Install;
 
     private List<RoadData> _roadDataList = new();
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType];
+    private GameObject _currentIndicator = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -57,7 +59,47 @@ public class RoadSystem : MonoBehaviour
     {
         if (!_gridHandler.BuildMode) return;
 
-        InputDetect();
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (_roadMode == RoadMode.Install)
+            {
+                _roadMode = RoadMode.UnInstall;
+                DestroyIndicator();
+            }
+            else
+            {
+                _roadMode = RoadMode.Install;
+                CreateIndicator();
+            }
+        }
+
+        if (_roadMode == RoadMode.Install)
+            InputDetect();
+        else
+            UnInstallRoad();
+
+        /* if (_roadMode == RoadMode.Install && _currentIndicator != null)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                ResizeIndicator(++_size);
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ResizeIndicator(--_size);
+            }
+        } */
+    }
+
+    void OnEnable()
+    {
+        // CreateIndicator();
+    }
+
+    void OnDisable()
+    {
+        // DestroyIndicator();
     }
 
     private void InputDetect() // Road 의 방향이 몇 방향인지 알아야 함
@@ -70,7 +112,9 @@ public class RoadSystem : MonoBehaviour
             {
                 Vector3Int cell = _gridHandler.WorldToCell(hit.point);
                 Debug.Log("cell: " + cell);
-                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
                 {
                     _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Road);
 
@@ -85,6 +129,32 @@ public class RoadSystem : MonoBehaviour
         }
     }
 
+    private void UnInstallRoad()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            {
+                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                Debug.Log("cell: " + cell);
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Road)
+                {
+                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Field);
+
+                    RemoveRoadTile(cell);
+                    DrawAdjacentRoadTile(cell);
+                }
+                else
+                {
+                    Debug.Log("cell is out of bounds");
+                }
+            }
+        }
+    }
     private void DrawAdjacentRoadTile(Vector3Int cell)
     {
         // Right Left Down Up
@@ -107,7 +177,9 @@ public class RoadSystem : MonoBehaviour
             }
         }
     }
-
+    
+    // TODO
+    // size 만큼의 영역을 칠하고 그 경계에 있는 타일들의 인접 타일도 갱신해야 함
     private void DrawRoadTile(Vector3Int cell)
     {
         // Right Left Down Up
@@ -136,6 +208,11 @@ public class RoadSystem : MonoBehaviour
             }
         }
 
+        DrawTile(cell, roadState);
+    }
+
+    private void DrawTile(Vector3Int cell, int roadState)
+    {
         switch (roadState)
         {
             case (int)RoadDir.None:
@@ -202,6 +279,51 @@ public class RoadSystem : MonoBehaviour
                 Debug.Log("Tile: LeftRightUpDown");
                 _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftRightUpDownTile);
                 break;
+        }
+    }
+    
+    private void RemoveRoadTile(Vector3Int cell)
+    {
+        _gridHandler.RoadTilemap.SetTile(cell, null);
+    }
+
+    private void CreateIndicator()
+    {
+        if (_currentIndicator != null)
+        {
+            Managers.Resource.Destroy(_currentIndicator);
+        }
+
+        _currentIndicator = Instantiate(_constructIndicator);
+        _currentIndicator.transform.position = _gridHandler.CellToWorld(0, 0);
+    }
+
+    private void DestroyIndicator()
+    {
+        if (_currentIndicator != null)
+        {
+            Managers.Resource.Destroy(_currentIndicator);
+        }
+    }
+
+    private void ResizeIndicator(int sizeScale)
+    {
+        _currentIndicator.transform.localScale = new Vector3(sizeScale * 2, 1, sizeScale * 2);
+        
+        var mat = _currentIndicator.GetComponentInChildren<MeshRenderer>().material;
+        mat.SetTextureScale("_BaseMap", new Vector2(sizeScale, sizeScale));
+
+        bool isEven = sizeScale % 2 == 0;
+        Vector3Int indicatorCell = _gridHandler.WorldToCell(_currentIndicator.transform.position);
+        Vector3 indicatorWorld = _gridHandler.CellToWorld(indicatorCell.x, indicatorCell.y);
+
+        if (isEven)
+        {
+            _currentIndicator.transform.position = new Vector3(indicatorWorld.x - _gridHandler.CellSize.x / 2, 0.05f, indicatorWorld.z - _gridHandler.CellSize.y / 2);
+        }
+        else
+        {
+            _currentIndicator.transform.position = new Vector3(indicatorWorld.x, 0.05f, indicatorWorld.z);
         }
     }
 }
