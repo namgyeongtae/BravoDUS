@@ -3,15 +3,21 @@ using UnityEngine;
 
 public class NpcPathWalker : MonoBehaviour
 {
-    public Transform entrance;
+    Transform entrance;
 
-    public Transform startWaypoint;
+    Transform startWaypoint;
 
     public float moveSpeed = 4f;
 
     private Waypoint currentWP; // 현재 웨이포인트
     private Waypoint nextWP;    // 다음 이동할 웨이포인트
     private Waypoint previousWP;// 이전 웨이포인트
+
+    private void Awake()
+    {
+        entrance = GameObject.FindWithTag("Entrance").transform;
+        startWaypoint = GameObject.FindWithTag("StartWaypoint").transform;
+    }
 
     private void Start()
     {

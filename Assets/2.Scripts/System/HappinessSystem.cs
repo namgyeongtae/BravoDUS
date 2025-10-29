@@ -9,10 +9,10 @@ public class HappinessSystem : MonoBehaviour
 {
     [Header("UI")]
     public Image targetImage; // 표시할 아이콘 UI
-    public TextMeshProUGUI happinessText;
     
-    int happiness = 0; // 행복도 수치 (0~100)
+    public int happiness = 0; // 행복도 수치 (0~100)
     float productivityMultiplier = 1.0f;
+    float populationChangeRate;
 
     // 아이콘 캐싱
     Sprite sad, neutral, smile, happy;
@@ -27,10 +27,6 @@ public class HappinessSystem : MonoBehaviour
         neutral = Resources.Load<Sprite>("Icon/neutral");
         smile = Resources.Load<Sprite>("Icon/smile");
         happy = Resources.Load<Sprite>("Icon/happy");
-
-        UpdateIcon(); // 초기 아이콘 갱신
-        UpdateProductivity(); // 초기 생산성 배율 갱신
-        UpdateText(); // 초기 텍스트 갱신
     }
 
     void Update()
@@ -49,8 +45,8 @@ public class HappinessSystem : MonoBehaviour
         UpdateIcon();
         // 생산성 배율 갱신
         UpdateProductivity();
-        // 텍스트 갱신
-        UpdateText();
+        // 인구 감소&증가 확률 갱신
+        UpdatePopulationChangeMultiplier();
     }
 
     // 현재 행복도 구간에 맞는 아이콘으로 교체
@@ -58,14 +54,14 @@ public class HappinessSystem : MonoBehaviour
     {
         Sprite newSprite = null;
 
-        if (happiness < 30) 
+        if (happiness < 30)         // 불만
             newSprite = sad;
-        else if (happiness < 60) 
+        else if (happiness < 60)    // 보통
             newSprite = neutral;
-        else if (happiness < 90) 
+        else if (happiness < 90)    // 만족
             newSprite = smile;
         else 
-            newSprite = happy;
+            newSprite = happy;      // 행복
 
         // 새로운 아이콘이 현재 아이콘과 다를 때만 교체
         if (newSprite != currentSprite)
@@ -75,26 +71,51 @@ public class HappinessSystem : MonoBehaviour
         }
     }
 
+    // 생산성 배율 갱신
     void UpdateProductivity()
     {
-        if (happiness < 30)
+        if (happiness < 30)                 // 불만
             productivityMultiplier = 0.9f;
-        else if (happiness < 60)
+        else if (happiness < 60)            // 보통
             productivityMultiplier = 1.0f;
-        else if (happiness < 90)
+        else if (happiness < 90)            // 만족
             productivityMultiplier = 1.1f;
-        else
+        else                                // 행복
             productivityMultiplier = 1.2f;
-
     }
 
-    void UpdateText()
+    // 인구 감소&증가 확률 갱신
+    void UpdatePopulationChangeMultiplier()
     {
-        happinessText.text = $"{happiness}";
+        int delta;
+
+        if (happiness < 30)                 // 불만
+            delta = -5;
+        else if (happiness < 60)            // 보통
+            delta = 0;
+        else if (happiness < 90)            // 만족
+            delta = 5;
+        else                                // 행복
+            delta = 10;
     }
 
     public float GetProductivityMultiplier()
     {
         return productivityMultiplier;
+    }
+
+    public void ApplyHappinessChange(int delta)
+    {
+        happiness += delta;
+    }
+
+    public void ApplyPopulationChange(int delta)
+    {
+        // 인구 감소 or 증가 확률에 더하기
+    }
+
+    public int GetHappiness()
+    {
+        return happiness;
     }
 }
