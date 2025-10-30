@@ -1020,7 +1020,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aacc4e023ef73640a1e3a745d46aae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyText: {fileID: 1958920873}
 --- !u!1 &201386285
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,7 +1148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 432a5e1a95707dc48bb8c4a97d33c699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  populationText: {fileID: 1795717720}
   npcPrefab: {fileID: 0}
   entrance: {fileID: 0}
 --- !u!4 &219586881
@@ -17032,7 +17030,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetImage: {fileID: 389370101}
-  happinessText: {fileID: 988353689}
   happiness: 0
 --- !u!4 &1665878785
 Transform:
