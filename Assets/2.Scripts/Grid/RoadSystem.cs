@@ -104,14 +104,16 @@ public class RoadSystem : MonoBehaviour
 
     private void InputDetect() // Road 의 방향이 몇 방향인지 알아야 함
     {
-        if (Input.GetMouseButton(0))
+#if !UNITY_EDITOR
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase == TouchPhase.Moved)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
             Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
             if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
             {
                 Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                Debug.Log("cell: " + cell);
+
                 if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
                 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
                 && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
@@ -127,10 +129,61 @@ public class RoadSystem : MonoBehaviour
                 }
             }
         }
+#else
+        if (Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            {
+                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
+                {
+                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Road);
+
+                    DrawRoadTile(cell);
+                    DrawAdjacentRoadTile(cell);
+                }
+                else
+                {
+                    Debug.Log("cell is out of bounds");
+                }
+            }
+        }
+#endif
     }
 
     private void UnInstallRoad()
     {
+#if !UNITY_EDITOR
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase == TouchPhase.Ended)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            {
+                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                Debug.Log("cell: " + cell);
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Road)
+                {
+                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Field);
+
+                    RemoveRoadTile(cell);
+                    DrawAdjacentRoadTile(cell);
+                }
+                else
+                {
+                    Debug.Log("cell is out of bounds");
+                }
+            }
+        }
+#endif        
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -178,8 +231,6 @@ public class RoadSystem : MonoBehaviour
         }
     }
     
-    // TODO
-    // size 만큼의 영역을 칠하고 그 경계에 있는 타일들의 인접 타일도 갱신해야 함
     private void DrawRoadTile(Vector3Int cell)
     {
         // Right Left Down Up

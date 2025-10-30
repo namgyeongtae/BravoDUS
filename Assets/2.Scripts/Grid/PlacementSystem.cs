@@ -78,7 +78,8 @@ public class PlacementSystem : MonoBehaviour
 #if UNITY_EDITOR
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
-        Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+        Touch touch = Input.GetTouch(0);
+        Ray ray = Camera.main.ScreenPointToRay(touch.position);
 #endif
         if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
         {
@@ -91,10 +92,17 @@ public class PlacementSystem : MonoBehaviour
 
         // TODO:
         // 이후 모바일에서는 그냥 터치로 끝내는 게 아닌 중간 과정의 UI/UX가 필요해 보임(정책 결정 필요)
-        if (Input.GetMouseButtonDown(0))
+        #if UNITY_EDITOR
+        if (Input.GetMouseButtonUp(0))
         {
             EndPlacement();
         }
+        #elif UNITY_ANDROID || UNITY_IOS
+        if (touch.phase == TouchPhase.Ended)
+        {
+            EndPlacement();
+        }
+        #endif
     }
 
     private void UnInstallPlacement()
@@ -102,7 +110,8 @@ public class PlacementSystem : MonoBehaviour
         // TODO:
         // 마찬가지로 이후 모바일에서 그냥 터치한다고 파괴되는 게 아니라 UI/UX 정책이 필요하다.
         // 현재는 테스트 용으로 PC 기준 입력만 고려
-        if (Input.GetMouseButton(0))
+        #if UNITY_EDITOR
+        if (Input.GetMouseButtonUp(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -112,6 +121,17 @@ public class PlacementSystem : MonoBehaviour
                 _currentBuilding = null;
             }
         }
+        #elif UNITY_ANDROID || UNITY_IOS
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase == TouchPhase.Ended)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Building")))
+            {
+                Managers.Resource.Destroy(hit.collider.gameObject);
+                _currentBuilding = null;
+            }
+        #endif
     }
 
     private void UpdateBuildingPosition(Vector3Int cell,bool isEven)
