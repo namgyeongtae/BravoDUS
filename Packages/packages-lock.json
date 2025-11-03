@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.boxqkrtm.ide.cursor": {
+      "version": "https://github.com/boxqkrtm/com.unity.ide.cursor.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.9"
+      },
+      "hash": "38fecf55e4fd94ccfe58a92ed8ad1a529ba1694e"
+    },
     "com.shlifedev.ugs": {
       "version": "https://github.com/shlifedev/uni-google-sheets.git?path=src",
       "depth": 0,
@@ -23,6 +32,17 @@
         "com.unity.modules.tilemap": "1.0.0",
         "com.unity.modules.uielements": "1.0.0"
       }
+    },
+    "com.unity.2d.tilemap.extras": {
+      "version": "4.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.2d.tilemap": "1.0.0",
+        "com.unity.modules.tilemap": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.8",
