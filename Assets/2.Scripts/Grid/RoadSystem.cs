@@ -48,61 +48,34 @@ public class RoadSystem : MonoBehaviour
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType];
     private GameObject _currentIndicator = null;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-       
-    }
-
     // Update is called once per frame
     void Update()
     {
         if (!_gridHandler.BuildMode) return;
+
+        if (Managers.Construct.ConstructMode != ConstructMode.Road) return;
 
         if (Input.GetKeyDown(KeyCode.I))
         {
             if (_roadMode == RoadMode.Install)
             {
                 _roadMode = RoadMode.UnInstall;
-                DestroyIndicator();
+                // DestroyIndicator();
             }
             else
             {
                 _roadMode = RoadMode.Install;
-                CreateIndicator();
+                // CreateIndicator();
             }
         }
 
         if (_roadMode == RoadMode.Install)
-            InputDetect();
+            InstallRoad();
         else
             UnInstallRoad();
-
-        /* if (_roadMode == RoadMode.Install && _currentIndicator != null)
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                ResizeIndicator(++_size);
-            }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ResizeIndicator(--_size);
-            }
-        } */
     }
 
-    void OnEnable()
-    {
-        // CreateIndicator();
-    }
-
-    void OnDisable()
-    {
-        // DestroyIndicator();
-    }
-
-    private void InputDetect() // Road 의 방향이 몇 방향인지 알아야 함
+    private void InstallRoad() // Road 의 방향이 몇 방향인지 알아야 함
     {
 #if !UNITY_EDITOR
         Touch touch = Input.GetTouch(0);
@@ -130,7 +103,7 @@ public class RoadSystem : MonoBehaviour
             }
         }
 #else
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);

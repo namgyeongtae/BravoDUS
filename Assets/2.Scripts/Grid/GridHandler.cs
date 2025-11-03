@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 public enum TileType
 {
     Field,
-    Road
+    Road,
+    Constructed
 }
 
 public enum BrushMode
@@ -48,9 +49,11 @@ public class GridHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Camera.main.GetComponent<MobileCameraPan>().enabled = !Camera.main.GetComponent<MobileCameraPan>().enabled;
-            _buildMode = !_buildMode;
-            _gridVisualizer.SetActive(_buildMode);
+            EnterBuildMode();
+        } 
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ExitBuildMode();
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -128,5 +131,19 @@ public class GridHandler : MonoBehaviour
         Vector3Int cell = WorldToCell(worldPosition);
 
         return GetGridTileType(cell.x, cell.y);
+    }
+
+    public void EnterBuildMode()
+    {
+        Camera.main.GetComponent<MobileCameraPan>().enabled = false;
+        _buildMode = true;
+        _gridVisualizer.SetActive(_buildMode);
+    }
+
+    public void ExitBuildMode()
+    {
+        Camera.main.GetComponent<MobileCameraPan>().enabled = true;
+        _buildMode = false;
+        _gridVisualizer.SetActive(_buildMode);
     }
 }
