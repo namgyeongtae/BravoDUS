@@ -13,6 +13,15 @@ public class UIBuildingMenu : CanvasPanel
     {
         base.Initialize();
         CreateBuildingSlots();
+
+        _closeButton.BindEvent(() => Close(), ClickType.Up);
+    }
+
+    public override void Open()
+    {
+        base.Open();
+
+        
     }
 
     private void CreateBuildingSlots()

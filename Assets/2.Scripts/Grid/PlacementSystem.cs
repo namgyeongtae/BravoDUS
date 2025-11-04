@@ -57,8 +57,6 @@ public class PlacementSystem : MonoBehaviour
             Managers.Resource.Destroy(_currentBuilding);
         }
 
-        _gridHandler.EnterBuildMode();
-
         _currentBuilding = Instantiate(buildingPrefab);
 
         // 첫 포지션은 스크린 가운데 포인트로 설정
@@ -88,6 +86,8 @@ public class PlacementSystem : MonoBehaviour
         }
 
         _currentBuilding.GetComponentInChildren<MeshRenderer>().materials = materials;
+
+        DetectCollision(buildingSize: 4);
     }
 
     private void UpdatePlacement()
@@ -244,18 +244,19 @@ public class PlacementSystem : MonoBehaviour
 
         foreach (var mat in materials)
         {
+            Debug.Log("Set Color: " + matColor);
             mat.SetColor("_Color", matColor);
         }
 
         return isCollide;
     }
 
-    public void EndPlacement(bool isCancel = false)
+    public bool EndPlacement(bool isCancel = false)
     {
         if (!_canBuild && !isCancel)
         {
             Managers.UI.AddPanel<UIToastPopup>().SettingPopup("그쪽은 못짓겠는데요?");
-            return;
+            return false;
         }
 
         _gridHandler.ExitBuildMode();
@@ -264,7 +265,7 @@ public class PlacementSystem : MonoBehaviour
         {
             Managers.Resource.Destroy(_currentBuilding);
             _currentBuilding = null;
-            return;
+            return isCancel;
         }
 
         var materials = new Material[_cachedOriginMaterials.Count];
@@ -283,6 +284,8 @@ public class PlacementSystem : MonoBehaviour
         _currentBuilding = null;
 
         _gridHandler.ExitBuildMode();
+
+        return true;
     }
 
     private void SetTileTypeConstructed()

@@ -20,6 +20,7 @@ public class SceneUI : CanvasPanel
     private Coroutine _ironSubCoroutine = null;
     [Header("SideGroup")]
     [Bind("BuildButton")] private UIButton _buildButton;
+    [Bind("RoadButton")] private UIButton _roadButton;
     [Bind("SettingButton")] private UIButton _settingButton;
     [Bind("QuestionButton")] private UIButton _questionButton;
     [Bind("MenuButton")] private UIButton _menuButton;
@@ -38,6 +39,7 @@ public class SceneUI : CanvasPanel
         base.Initialize();
 
         BindEvent(_buildButton, OnBuildButtonClicked);
+        BindEvent(_roadButton, OnRoadButtonClicked);
     }
 
     public override void Open()
@@ -50,6 +52,12 @@ public class SceneUI : CanvasPanel
     private void OnBuildButtonClicked()
     {
         Managers.UI.AddPanel<UIBuildingMenu>();
+    }
+
+    private void OnRoadButtonClicked()
+    {
+        Managers.Construct.SwitchConstructMode(ConstructMode.Road);
+        Managers.UI.AddPanel<UIRoadPlacement>();
     }
     private IEnumerator CoAddCommodity(Ingredient ingredient, float amount)
     {

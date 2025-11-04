@@ -79,6 +79,9 @@ public class RoadSystem : MonoBehaviour
     {
 #if !UNITY_EDITOR
         Touch touch = Input.GetTouch(0);
+
+        if (UIUtils.IsPointerOverUIObject(touch.position)) return;
+
         if (touch.phase == TouchPhase.Moved)
         {
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
@@ -105,6 +108,8 @@ public class RoadSystem : MonoBehaviour
 #else
         if (Input.GetMouseButton(0))
         {
+            if (UIUtils.IsPointerOverUIObject(Input.mousePosition)) return;
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
             if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))

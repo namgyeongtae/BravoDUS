@@ -23,14 +23,10 @@ public class UIBuildPlacement : CanvasPanel
     public override void Open()
     {
         base.Open();
-
-        Managers.UI.GetUI<SceneUI>().gameObject.SetActive(false);
     }
 
     public override void Close()
     {
-        Managers.UI.GetUI<SceneUI>().gameObject.SetActive(true);
-        
         base.Close();
     }
 
@@ -44,7 +40,11 @@ public class UIBuildPlacement : CanvasPanel
 
     private void OnClickConfirm()
     {
-        Managers.Construct.PlacementSystem.EndPlacement();
+        bool isSuccess = Managers.Construct.PlacementSystem.EndPlacement();
+        if (!isSuccess)
+        {
+            return;
+        }
         Managers.Construct.SwitchConstructMode(ConstructMode.None);
         Close();
     }
