@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 struct RoadData
@@ -48,6 +49,11 @@ public class RoadSystem : MonoBehaviour
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType];
     private GameObject _currentIndicator = null;
 
+    void Start()
+    {
+        InitRoadTiles();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -73,6 +79,21 @@ public class RoadSystem : MonoBehaviour
             InstallRoad();
         else
             UnInstallRoad();
+    }
+
+    private void InitRoadTiles()
+    {
+        for (int x = -_gridHandler.Width / 2; x < _gridHandler.Width / 2; x++)
+        {
+            for (int y = -_gridHandler.Height / 2; y < _gridHandler.Height / 2; y++)
+            {
+                var tilebase = _gridHandler.RoadTilemap.GetTile(new Vector3Int(x, y, 0));
+                if (tilebase != null)
+                {
+                    _gridHandler.SetGridTileType(x, y, TileType.Road);
+                }
+            }
+        }
     }
 
     private void InstallRoad() // Road 의 방향이 몇 방향인지 알아야 함
@@ -242,78 +263,26 @@ public class RoadSystem : MonoBehaviour
 
     private void DrawTile(Vector3Int cell, int roadState)
     {
-        switch (roadState)
+        _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RoadTiles[roadState]);
+
+        var roadRuntimeAPI = _gridHandler.RoadTilemap.GetComponent<RoadRuntimeAPI>();
+
+        if (roadRuntimeAPI != null)
         {
-            case (int)RoadDir.None:
-                Debug.Log("Tile: Center");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.CenterTile);
-                break;
-            case (int)RoadDir.Right:
-                Debug.Log("Tile: Right");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RightTile);
-                break;
-            case (int)RoadDir.Left:
-                Debug.Log("Tile: Left");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftTile);
-                break;
-            case (int)RoadDir.Down:
-                Debug.Log("Tile: Down");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownTile);
-                break;
-            case (int)RoadDir.Up:
-                Debug.Log("Tile: Up");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpTile);
-                break;
-            case (int)RoadDir.UpRight:
-                Debug.Log("Tile: UpRight");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpRightTile);
-                break;
-            case (int)RoadDir.UpLeft:
-                Debug.Log("Tile: UpLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpLeftTile);
-                break;
-            case (int)RoadDir.DownRight:
-                Debug.Log("Tile: DownRight");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownRightTile);
-                break;
-            case (int)RoadDir.DownLeft:
-                Debug.Log("Tile: DownLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownLeftTile);
-                break;
-            case (int)RoadDir.UpRightLeft:
-                Debug.Log("Tile: UpRightLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpRightLeftTile);
-                break;
-            case (int)RoadDir.RightLeft:
-                Debug.Log("Tile: RightLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RightLeftTile);
-                break;
-            case (int)RoadDir.DownRightLeft:
-                Debug.Log("Tile: DownRightLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownRightLeftTile);
-                break;
-            case (int)RoadDir.UpDown:
-                Debug.Log("Tile: UpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpDownTile);
-                break;
-            case (int)RoadDir.RightUpDown:
-                Debug.Log("Tile: RightUpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RightUpDownTile);
-                break;
-            case (int)RoadDir.LeftUpDown:
-                Debug.Log("Tile: LeftUpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftUpDownTile);
-                break;
-            case (int)RoadDir.LeftRightUpDown:
-                Debug.Log("Tile: LeftRightUpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftRightUpDownTile);
-                break;
+            roadRuntimeAPI.Place(cell, _roadTileData.RoadTiles[roadState]);
         }
     }
     
     private void RemoveRoadTile(Vector3Int cell)
     {
         _gridHandler.RoadTilemap.SetTile(cell, null);
+
+        var roadRuntimeAPI = _gridHandler.RoadTilemap.GetComponent<RoadRuntimeAPI>();
+
+        if (roadRuntimeAPI != null)
+        {
+            roadRuntimeAPI.Remove(cell);
+        }
     }
 
     private void CreateIndicator()
@@ -354,5 +323,11 @@ public class RoadSystem : MonoBehaviour
         {
             _currentIndicator.transform.position = new Vector3(indicatorWorld.x, 0.05f, indicatorWorld.z);
         }
+    }
+
+    public RoadMode SwitchInstallMode()
+    {
+        _roadMode = (_roadMode == RoadMode.Install) ? RoadMode.UnInstall : RoadMode.Install;
+        return _roadMode;
     }
 }
