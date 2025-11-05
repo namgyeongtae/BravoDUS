@@ -11,12 +11,11 @@ public class PlacementSystem : MonoBehaviour
 {
     [SerializeField] private Material _previewMaterial;
     [SerializeField] private GridHandler _gridHandler;
-
-    [SerializeField] private GameObject _testBuildingPrefab;
     [SerializeField] private PlacementMode _placementMode = PlacementMode.Install;
 
     private bool _canBuild = true;
     private GameObject _currentBuilding = null;
+    private int _buildingSize = 0;
     private List<Material> _cachedOriginMaterials = new();
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -50,7 +49,7 @@ public class PlacementSystem : MonoBehaviour
             UnInstallPlacement(); */
     }
 
-    public void StartPlacement(GameObject buildingPrefab)
+    public void StartPlacement(GameObject buildingPrefab, int buildingSize)
     {
         if (_currentBuilding != null)
         {
@@ -58,6 +57,7 @@ public class PlacementSystem : MonoBehaviour
         }
 
         _currentBuilding = Instantiate(buildingPrefab);
+        _buildingSize = buildingSize;
 
         // 첫 포지션은 스크린 가운데 포인트로 설정
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
@@ -87,7 +87,7 @@ public class PlacementSystem : MonoBehaviour
 
         _currentBuilding.GetComponentInChildren<MeshRenderer>().materials = materials;
 
-        DetectCollision(buildingSize: 4);
+        DetectCollision(_buildingSize);
     }
 
     private void UpdatePlacement()
@@ -125,7 +125,7 @@ public class PlacementSystem : MonoBehaviour
                     {
                         if (!UIUtils.IsPointerOverUIObject(touch.position))
                         {
-                            UpdateBuildingPosition(cell, isEven: true);
+                            UpdateBuildingPosition(cell);
                         }
                     }
                 }
@@ -178,8 +178,10 @@ public class PlacementSystem : MonoBehaviour
         #endif
     }
 
-    private void UpdateBuildingPosition(Vector3Int cell,bool isEven)
+    private void UpdateBuildingPosition(Vector3Int cell)
     {
+        bool isEven = _buildingSize % 2 == 0;
+
         if (isEven)
         {
             Vector3 cellToWorld = _gridHandler.CellToWorld(cell.x, cell.y);
@@ -192,7 +194,7 @@ public class PlacementSystem : MonoBehaviour
             _currentBuilding.transform.position = _gridHandler.CellToWorld(cell.x, cell.y);
         }
 
-        _canBuild = !DetectCollision(buildingSize: 4);
+        _canBuild = !DetectCollision(_buildingSize);
     }
 
     private bool DetectCollision(int buildingSize)
@@ -295,27 +297,26 @@ public class PlacementSystem : MonoBehaviour
 
         Vector3 startPos;
 
-        int buildingSize = 4; // Test Code: 실제 빌딩 사이즈 갖고와야 함
-        bool isEven = buildingSize % 2 == 0; 
+        bool isEven = _buildingSize % 2 == 0; 
 
         if (!isEven)
         {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
+            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
         else
         {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
+            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
 
-        for (int i = 0; i < buildingSize; i++)
+        for (int i = 0; i < _buildingSize; i++)
         {
-            for (int j = 0; j < buildingSize; j++)
+            for (int j = 0; j < _buildingSize; j++)
             {
                 float posX = startPos.x + (_gridHandler.CellSize.x * i);
                 float posZ = startPos.z + (_gridHandler.CellSize.y * j);
@@ -343,29 +344,28 @@ public class PlacementSystem : MonoBehaviour
 
         Vector3 startPos;
 
-        int buildingSize = 4;
-        bool isEven = buildingSize % 2 == 0;
+        bool isEven = _buildingSize % 2 == 0;
 
         if (!isEven)
         {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
+            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
         else
         {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
+            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
 
         // Gizmos.DrawCube(startPos, new Vector3(_gridHandler.CellSize.x, _gridHandler.CellSize.x, _gridHandler.CellSize.x));
 
-        for (int i = 0; i < buildingSize; i++)
+        for (int i = 0; i < _buildingSize; i++)
         {
-            for (int j = 0; j < buildingSize; j++)
+            for (int j = 0; j < _buildingSize; j++)
             {
                 float posX = startPos.x + (_gridHandler.CellSize.x * i);
                 float posZ = startPos.z + (_gridHandler.CellSize.y * j);

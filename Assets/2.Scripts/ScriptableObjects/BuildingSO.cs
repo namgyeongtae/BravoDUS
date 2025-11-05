@@ -8,6 +8,7 @@ public class BuildingData
     public Sprite buildingIcon;
     public BuildingType buildingType;
     public GameObject buildingPrefab;
+    public int buildingSize;
 }
 
 [CreateAssetMenu(fileName = "BuildingSO", menuName = "ScriptableObjects/BuildingSO")]

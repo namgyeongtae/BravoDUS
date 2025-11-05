@@ -7,6 +7,7 @@ public class UIBuildingSlot : UIBind
     [Bind("NameText")] private Text _nameText;
 
     private GameObject _buildingPrefab;
+    private int _buildingSize;
 
     public override void Open()
     {
@@ -22,6 +23,7 @@ public class UIBuildingSlot : UIBind
         _buildingImage.sprite = buildingData.buildingIcon;
         _nameText.text = buildingData.buildingName;
         _buildingPrefab = buildingData.buildingPrefab;
+        _buildingSize = buildingData.buildingSize;
     }
 
     private void OnClickSlotButton()
@@ -31,7 +33,7 @@ public class UIBuildingSlot : UIBind
         Managers.Construct.SwitchConstructMode(ConstructMode.Placement);
 
         Managers.UI.AddPanel<UIBuildPlacement>(_buildingPrefab);
-        Managers.Construct.PlacementSystem.StartPlacement(_buildingPrefab);
+        Managers.Construct.PlacementSystem.StartPlacement(_buildingPrefab, _buildingSize);
 
         Managers.UI.GetUI<UIBuildingMenu>().Close();
     }
