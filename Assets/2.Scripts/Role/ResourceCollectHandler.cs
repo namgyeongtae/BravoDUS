@@ -8,22 +8,43 @@ public class ResourceCollectHandler : RoleHandler
     private float _lastCollectTime = 0f;
     private float _intervalTime = 3f;
     private float _quantity = 4f;
+    private float _cumulativeQuantity = 0f;
     private Building _building;
 
     private UIAlarmNotWorkForce _alarmNotWorkForce = null;
+    private UICollectButton _collectButton = null;
 
     public IngredientType ResourceType => _resourceType;
     public float Quantity => _quantity;
+    public float CumulativeQuantity => _cumulativeQuantity;
 
     void Start()
     {
         _building = GetComponent<Building>();
         _building.OnWorkForceChanged += OnWorkForceChanged;
+
+        if (_resourceType == IngredientType.Wood)
+        {
+            Managers.UI.GetUI<SceneUI>().WoodParticleAttractor.OnAttractedCompleted.AddListener(AddIngredient);
+        }
+        else if (_resourceType == IngredientType.Iron)
+        {
+            Managers.UI.GetUI<SceneUI>().IronParticleAttractor.OnAttractedCompleted.AddListener(AddIngredient);
+        }
     }
 
     void OnDestroy()
     {
         _building.OnWorkForceChanged -= OnWorkForceChanged;
+
+        if (_resourceType == IngredientType.Wood)
+        {
+            Managers.UI.GetUI<SceneUI>().WoodParticleAttractor.OnAttractedCompleted.RemoveListener(AddIngredient);
+        }
+        else if (_resourceType == IngredientType.Iron)
+        {
+            Managers.UI.GetUI<SceneUI>().IronParticleAttractor.OnAttractedCompleted.RemoveListener(AddIngredient);
+        }
     }
 
     public override void HandleEvent(string eventType)
@@ -62,6 +83,21 @@ public class ResourceCollectHandler : RoleHandler
         _quantity = 4f;
     }
 
+    private void CreateCollectButton()
+    {
+        if (_collectButton == null && _cumulativeQuantity >= 20f)
+            _collectButton = Managers.UI.AddPanel<UICollectButton>(this, true);
+    }
+
+    public void DestroyCollectButton()
+    {
+        if (_collectButton != null)
+        {
+            _collectButton.Close();
+            _collectButton = null;
+        }
+    }
+
     private void CollectResource()
     {
         var building = GetComponentInParent<Building>();
@@ -71,9 +107,20 @@ public class ResourceCollectHandler : RoleHandler
         if (building.WorkForceList.Count <= 0)
             return;
 
-        Managers.Commodity.AddIngredient(_resourceType, _quantity);
+        _cumulativeQuantity += _quantity;
 
-        Managers.UI.AddPanel<UIResourceGather>(this, true);
+        CreateCollectButton();
+
+        // Managers.Commodity.AddIngredient(_resourceType, _quantity);
+
+        // Managers.UI.AddPanel<UIResourceGather>(this, true);
+    }
+
+    public void AddIngredient()
+    {
+        Managers.Commodity.AddIngredient(_resourceType, _cumulativeQuantity);
+        _cumulativeQuantity = 0f;
+        DestroyCollectButton();
     }
 
     private void OnWorkForceChanged()
