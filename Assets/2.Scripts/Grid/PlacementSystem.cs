@@ -301,8 +301,8 @@ public class PlacementSystem : MonoBehaviour
 
         if (!isEven)
         {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2));
+            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
