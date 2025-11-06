@@ -14,6 +14,7 @@ public class Building : MonoBehaviour
     [SerializeField] private int maxLevel = 10; // 업그레이드 최대 레벨
     [SerializeField] private bool _isTestMode = false; // 기본 false
     [SerializeField] public float constructionTime = 5f; // 건설 시간 (초)
+    [SerializeField] private int buildingSize = 1; // 건물 크기
 
     private Animator _animator;
 
@@ -350,6 +351,19 @@ public class Building : MonoBehaviour
     } */
 #endregion
 
+    public void DestroyBuilding()
+    {
+        var gridHandler = Managers.Construct.GridHandler;
+
+        var cells = gridHandler.GetCellsInRange(transform.position, buildingSize);
+
+        for (int i = 0; i < cells.Count; i++)
+        {
+            gridHandler.SetGridTileType(cells[i].x, cells[i].y, TileType.Field);
+        }
+
+        Managers.Resource.Destroy(gameObject);
+    }
     private void CreateConstructionEffect()
     {
         if (constructionEffectPrefab != null)

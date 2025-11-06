@@ -155,6 +155,7 @@ public class UIBuildingSelection : CanvasPanel
         Debug.Log("InitActionDict");
         _actionDict.Add(BuildingActionType.Info, Action_ShowInfo);
         _actionDict.Add(BuildingActionType.Upgrade, Action_Upgrade);
+        _actionDict.Add(BuildingActionType.Destroy, Action_Destroy);
         _actionDict.Add(BuildingActionType.HumanResource, Action_HumanResource);
         _actionDict.Add(BuildingActionType.PatientManage, Action_PatientManage);
         _actionDict.Add(BuildingActionType.Hire, Action_Hire);
@@ -192,6 +193,13 @@ public class UIBuildingSelection : CanvasPanel
 
         // TODO
         // 선택된 빌딩을 어떻게든 가져와서 Upgrade 함수 호출출
+    }
+
+    private void Action_Destroy()
+    {
+        _selectedBuilding.DestroyBuilding();
+
+        Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(_selectedBuilding);
     }
 
     private void Action_HumanResource()

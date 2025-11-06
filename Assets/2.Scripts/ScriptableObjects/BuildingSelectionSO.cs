@@ -19,6 +19,7 @@ public enum BuildingActionType
     None,
     Info,
     Upgrade,
+    Destroy,
     HumanResource,
     PatientManage,
     Hire

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -131,6 +132,45 @@ public class GridHandler : MonoBehaviour
         Vector3Int cell = WorldToCell(worldPosition);
 
         return GetGridTileType(cell.x, cell.y);
+    }
+
+    public List<Vector3Int> GetCellsInRange(Vector3 center, int size)
+    {
+        bool isEven = size % 2 == 0;
+
+        List<Vector3Int> cells = new();
+
+        Vector3 startPos;
+
+        if (!isEven)
+        {
+            float startPosX = center.x - (CellSize.x * (size / 2));
+            float startPosZ = center.z - (CellSize.y * (size / 2));
+
+            startPos = new Vector3(startPosX, 0, startPosZ);
+        }
+        else
+        {
+            float startPosX = center.x - CellSize.x / 2 - (CellSize.x * (size / 2 - 1));
+            float startPosZ = center.z - CellSize.y / 2 - (CellSize.y * (size / 2 - 1));
+
+            startPos = new Vector3(startPosX, 0, startPosZ);
+        }
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                float posX = startPos.x + (CellSize.x * i);
+                float posZ = startPos.z + (CellSize.y * j);
+
+                Vector3Int cell = WorldToCell(new Vector3(posX, 0, posZ));
+
+                cells.Add(cell);
+            }
+        }
+
+        return cells;
     }
 
     public void EnterBuildMode()
