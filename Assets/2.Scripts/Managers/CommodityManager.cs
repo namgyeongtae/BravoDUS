@@ -36,6 +36,7 @@ public class CommodityManager : IManagerBase
     private Dictionary<IngredientType, Ingredient> _ingredients = new Dictionary<IngredientType, Ingredient>();
     public Ingredient GetIngredient(IngredientType type) => _ingredients.TryGetValue(type, out var ingredient) ? ingredient : null;
 
+    public IReadOnlyDictionary<IngredientType, Ingredient> Ingredients => _ingredients;
     public void Init()
     {
         LoadIngredientFromDB();

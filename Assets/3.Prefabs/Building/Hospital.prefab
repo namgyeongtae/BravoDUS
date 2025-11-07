@@ -614,7 +614,7 @@ MonoBehaviour:
   maxLevel: 10
   _isTestMode: 0
   constructionTime: 5
-  BuildingType: 0
+  BuildingType: 2
 --- !u!1 &5940291433528997197
 GameObject:
   m_ObjectHideFlags: 0
