@@ -6,9 +6,10 @@ public class EventManager : IManagerBase
 {
     private Dictionary<EventType, EventController> _events = new Dictionary<EventType, EventController>();
     private List<Incident> _incidents = new List<Incident>();
+    
 
     private CityStat _cityStat = new CityStat();    // Temp Code -> 생성자로 안 할 거임
-
+    public CityStat CityStat => _cityStat;
     public EventController Fire => _events[EventType.FireRiskEvent] as FireEventController;
     public EventController Security => _events[EventType.SecurityEvent] as SecurityEventController;
     public EventController Injure => _events[EventType.InjureEvent] as InjureEventController;

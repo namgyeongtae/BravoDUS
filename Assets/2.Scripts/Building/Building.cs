@@ -21,7 +21,6 @@ public class Building : MonoBehaviour
     private List<WorkForce> _workForceList = new(); // 건물에 할당된 인력 리스트
     public Action OnWorkForceChanged;
 
-
     public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
     public State CurrentState { get; private set; } = State.Ruin; // 현재 상태
     public int Level { get; private set; } = 0; // 레벨
@@ -32,7 +31,7 @@ public class Building : MonoBehaviour
     private GameObject currentModel; // 현재 모델 인스턴스
     private Coroutine constructionCoroutine; // 건설 코루틴 참조
     private Coroutine upgradeCoroutine; // 업그레이드 코루틴 참조
-    
+
     private GameObject currentEffect; // 현재 이펙트 인스턴스
 
     private ResourceProducer resourceProducer;
@@ -41,7 +40,7 @@ public class Building : MonoBehaviour
     void Awake()
     {
         // FixedPosition = transform.position;
-        
+
         roleHandler = GetComponent<RoleHandler>();
         _animator = GetComponent<Animator>();
 
@@ -78,20 +77,20 @@ public class Building : MonoBehaviour
 
     void Update()
     {
-/* #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log($"Update detected key press for {gameObject.name} - CurrentState: {CurrentState}");
-            if (CurrentState == State.Ruin)
-            {
-                StartConstruction();
-            }
-            // else if (CurrentState == State.Base)
-            // {
-            // Upgrade();
-            // }
-        }
-#endif */
+        /* #if UNITY_EDITOR
+                if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R))
+                {
+                    Debug.Log($"Update detected key press for {gameObject.name} - CurrentState: {CurrentState}");
+                    if (CurrentState == State.Ruin)
+                    {
+                        StartConstruction();
+                    }
+                    // else if (CurrentState == State.Base)
+                    // {
+                    // Upgrade();
+                    // }
+                }
+        #endif */
     }
 
     public void StartConstruction()
@@ -109,7 +108,7 @@ public class Building : MonoBehaviour
     private IEnumerator ConstructCoroutine()
     {
         Debug.Log($"ConstructCoroutine started for {gameObject.name}");
-        
+
         // CreateConstructor(); // 건설자 프리팹 생성
 
         // basePrefab.SetActive(false);
@@ -131,7 +130,7 @@ public class Building : MonoBehaviour
             yield return new WaitForSeconds(constructionTime / 5f);
             Debug.Log("건설 진행: " + ((i + 1) * 20) + "% - " + gameObject.name + " (State: " + CurrentState + ")");
         }
-        
+
         CompleteConstruction();
     }
 
@@ -299,7 +298,7 @@ public class Building : MonoBehaviour
         Debug.Log($"업그레이드 취소: {gameObject.name}, Level: {Level}, State: {CurrentState}");
     }
 
-#region Swap Model
+    #region Swap Model
     /* private void SwapModel(GameObject newPrefab)
     {
         // 🔹 1. 현재 모델 반환
@@ -349,7 +348,7 @@ public class Building : MonoBehaviour
             Debug.LogError($"❌ 모델 생성 실패: {gameObject.name}, 프리팹: {newPrefab.name}");
         }
     } */
-#endregion
+    #endregion
 
     public void DestroyBuilding()
     {
@@ -388,6 +387,7 @@ public class Building : MonoBehaviour
             Debug.LogWarning($"constructionEffectPrefab is null for {gameObject.name}");
         }
     }
+
     private void CreateConstructor()
     {
         var collider = ruinPrefab.GetComponent<BoxCollider>();
@@ -396,10 +396,11 @@ public class Building : MonoBehaviour
 
         GameObject constructor = Managers.Resource.Instantiate("Avatar/Constructor");
         constructor.transform.SetParent(transform);
-        constructor.transform.position = transform.position 
+        constructor.transform.position = transform.position
                     + transform.forward * (collider.size.z / 2f * 3.5f) * -1
                     + transform.up * (collider.size.y / 2f * 0.5f) * -1;
     }
+
     private void DestroyConstructor()
     {
         var constructors = transform.Find("Constructor");
@@ -407,14 +408,103 @@ public class Building : MonoBehaviour
         if (constructors != null)
             Managers.Resource.Destroy(constructors.gameObject);
     }
+
     public void AssignWorkForce(WorkForce workForce)
     {
         _workForceList.Add(workForce);
         OnWorkForceChanged?.Invoke();
     }
+
     public void UnassignWorkForce(WorkForce workForce)
     {
         _workForceList.Remove(workForce);
         OnWorkForceChanged?.Invoke();
+    }
+
+    // ============================
+    // 🔽🔽🔽 여기부터 Save/Load 관련 추가 코드 🔽🔽🔽
+    // ============================
+
+    /// <summary>
+    /// 현재 Building 상태를 세이브용 데이터로 변환
+    /// </summary>
+    public BuildingSaveData ToSaveData()
+    {
+        var data = new BuildingSaveData();
+
+        // 어떤 건물인지 구분용
+        data.buildingName = gameObject.name;
+        data.buildingType = (int)BuildingType;
+
+        // 위치 / 회전
+        Vector3 pos = transform.position;
+        data.posX = pos.x;
+        data.posY = pos.y;
+        data.posZ = pos.z;
+
+        data.rotY = transform.rotation.eulerAngles.y;
+
+        // 상태 / 레벨
+        data.level = this.Level;
+        data.state = (int)this.CurrentState;
+
+        data.isConstructing = (this.CurrentState == State.Constructing);
+        data.isUpgrading = (this.CurrentState == State.Upgrading);
+
+        // 공사 남은 시간, 업그레이드 남은 시간 등은
+        // 나중에 필요해지면 필드 추가해서 채우면 됨
+        return data;
+    }
+
+    /// <summary>
+    /// 세이브 데이터 기반으로 Building 상태 복원
+    /// </summary>
+    public void ApplySaveData(BuildingSaveData data)
+    {
+        // 위치 / 회전 복원
+        transform.position = new Vector3(data.posX, data.posY, data.posZ);
+        transform.rotation = Quaternion.Euler(0f, data.rotY, 0f);
+
+        // 상태 / 레벨 복원
+        Level = data.level;
+        CurrentState = (State)data.state;
+
+        // 상태에 맞게 ruin/base/upgraded 오브젝트 활성화
+        ApplyVisualByStateInstant();
+    }
+
+    /// <summary>
+    /// CurrentState에 맞게 ruin/base/upgraded 오브젝트의 Active 상태를 정리
+    /// (세이브 로드 직후 한 번 호출해 주는 용도)
+    /// </summary>
+    private void ApplyVisualByStateInstant()
+    {
+        if (ruinPrefab != null) ruinPrefab.SetActive(false);
+        if (basePrefab != null) basePrefab.SetActive(false);
+        if (upgradedPrefab != null) upgradedPrefab.SetActive(false);
+
+        switch (CurrentState)
+        {
+            case State.Ruin:
+                if (ruinPrefab != null) ruinPrefab.SetActive(true);
+                break;
+
+            case State.Constructing:
+            case State.Base:
+                if (basePrefab != null) basePrefab.SetActive(true);
+                break;
+
+            case State.Upgrading:
+                // 업그레이드 중일 때도 일단 base 모델 보여주기
+                if (basePrefab != null) basePrefab.SetActive(true);
+                break;
+
+            case State.Upgraded:
+                if (upgradedPrefab != null)
+                    upgradedPrefab.SetActive(true);
+                else if (basePrefab != null)
+                    basePrefab.SetActive(true);
+                break;
+        }
     }
 }

@@ -17,11 +17,11 @@ public class PlacementSystem : MonoBehaviour
     private GameObject _currentBuilding = null;
     private int _buildingSize = 0;
     private List<Material> _cachedOriginMaterials = new();
-    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -100,7 +100,7 @@ public class PlacementSystem : MonoBehaviour
             RotateBuilding();
         }
 
-// #if UNITY_EDITOR
+        // #if UNITY_EDITOR
         /* Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
         {
@@ -110,15 +110,15 @@ public class PlacementSystem : MonoBehaviour
                 UpdateBuildingPosition(cell, isEven: true);
             }
         } */
-// #elif UNITY_ANDROID || UNITY_IOS
+        // #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-        
+
             if (touch.phase == TouchPhase.Moved)
             {
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
                 {
                     Vector3Int cell = _gridHandler.WorldToCell(hit.point);
                     if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
@@ -131,8 +131,8 @@ public class PlacementSystem : MonoBehaviour
                 }
             }
         }
-// #endif
-        
+        // #endif
+
 
         // TODO:
         // 이후 모바일에서는 그냥 터치로 끝내는 게 아닌 중간 과정의 UI/UX가 필요해 보임(정책 결정 필요)
@@ -154,7 +154,7 @@ public class PlacementSystem : MonoBehaviour
         // TODO:
         // 마찬가지로 이후 모바일에서 그냥 터치한다고 파괴되는 게 아니라 UI/UX 정책이 필요하다.
         // 현재는 테스트 용으로 PC 기준 입력만 고려
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if (Input.GetMouseButtonUp(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -165,7 +165,7 @@ public class PlacementSystem : MonoBehaviour
                 _currentBuilding = null;
             }
         }
-        #elif UNITY_ANDROID || UNITY_IOS
+#elif UNITY_ANDROID || UNITY_IOS
         Touch touch = Input.GetTouch(0);
         if (touch.phase == TouchPhase.Ended)
         {
@@ -175,7 +175,7 @@ public class PlacementSystem : MonoBehaviour
                 Managers.Resource.Destroy(hit.collider.gameObject);
                 _currentBuilding = null;
             }
-        #endif
+#endif
     }
 
     private void UpdateBuildingPosition(Vector3Int cell)
@@ -297,7 +297,7 @@ public class PlacementSystem : MonoBehaviour
 
         Vector3 startPos;
 
-        bool isEven = _buildingSize % 2 == 0; 
+        bool isEven = _buildingSize % 2 == 0;
 
         if (!isEven)
         {
