@@ -63,11 +63,7 @@ public class PlacementSystem : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
         {
             Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-            _currentBuilding.transform.position = _gridHandler.CellToWorld(cell.x, cell.y);
-        }
-        else
-        {
-            _currentBuilding.transform.position = Vector3.zero;
+            _currentBuilding.transform.position = _buildingSize % 2 != 0 ? _gridHandler.CellToWorld(cell.x, cell.y) : _gridHandler.CellToWorld(cell.x, cell.y) + new Vector3(_gridHandler.CellSize.x / 2, 0, _gridHandler.CellSize.y / 2);
         }
 
         // 프리뷰 머터리얼 설정
@@ -121,13 +117,15 @@ public class PlacementSystem : MonoBehaviour
                 if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
                 {
                     Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                    if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
+
+                    if (!UIUtils.IsPointerOverUIObject(touch.position))
                     {
-                        if (!UIUtils.IsPointerOverUIObject(touch.position))
-                        {
-                            UpdateBuildingPosition(cell);
-                        }
+                        UpdateBuildingPosition(cell);
                     }
+                    /* if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
+                    {
+                        
+                    } */
                 }
             }
         }
@@ -187,11 +185,49 @@ public class PlacementSystem : MonoBehaviour
             Vector3 cellToWorld = _gridHandler.CellToWorld(cell.x, cell.y);
             Vector3 buildPos = new Vector3(cellToWorld.x + _gridHandler.CellSize.x / 2, 0, cellToWorld.z + _gridHandler.CellSize.y / 2);
 
-            _currentBuilding.transform.position = buildPos;
+            if (!IsCellsOutOfRange(_gridHandler.GetCellsInRange(buildPos, _buildingSize)))
+            {
+                _currentBuilding.transform.position = buildPos;
+            }
+            else
+            {
+                float minX = (-_gridHandler.Width / 2) * _gridHandler.CellSize.x + (_buildingSize / 2) * _gridHandler.CellSize.x;
+                float maxX = (_gridHandler.Width / 2) * _gridHandler.CellSize.x - (_buildingSize / 2) * _gridHandler.CellSize.x;
+                float minZ = (-_gridHandler.Height / 2) * _gridHandler.CellSize.y + (_buildingSize / 2) * _gridHandler.CellSize.y;
+                float maxZ = (_gridHandler.Height / 2) * _gridHandler.CellSize.y - (_buildingSize / 2) * _gridHandler.CellSize.y;
+
+                float clampedX = Mathf.Clamp(buildPos.x, minX, maxX);
+                float clampedZ = Mathf.Clamp(buildPos.z, minZ, maxZ);
+
+                _currentBuilding.transform.position = new Vector3(clampedX, buildPos.y, clampedZ);
+
+                Debug.Log("minX: " + minX + ", maxX: " + maxX + ", minZ: " + minZ + ", maxZ: " + maxZ);
+                Debug.Log("clampedX: " + clampedX + ", clampedZ: " + clampedZ);
+            }
         }
         else
         {
-            _currentBuilding.transform.position = _gridHandler.CellToWorld(cell.x, cell.y);
+            Vector3 buildPos = _gridHandler.CellToWorld(cell.x, cell.y);
+            
+            if (!IsCellsOutOfRange(_gridHandler.GetCellsInRange(buildPos, _buildingSize)))
+            {
+                _currentBuilding.transform.position = buildPos;
+            }
+            else
+            {
+                float minX = (-_gridHandler.Width / 2) * _gridHandler.CellSize.x + (_buildingSize / 2) * _gridHandler.CellSize.x + _gridHandler.CellSize.x / 2;
+                float maxX = (_gridHandler.Width / 2) * _gridHandler.CellSize.x - (_buildingSize / 2) * _gridHandler.CellSize.x - _gridHandler.CellSize.x / 2;
+                float minZ = (-_gridHandler.Height / 2) * _gridHandler.CellSize.y + (_buildingSize / 2) * _gridHandler.CellSize.y + _gridHandler.CellSize.y / 2;
+                float maxZ = (_gridHandler.Height / 2) * _gridHandler.CellSize.y - (_buildingSize / 2) * _gridHandler.CellSize.y - _gridHandler.CellSize.y / 2;
+
+                float clampedX = Mathf.Clamp(buildPos.x, minX, maxX);
+                float clampedZ = Mathf.Clamp(buildPos.z, minZ, maxZ);
+
+                _currentBuilding.transform.position = new Vector3(clampedX, buildPos.y, clampedZ);
+
+                Debug.Log("minX: " + minX + ", maxX: " + maxX + ", minZ: " + minZ + ", maxZ: " + maxZ);
+                Debug.Log("clampedX: " + clampedX + ", clampedZ: " + clampedZ);
+            }
         }
 
         _canBuild = !DetectCollision(_buildingSize);
@@ -336,6 +372,17 @@ public class PlacementSystem : MonoBehaviour
         float rotationY = (currentY >= 90) ? 0 : 90;
 
         _currentBuilding.transform.rotation = Quaternion.Euler(0, rotationY, 0);
+    }
+
+    private bool IsCellsOutOfRange(List<Vector3Int> cells)
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            if (cells[i].x < -_gridHandler.Width / 2 || cells[i].x > _gridHandler.Width / 2 || cells[i].y < -_gridHandler.Height / 2 || cells[i].y > _gridHandler.Height / 2)
+                return true;
+        }
+
+        return false;
     }
 
     private void OnDrawGizmos()

@@ -10,22 +10,12 @@ public enum TileType
     Constructed
 }
 
-public enum BrushMode
-{
-    None,
-    Field,
-    Road,
-    Building
-}
-
 public class GridHandler : MonoBehaviour
 {
     [SerializeField] private GameObject _gridVisualizer;    
     [SerializeField] private Tilemap _fieldTilemap;
     [SerializeField] private Tilemap _roadTilemap;
     [SerializeField] private TileBase _selectedTile;        // 이후 고도화 (더 다양한 TileBase를 선택할 수 있는 UX 제공)
-
-    [SerializeField] private BrushMode _curBrushMode = BrushMode.Field;
 
     private readonly int _width = 20;
     private readonly int _height = 20;
@@ -48,32 +38,7 @@ public class GridHandler : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            EnterBuildMode();
-        } 
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ExitBuildMode();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            _curBrushMode = (BrushMode)(((int)_curBrushMode + 1) % Enum.GetValues(typeof(BrushMode)).Length);
-        }
-
-        if (_curBrushMode == BrushMode.Field)
-        {
-            DrawFieldTile();
-        }
-        else if (_curBrushMode == BrushMode.Road)
-        {
-
-        }
-        else if (_curBrushMode == BrushMode.Building)
-        {
-            
-        }
+        
     }
     public void DrawFieldTile()
     {
