@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 865380265528117681}
   - component: {fileID: 8918158162030415211}
   - component: {fileID: 943796245367843836}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 705425908418575626}
   - component: {fileID: 7409550514318529437}
   - component: {fileID: 6263130858041477997}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_BD_Hospital
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1192200376486580435}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fences
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7996938852812481324}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9195283793692427349}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 8470705083665369981}
   - component: {fileID: 4072998785031106933}
   - component: {fileID: 2458083316371933533}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,7 +441,7 @@ GameObject:
   - component: {fileID: 3003389180807412613}
   - component: {fileID: 4680759233692520745}
   - component: {fileID: 8349040941686622125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +548,7 @@ GameObject:
   - component: {fileID: 4443081415363227287}
   - component: {fileID: 2662584809355517561}
   - component: {fileID: 5844980595860861661}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hospital
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,7 +625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4130536406660338763}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +657,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4419103492346124386}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -692,7 +692,7 @@ GameObject:
   - component: {fileID: 4688705901937888541}
   - component: {fileID: 3129858199164327618}
   - component: {fileID: 4781774933300124228}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}

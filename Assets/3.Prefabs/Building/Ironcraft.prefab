@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7848449871229668434}
   - component: {fileID: 623713037494636173}
   - component: {fileID: 5738911909134899203}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 6761627320027686202}
   - component: {fileID: 2006134826843164939}
   - component: {fileID: 7292025740996651385}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_BD_Ironcraft.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1783251207343500447}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2753259714607509850}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 3649289003422439744}
   - component: {fileID: 2226118008622121885}
   - component: {fileID: 6466271758400388169}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1513026617846683951}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fences
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -438,7 +438,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7650113191822551398}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -472,7 +472,7 @@ GameObject:
   - component: {fileID: 8942446160432247423}
   - component: {fileID: 1862687058318011772}
   - component: {fileID: 7411496515973837156}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ironcraft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -549,7 +549,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3303990891644752164}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_BD_Ironcraft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -581,7 +581,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3925050010134650520}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WoodFence (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -616,7 +616,7 @@ GameObject:
   - component: {fileID: 6982362254465173297}
   - component: {fileID: 5970619243723319739}
   - component: {fileID: 6170681048464845746}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -724,7 +724,7 @@ GameObject:
   - component: {fileID: 699530548426371369}
   - component: {fileID: 4761595285179069903}
   - component: {fileID: 3569730627001409974}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LowWoodFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}

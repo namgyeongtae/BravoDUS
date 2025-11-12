@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2308241572661097699}
   - component: {fileID: 4110083011463343630}
   - component: {fileID: 7198037380993292207}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_BD_SmallStore.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3464076428348904197}
   - component: {fileID: 5138868431289399494}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallStore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5508467312988438422}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_BD_SmallStore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
