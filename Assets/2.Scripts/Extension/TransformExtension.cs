@@ -30,4 +30,14 @@ public static class TransformExtension
                 CachedChildTransform(child, childTransform);
         }
     }
+
+    public static Transform FindHighestParent(this Transform transform)
+    {
+        while (transform.parent != null)
+        {
+            transform = transform.parent;
+        }
+
+        return transform;
+    }
 }

@@ -17,14 +17,14 @@ public class GridHandler : MonoBehaviour
     [SerializeField] private Tilemap _roadTilemap;
     [SerializeField] private TileBase _selectedTile;        // 이후 고도화 (더 다양한 TileBase를 선택할 수 있는 UX 제공)
 
-    private readonly int _width = 20;
-    private readonly int _height = 20;
+    private readonly int _width = 80;
+    private readonly int _height = 80;
 
     [SerializeField] private Grid _grid;
 
     [SerializeField] private bool _buildMode = false;
 
-    private TileType[,] _gridTileTypes = new TileType[20, 20];
+    private TileType[,] _gridTileTypes = new TileType[80, 80];
 
     public bool BuildMode => _buildMode;
 
@@ -140,14 +140,14 @@ public class GridHandler : MonoBehaviour
 
     public void EnterBuildMode()
     {
-        Camera.main.GetComponent<MobileCameraPan>().enabled = false;
+        // Camera.main.GetComponent<MobileCameraPan>().enabled = false;
         _buildMode = true;
         _gridVisualizer.SetActive(_buildMode);
     }
 
     public void ExitBuildMode()
     {
-        Camera.main.GetComponent<MobileCameraPan>().enabled = true;
+        // Camera.main.GetComponent<MobileCameraPan>().enabled = true;
         _buildMode = false;
         _gridVisualizer.SetActive(_buildMode);
     }

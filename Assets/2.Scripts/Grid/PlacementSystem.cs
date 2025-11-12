@@ -13,6 +13,7 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private GridHandler _gridHandler;
     [SerializeField] private PlacementMode _placementMode = PlacementMode.Install;
 
+    private bool _canMove = false;
     private bool _canBuild = true;
     private GameObject _currentBuilding = null;
     private int _buildingSize = 0;
@@ -111,22 +112,40 @@ public class PlacementSystem : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Moved)
+            if (touch.phase == TouchPhase.Began)
             {
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Building")))
                 {
-                    Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                    var hitObject = hit.collider.transform.FindHighestParent().gameObject;
 
-                    if (!UIUtils.IsPointerOverUIObject(touch.position))
+                    if (hitObject == _currentBuilding)
                     {
-                        UpdateBuildingPosition(cell);
+                        _canMove = true;
+                        Camera.main.GetComponent<MobileCameraPan>().SetMoveMode(false);
                     }
-                    /* if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
-                    {
-                        
-                    } */
                 }
+            }
+            else if (touch.phase == TouchPhase.Moved)
+            {
+                if (_canMove)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                    if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default") | LayerMask.GetMask("Building")))
+                    {
+                        Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+
+                        if (!UIUtils.IsPointerOverUIObject(touch.position))
+                        {
+                            UpdateBuildingPosition(cell);
+                        }
+                    }
+                }
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                _canMove = false;
+                Camera.main.GetComponent<MobileCameraPan>().SetMoveMode(true);
             }
         }
         // #endif

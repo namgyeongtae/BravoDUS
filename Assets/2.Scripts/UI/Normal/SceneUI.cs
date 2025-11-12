@@ -11,9 +11,9 @@ public class SceneUI : CanvasPanel
 
     [Header("Commodity")]
     [Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
-    [Bind("IronIcon")] private UIParticleAttractor _ironParticleAttractor;
+    // [Bind("IronIcon")] private UIParticleAttractor _ironParticleAttractor;
     [Bind("WoodAmount")] private Text _woodAmount;
-    [Bind("IronAmount")] private Text _ironAmount;
+    // [Bind("IronAmount")] private Text _ironAmount;
     private Coroutine _woodAddCoroutine = null;
     private Coroutine _ironAddCoroutine = null;
     private Coroutine _woodSubCoroutine = null;
@@ -31,7 +31,7 @@ public class SceneUI : CanvasPanel
     public UIBuildingSelection BuildingSelection => _buildingSelection;
 
     public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
-    public UIParticleAttractor IronParticleAttractor => _ironParticleAttractor;
+    // public UIParticleAttractor IronParticleAttractor => _ironParticleAttractor;
 
 
     protected override void Initialize()
@@ -46,7 +46,8 @@ public class SceneUI : CanvasPanel
     {
         // _buildingSelection = Managers.UI.AddPanel<UIBuildingSelection>();
         _woodAmount.text = Managers.Commodity.GetIngredient(IngredientType.Wood).Amount.ToString();
-        _ironAmount.text = Managers.Commodity.GetIngredient(IngredientType.Iron).Amount.ToString();
+        
+        // _ironAmount.text = Managers.Commodity.GetIngredient(IngredientType.Iron).Amount.ToString();
     }
 
     private void OnBuildButtonClicked()
@@ -66,7 +67,7 @@ public class SceneUI : CanvasPanel
         float currentAmount = type switch
         {
             IngredientType.Wood => Convert.ToSingle(_woodAmount.text),
-            IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
+            // IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
             _ => 0f
         };
 
@@ -82,7 +83,7 @@ public class SceneUI : CanvasPanel
                     _woodAmount.text = currentAmount.ToString();
                     break;
                 case IngredientType.Iron:
-                    _ironAmount.text = currentAmount.ToString();
+                    // _ironAmount.text = currentAmount.ToString();
                     break;
             }
         }
@@ -104,7 +105,7 @@ public class SceneUI : CanvasPanel
         float currentAmount = type switch
         {
             IngredientType.Wood => Convert.ToSingle(_woodAmount.text),
-            IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
+            // IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
             _ => 0f
         };
 
@@ -119,7 +120,7 @@ public class SceneUI : CanvasPanel
                     _woodAmount.text = currentAmount.ToString();
                     break;
                 case IngredientType.Iron:
-                    _ironAmount.text = currentAmount.ToString();
+                    // _ironAmount.text = currentAmount.ToString();
                     break;
             }
         }
@@ -207,7 +208,7 @@ public class SceneUI : CanvasPanel
                 _woodParticleAttractor.AddParticle(particle);
                 break;
             case IngredientType.Iron:
-                _ironParticleAttractor.AddParticle(particle);
+                // _ironParticleAttractor.AddParticle(particle);
                 break;
         }
     }

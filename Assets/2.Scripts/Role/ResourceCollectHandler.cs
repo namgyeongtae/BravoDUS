@@ -27,10 +27,10 @@ public class ResourceCollectHandler : RoleHandler
         {
             Managers.UI.GetUI<SceneUI>().WoodParticleAttractor.OnAttractedCompleted.AddListener(AddIngredient);
         }
-        else if (_resourceType == IngredientType.Iron)
+        /* else if (_resourceType == IngredientType.Iron)
         {
             Managers.UI.GetUI<SceneUI>().IronParticleAttractor.OnAttractedCompleted.AddListener(AddIngredient);
-        }
+        } */
     }
 
     void OnDestroy()
@@ -41,10 +41,10 @@ public class ResourceCollectHandler : RoleHandler
         {
             Managers.UI.GetUI<SceneUI>().WoodParticleAttractor.OnAttractedCompleted.RemoveListener(AddIngredient);
         }
-        else if (_resourceType == IngredientType.Iron)
+        /* else if (_resourceType == IngredientType.Iron)
         {
             Managers.UI.GetUI<SceneUI>().IronParticleAttractor.OnAttractedCompleted.RemoveListener(AddIngredient);
-        }
+        } */
     }
 
     public override void HandleEvent(string eventType)

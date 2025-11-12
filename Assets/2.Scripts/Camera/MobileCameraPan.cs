@@ -27,6 +27,7 @@ public class MobileCameraPan : MonoBehaviour
     private Plane ground;                                 // y=0 평면
     private Vector3 lastHit;
     private bool dragging;
+    private bool canMove = true;
 
     void Awake()
     {
@@ -51,6 +52,8 @@ public class MobileCameraPan : MonoBehaviour
     // -------------------------
     void HandlePan()
     {
+        if (!canMove) return;
+
 #if UNITY_EDITOR
         if (UIUtils.IsPointerOverUIObject(Input.mousePosition)) return;
 
@@ -226,5 +229,10 @@ public class MobileCameraPan : MonoBehaviour
 
         pos.y = fixedY; // 고정 높이
         transform.position = pos;
+    }
+
+    public void SetMoveMode(bool canMove)
+    {
+        this.canMove = canMove;
     }
 }
