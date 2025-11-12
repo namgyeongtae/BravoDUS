@@ -49,6 +49,9 @@ public class RoadSystem : MonoBehaviour
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType];
     private GameObject _currentIndicator = null;
 
+    private bool _canInstall = false;
+    [SerializeField] private int _limitedDeltaTouch = 10; // 도로 설치 시 허용되는 Touch 움직임 거리의 제한 -> 이거 넘긴 상태의 Touch는 도로 설치 못함
+
     void Start()
     {
         InitRoadTiles();
@@ -98,35 +101,57 @@ public class RoadSystem : MonoBehaviour
 
     private void InstallRoad() // Road 의 방향이 몇 방향인지 알아야 함
     {
-#if !UNITY_EDITOR
-        Touch touch = Input.GetTouch(0);
-
-        if (UIUtils.IsPointerOverUIObject(touch.position)) return;
-
-        if (touch.phase == TouchPhase.Moved)
+// #if !UNITY_EDITOR
+        if (Input.touchCount > 0)
         {
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
-            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            Touch touch = Input.GetTouch(0);
+
+            if (UIUtils.IsPointerOverUIObject(touch.position)) return;
+
+            if (touch.phase == TouchPhase.Began)
             {
-                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                _canInstall = true;
+            }
+            if (touch.phase == TouchPhase.Moved)
+            {
+                _canInstall = touch.deltaPosition.sqrMagnitude <= _limitedDeltaTouch * _limitedDeltaTouch;
 
-                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
-                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
-                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
-                {
-                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Road);
+                Debug.Log("Can Install : " + _canInstall);
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                if (!_canInstall)
+                    return;
 
-                    DrawRoadTile(cell);
-                    DrawAdjacentRoadTile(cell);
-                }
-                else
+                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+
+                // TODO:
+                // 중간에 다른 Layer의 오브젝트를 무시하고 통과하는 Raycast 구현 필요
+                if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
                 {
-                    Debug.Log("cell is out of bounds");
+                    Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                    
+                    //if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                    //&& cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                    if (!_gridHandler.IsCellOutOfRange(cell)
+                    && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
+                    {
+                        _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Road);
+
+                        DrawRoadTile(cell);
+                        DrawAdjacentRoadTile(cell);
+                    }
+                    else
+                    {
+                        Debug.Log("cell is out of bounds");
+                    }
                 }
+
+                _canInstall = true;
             }
         }
-#else
+/* #else
         if (Input.GetMouseButton(0))
         {
             if (UIUtils.IsPointerOverUIObject(Input.mousePosition)) return;
@@ -151,8 +176,8 @@ public class RoadSystem : MonoBehaviour
                     Debug.Log("cell is out of bounds");
                 }
             }
-        }
-#endif
+        } */
+// #endif 
     }
 
     private void UnInstallRoad()

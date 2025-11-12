@@ -138,6 +138,11 @@ public class GridHandler : MonoBehaviour
         return cells;
     }
 
+    public bool IsCellOutOfRange(Vector3Int cell)
+    {
+        return cell.x < -_width / 2 || cell.x >= _width / 2 || cell.y < -_height / 2 || cell.y >= _height / 2;
+    }
+    
     public void EnterBuildMode()
     {
         // Camera.main.GetComponent<MobileCameraPan>().enabled = false;
