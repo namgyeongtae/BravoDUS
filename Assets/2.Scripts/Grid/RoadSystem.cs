@@ -60,6 +60,15 @@ public class RoadSystem : MonoBehaviour
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType]; // 선택형 타일셋
     private GameObject _currentIndicator = null; // 미리보기 인디케이터 인스턴스
 
+    // "도로 변경됨" 방송용 전역 이벤트
+    public static event Action RoadsChanged;
+
+    // 도로 설치/제거 후 호출 - 구독자(RoadGraphFromGrid)에게 "변경 알림"
+    private void NotifyRoadsChanged()
+    {
+        RoadsChanged?.Invoke();
+    }
+
     void Start()
     {
         InitRoadTiles();
@@ -154,11 +163,11 @@ public class RoadSystem : MonoBehaviour
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
             {
                 Vector3Int cell = _gridHandler.WorldToCell(hit.point);
 
-                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2
                 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
                 && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
                 {
