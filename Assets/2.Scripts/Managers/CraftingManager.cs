@@ -138,7 +138,7 @@ public class CraftingManager : MonoBehaviour
 
     private void ProcessRaycast(Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Default")))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Building")))
         {
             Debug.Log($"Raycast hit object: {hit.transform.name}, Position: {hit.point}, Layer: {LayerMask.LayerToName(hit.transform.gameObject.layer)}");
             Building building = hit.transform.GetComponentInParent<Building>();

@@ -50,7 +50,7 @@ public abstract class EventController
         }
 
         // 시간 도달 시 1건 스폰
-        while (now >= _nextSpawnAt) // while: 같은 프레임에 여러 번도 가능
+        if (now >= _nextSpawnAt)
         {
             var inc = ExecuteSpawn(now, stats);
             if (inc != null) 
@@ -71,6 +71,9 @@ public abstract class EventController
             OnSpawned = OnSpawned_Event,
             OnUpdateTick = OnUpdateTick_Event
         };
+
+        incident.InvokeSpawnEvent();
+
         return incident;
     }
 

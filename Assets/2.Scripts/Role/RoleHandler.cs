@@ -11,6 +11,8 @@ public abstract class RoleHandler : MonoBehaviour
 
     public abstract void HandleEvent(string eventType); // �̺�Ʈ ó��
 
+    public virtual void Initialize() { }
+
     public virtual void OnUpgrade(int newLevel)
     {
         buildingLevel = newLevel;

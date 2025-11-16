@@ -24,6 +24,8 @@ public class GridHandler : MonoBehaviour
 
     [SerializeField] private bool _buildMode = false;
 
+    private Dictionary<Vector3Int, Building> _buildingByCellDict = new();
+
     private TileType[,] _gridTileTypes = new TileType[80, 80];
 
     public bool BuildMode => _buildMode;
@@ -142,7 +144,21 @@ public class GridHandler : MonoBehaviour
     {
         return cell.x < -_width / 2 || cell.x >= _width / 2 || cell.y < -_height / 2 || cell.y >= _height / 2;
     }
+
+    public Building GetBuilding(Vector3Int cell)
+    {
+        // cell의 위치에 있는 건물을 찾아서 반환한다.
+        if (_buildingByCellDict.ContainsKey(cell)) 
+            return _buildingByCellDict[cell];
+
+        return null;
+    }
     
+    public void AddBuildngByCell(Vector3Int cell, Building building)
+    {
+        _buildingByCellDict.Add(cell, building);
+    }
+
     public void EnterBuildMode()
     {
         // Camera.main.GetComponent<MobileCameraPan>().enabled = false;

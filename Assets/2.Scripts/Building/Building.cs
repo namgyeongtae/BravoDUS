@@ -27,7 +27,7 @@ public class Building : MonoBehaviour
     public Vector3 FixedPosition { get; private set; } // 고정 위치
     public BuildingType BuildingType; // 건물 타입
     public List<WorkForce> WorkForceList => _workForceList; // 건물에 할당된 인력 리스트
-
+    public int BuildingSize => buildingSize;
     private GameObject currentModel; // 현재 모델 인스턴스
     private Coroutine constructionCoroutine; // 건설 코루틴 참조
     private Coroutine upgradeCoroutine; // 업그레이드 코루틴 참조
@@ -136,8 +136,6 @@ public class Building : MonoBehaviour
 
     public void CompleteConstruction()
     {
-        DestroyConstructor();  // 건설자 프리팹 제거
-
         basePrefab.SetActive(true);
         ruinPrefab.SetActive(false);
 
@@ -145,7 +143,7 @@ public class Building : MonoBehaviour
 
         CurrentState = State.Base;
         Level = 0; // Base 상태에서 레벨 0부터 시작으로 초기화
-        // SwapModel(basePrefab);
+
         StopCoroutine(constructionCoroutine);
         constructionCoroutine = null;
 
@@ -157,7 +155,35 @@ public class Building : MonoBehaviour
             Debug.Log($"Construction effect removed for {gameObject.name}");
         }
 
+        // 건설이 완료 되면 본인의 셀을 GridHandler에 등록
+        var gridHandler = Managers.Construct.GridHandler;
+        Vector3Int cell = gridHandler.WorldToCell(transform.position);
+        gridHandler.AddBuildngByCell(cell, this);
+
+        CraftingManager.Instance.AddBuilding(this);
+
+        //////////////////// 주변 소방서에 등록 ////////////////////
+        FireStationRole fireStationRole = null;
+        for (int i = 0; i < Managers.Event.Fire.FireStationRoles.Count; i++)
+        {
+            var currentFireStationRole = Managers.Event.Fire.FireStationRoles[i];
+            if (fireStationRole == null 
+            || (currentFireStationRole.transform.position - transform.position).sqrMagnitude 
+                < (fireStationRole.transform.position - transform.position).sqrMagnitude)
+            {
+                fireStationRole = currentFireStationRole;
+            }
+        }
+
+        if (fireStationRole != null)
+        {
+            fireStationRole.RegisterBuilding(this);
+        }
+        //////////////////////////////////////////////////////////
+
         Debug.Log($"건설 완료: {gameObject.name}, Level: {Level}, State: {CurrentState}");
+
+        GetComponent<RoleHandler>()?.Initialize();
 
         OnWorkForceChanged?.Invoke();
     }

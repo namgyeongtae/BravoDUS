@@ -1,15 +1,21 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
-public class UIEventWarning : CanvasPanel
+public class UIFireEventWarning : CanvasPanel
 {
     private Coroutine _animateCoroutine = null;
 
-    private MonoBehaviour _targetObject;
+    private UIButton _callResolveButton;
+
+    private Building _targetBuilding;
     
     protected override void Initialize()
     {
         base.Initialize();
+
+        _callResolveButton = GetComponent<UIButton>();
+        _callResolveButton.BindEvent(OnClickCallResolveButton, ClickType.Up);
     }
 
     public override void Open()
@@ -19,12 +25,12 @@ public class UIEventWarning : CanvasPanel
 
     public override void SetPanelInfo(object Info)
     {
-        _targetObject = Info as MonoBehaviour;
+        _targetBuilding = Info as Building;
     }
 
     public override void CallAfterSetting()
     {
-        Rect.position = Camera.main.WorldToScreenPoint(_targetObject.transform.position) + Vector3.up * 100f;
+        Rect.position = Camera.main.WorldToScreenPoint(_targetBuilding.transform.position) + Vector3.up * 100f;
     }
 
     void Update()
@@ -33,6 +39,8 @@ public class UIEventWarning : CanvasPanel
         {
             _animateCoroutine = StartCoroutine(AnimateShake());
         }
+
+        Rect.position = Camera.main.WorldToScreenPoint(_targetBuilding.transform.position) + Vector3.up * 100f;
     }
 
     private IEnumerator AnimateShake()
@@ -64,5 +72,29 @@ public class UIEventWarning : CanvasPanel
 
         StopCoroutine(_animateCoroutine);
         _animateCoroutine = null;
+    }
+
+    private void OnClickCallResolveButton()
+    {
+        bool isSuccess = false;
+
+        foreach (var fireStationRole in Managers.Event.Fire.FireStationRoles)
+        {
+            if (fireStationRole.CanProtect(_targetBuilding))
+            {
+                int wfCount = fireStationRole.GetComponent<Building>().WorkForceList.Where(x => x.HRState == HRState.None).Count();
+                if (wfCount >= 0) // 이후 > 0 으로 수정해야 함. Test를 위해 <= 0 으로 설정
+                {
+                    fireStationRole.DispatchFireTruck(_targetBuilding);
+                    isSuccess = true;
+                    break;
+                }
+            }
+        }
+
+        if (!isSuccess)
+        {
+            Managers.UI.OpenToastPopup("소방서에서 소방차를 호출할 수 없습니다. 주변에 소방서가 없거나 인력이 부족합니다.");
+        }
     }
 }

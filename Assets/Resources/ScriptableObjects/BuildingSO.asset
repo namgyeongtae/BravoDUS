@@ -28,3 +28,8 @@ MonoBehaviour:
     buildingType: 1
     buildingPrefab: {fileID: 6708357938524194867, guid: a1a871387709c194688b4800592b4523, type: 3}
     buildingSize: 5
+  - buildingName: "\uC18C\uBC29\uC11C"
+    buildingIcon: {fileID: 21300000, guid: 4a8f1b47aecffda4095d23762133e936, type: 3}
+    buildingType: 4
+    buildingPrefab: {fileID: 3768488022834937166, guid: 6ee70168e48d2ca439dea0ac7a6ffd72, type: 3}
+    buildingSize: 4

@@ -10,9 +10,9 @@ public class EventManager : IManagerBase
 
     private CityStat _cityStat = new CityStat();    // Temp Code -> 생성자로 안 할 거임
     public CityStat CityStat => _cityStat;
-    public EventController Fire => _events[EventType.FireRiskEvent] as FireEventController;
-    public EventController Security => _events[EventType.SecurityEvent] as SecurityEventController;
-    public EventController Injure => _events[EventType.InjureEvent] as InjureEventController;
+    public FireEventController Fire => _events[EventType.FireRiskEvent] as FireEventController;
+    public SecurityEventController Security => _events[EventType.SecurityEvent] as SecurityEventController;
+    public InjureEventController Injure => _events[EventType.InjureEvent] as InjureEventController;
     public void Init()
     {
         // Load Events from Database
@@ -83,6 +83,7 @@ public class EventManager : IManagerBase
             case IncidentState.Resolved:
                 {
                     // OnResolved는 EventController에서 생성
+                    inc.InvokeResolvedEvent();
                     RemoveIncident(inc);
                 }
                 break;
@@ -111,13 +112,13 @@ public class EventManager : IManagerBase
 
     public void AddIncident(Incident incident)
     {
-        incident.OnSpawned?.Invoke(incident);
         _incidents.Add(incident);
+        // incident.OnSpawned?.Invoke(incident);
     }
 
     public void RemoveIncident(Incident incident)
     {
-        incident.OnResolved?.Invoke(incident);
+        // incident.OnResolved?.Invoke(incident);
         _incidents.Remove(incident);
     }
     public void Release() // �߰�: ��ü ����

@@ -25,4 +25,14 @@ public sealed class Incident
             OnUpdateTick?.Invoke(this);
         }
     }
+
+    public void InvokeSpawnEvent()
+    {
+        OnSpawned?.Invoke(this);
+    }
+
+    public void InvokeResolvedEvent()
+    {
+        OnResolved?.Invoke(this);
+    }
 }

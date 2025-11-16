@@ -9,6 +9,12 @@ public class UIManager : IManagerBase
         
     }
 
+    public void OpenToastPopup(string message)
+    {
+        var toast = AddPanel<UIToastPopup>();
+        toast.SettingPopup(message);
+    }
+
     public T GetUI<T>(string name = null) where T : CanvasPanel
     {
         if (name == null) name = typeof(T).Name;
