@@ -54,7 +54,7 @@ public class CraftingManager : MonoBehaviour
     {
         HandleTouchInput();
 #if UNITY_EDITOR
-        HandleMouseInput();
+        // HandleMouseInput();
 #endif
         HandleKeyInput();
     }
@@ -124,7 +124,7 @@ public class CraftingManager : MonoBehaviour
                 if (building.CurrentState == Building.State.Ruin)
                 {
                     // building.StartConstruction();
-                    Managers.UI.AddPanel<UIBuildButtonGroup>(building, true);
+                    // Managers.UI.AddPanel<UIBuildButtonGroup>(building, true);
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
@@ -148,13 +148,13 @@ public class CraftingManager : MonoBehaviour
                 if (building.CurrentState == Building.State.Ruin)
                 {
                     // building.StartConstruction();
-                    var buildButtonGroup = Managers.UI.GetUI<UIBuildButtonGroup>();
+                    /* var buildButtonGroup = Managers.UI.GetUI<UIBuildButtonGroup>();
                     if (buildButtonGroup != null && buildButtonGroup.SelectedBuilding != building)
                     {
                         buildButtonGroup.Close();
                     }
                     
-                    Managers.UI.AddPanel<UIBuildButtonGroup>(building);
+                    // Managers.UI.AddPanel<UIBuildButtonGroup>(building); */
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {

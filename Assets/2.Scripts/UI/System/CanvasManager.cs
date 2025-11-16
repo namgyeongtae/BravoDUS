@@ -11,6 +11,8 @@ public class CanvasManager : MonoBehaviour
 
     private Canvas _canvas;
 
+    private int _sortingOrder = 1000;
+
     private static CanvasManager _instance;
     public static CanvasManager Instance
     {
@@ -142,7 +144,7 @@ public class CanvasManager : MonoBehaviour
 
         rect.SetParent(transform);
 
-        int depth = _baseDepth + _gap * panelList.Count;
+        int depth = ++_sortingOrder;
 
         canvasPanel.SetPanelDepth(depth);
 
@@ -174,6 +176,8 @@ public class CanvasManager : MonoBehaviour
             return;
         }
 
+        _sortingOrder--;
+
         obj?.Close();
     }
     public void RemovePanel(string panelObj)
@@ -183,6 +187,7 @@ public class CanvasManager : MonoBehaviour
 
         if (panelList.TryGetValue(panelObj, out var data))
         {
+            _sortingOrder--;
             data?.Close();
         }
     }
@@ -194,6 +199,7 @@ public class CanvasManager : MonoBehaviour
             panel.Close();
         }
         panelList.Clear();
+        _sortingOrder = 1000;
     }
 
     public void ReleaseUI(UIBind uibase)

@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: RoadTileSO
   m_EditorClassIdentifier: 
   RoadTileDatas:
-  - RoadType: 1
-    UpTile: {fileID: 11400000, guid: 89b3c4669f6001b41870f39d782c1cc5, type: 2}
-    RightTile: {fileID: 11400000, guid: 028e8e128be33b8448a1ff7b9fbfbecc, type: 2}
-    DownTile: {fileID: 11400000, guid: 545f80d9b35c67f4eb55142cf7b2ce21, type: 2}
-    LeftTile: {fileID: 11400000, guid: 89190b1b0e8911246ad2161db189b3cb, type: 2}
-    UpRightTile: {fileID: 11400000, guid: cef053724da376e4f96f447d1f1f6005, type: 2}
-    UpLeftTile: {fileID: 11400000, guid: 3cbeaab59c5dd434097ff1c1dfede0b2, type: 2}
-    DownRightTile: {fileID: 11400000, guid: 61124576f71038549a2b38b8147a01da, type: 2}
-    DownLeftTile: {fileID: 11400000, guid: 0a1b21c8bbf5a314eb64f3a228c4cb5b, type: 2}
-    UpRightLeftTile: {fileID: 11400000, guid: dd48d28cb75a48a4bb29635f4ba801b5, type: 2}
-    DownRightLeftTile: {fileID: 11400000, guid: bb327993e11a0bc4f813d437f3bac5ee, type: 2}
-    RightLeftTile: {fileID: 11400000, guid: e259816486e2d4647a2b42ab0bce6d95, type: 2}
-    UpDownTile: {fileID: 11400000, guid: 601eca92f5340704d89144bc2ac07edd, type: 2}
-    RightUpDownTile: {fileID: 11400000, guid: 8a0b37a3498367c4a9ff30adde4bc056, type: 2}
-    LeftUpDownTile: {fileID: 11400000, guid: 3c0b371ebd0563c4cb6b90c137d73246, type: 2}
-    LeftRightUpDownTile: {fileID: 11400000, guid: 767b52d62aa80074d8e7344eb27e2c31, type: 2}
-    CenterTile: {fileID: 11400000, guid: 4e311737db67fa8418da3d6f52ef89fc, type: 2}
+  - RoadType: 0
+    RoadTiles:
+    - {fileID: 11400000, guid: 4e311737db67fa8418da3d6f52ef89fc, type: 2}
+    - {fileID: 11400000, guid: 028e8e128be33b8448a1ff7b9fbfbecc, type: 2}
+    - {fileID: 11400000, guid: 89190b1b0e8911246ad2161db189b3cb, type: 2}
+    - {fileID: 11400000, guid: e259816486e2d4647a2b42ab0bce6d95, type: 2}
+    - {fileID: 11400000, guid: 545f80d9b35c67f4eb55142cf7b2ce21, type: 2}
+    - {fileID: 11400000, guid: 61124576f71038549a2b38b8147a01da, type: 2}
+    - {fileID: 11400000, guid: 0a1b21c8bbf5a314eb64f3a228c4cb5b, type: 2}
+    - {fileID: 11400000, guid: bb327993e11a0bc4f813d437f3bac5ee, type: 2}
+    - {fileID: 11400000, guid: 89b3c4669f6001b41870f39d782c1cc5, type: 2}
+    - {fileID: 11400000, guid: cef053724da376e4f96f447d1f1f6005, type: 2}
+    - {fileID: 11400000, guid: 3cbeaab59c5dd434097ff1c1dfede0b2, type: 2}
+    - {fileID: 11400000, guid: dd48d28cb75a48a4bb29635f4ba801b5, type: 2}
+    - {fileID: 11400000, guid: 601eca92f5340704d89144bc2ac07edd, type: 2}
+    - {fileID: 11400000, guid: 8a0b37a3498367c4a9ff30adde4bc056, type: 2}
+    - {fileID: 11400000, guid: 3c0b371ebd0563c4cb6b90c137d73246, type: 2}
+    - {fileID: 11400000, guid: 767b52d62aa80074d8e7344eb27e2c31, type: 2}

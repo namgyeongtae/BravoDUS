@@ -60,18 +60,9 @@ public class RoadSystem : MonoBehaviour
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType]; // 선택형 타일셋
     private GameObject _currentIndicator = null; // 미리보기 인디케이터 인스턴스
 
-    // "도로 변경됨" 방송용 전역 이벤트
-    public static event Action RoadsChanged;
-
-    // 도로 설치/제거 후 호출 - 구독자(RoadGraphFromGrid)에게 "변경 알림"
-    private void NotifyRoadsChanged()
-    {
-        RoadsChanged?.Invoke();
-    }
-
     void Start()
     {
-        // 초기화 필요시 사용
+        InitRoadTiles();
     }
 
     void Update()
@@ -79,70 +70,64 @@ public class RoadSystem : MonoBehaviour
         // 빌드 모드가 아니면 도로 편집 차단
         if (!_gridHandler.BuildMode) return;
 
-        // I 입력으로 설치<->제거 모드 토글 + 인디케이터 생성/파괴
+        if (Managers.Construct.ConstructMode != ConstructMode.Road) return;
+
         if (Input.GetKeyDown(KeyCode.I))
         {
             if (_roadMode == RoadMode.Install)
             {
                 _roadMode = RoadMode.UnInstall;
-                DestroyIndicator();
+                // DestroyIndicator();
             }
             else
             {
                 _roadMode = RoadMode.Install;
-                CreateIndicator();
+                // CreateIndicator();
             }
         }
 
         // 현재 모드에 따라 입력 처리 분기
         if (_roadMode == RoadMode.Install)
-            InputDetect();    // 좌클릭으로 도로 설치
+            InstallRoad();
         else
-            UnInstallRoad();  // 좌클릭으로 도로 제거
+            UnInstallRoad();
+    }
 
-        // ⬇︎ 사이즈 조절 기능(인디케이터 확장) 필요시 해제
-        /*
-        if (_roadMode == RoadMode.Install && _currentIndicator != null)
+    private void InitRoadTiles()
+    {
+        for (int x = -_gridHandler.Width / 2; x < _gridHandler.Width / 2; x++)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-                ResizeIndicator(++_size);
-
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-                ResizeIndicator(--_size);
+            for (int y = -_gridHandler.Height / 2; y < _gridHandler.Height / 2; y++)
+            {
+                var tilebase = _gridHandler.RoadTilemap.GetTile(new Vector3Int(x, y, 0));
+                if (tilebase != null)
+                {
+                    _gridHandler.SetGridTileType(x, y, TileType.Road);
+                }
+            }
         }
-        */
     }
 
-    void OnEnable()
+    private void InstallRoad() // Road 의 방향이 몇 방향인지 알아야 함
     {
-        // 설치 모드 진입 시 인디케이터를 자동 생성하고 싶다면 사용
-        // CreateIndicator();
-    }
+#if !UNITY_EDITOR
+        Touch touch = Input.GetTouch(0);
 
-    void OnDisable()
-    {
-        // 비활성화 시 생성물 정리 원하면 사용
-        // DestroyIndicator();
-    }
+        if (UIUtils.IsPointerOverUIObject(touch.position)) return;
 
-    // 도로 설치: 좌클릭한 셀에 도로를 깔고, 인접 4셀을 재계산하여 연결부 갱신
-    private void InputDetect()
-    {
-        if (Input.GetMouseButton(0))
+        if (touch.phase == TouchPhase.Moved)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
             Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
 
             // ⚠️ 레이어 하드코딩(Default). 인스펙터 노출 권장.
             if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
             {
                 Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                Debug.Log("cell: " + cell);
 
-                // 경계 체크 + 현재 필드여야 설치 가능
-                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2
-                 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
-                 && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
                 {
                     // 논리 타입을 Road로 변경(먼저 변경해야 주변 계산이 일관됨)
                     _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Road);
@@ -162,11 +147,64 @@ public class RoadSystem : MonoBehaviour
                 }
             }
         }
+#else
+        if (Input.GetMouseButton(0))
+        {
+            if (UIUtils.IsPointerOverUIObject(Input.mousePosition)) return;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            {
+                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
+                {
+                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Road);
+
+                    DrawRoadTile(cell);
+                    DrawAdjacentRoadTile(cell);
+                }
+                else
+                {
+                    Debug.Log("cell is out of bounds");
+                }
+            }
+        }
+#endif
     }
 
     // 도로 제거: 좌클릭한 셀이 도로면 지우고, 인접 4셀 재계산
     private void UnInstallRoad()
     {
+#if !UNITY_EDITOR
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase == TouchPhase.Ended)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
+            {
+                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                Debug.Log("cell: " + cell);
+                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Road)
+                {
+                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Field);
+
+                    RemoveRoadTile(cell);
+                    DrawAdjacentRoadTile(cell);
+                }
+                else
+                {
+                    Debug.Log("cell is out of bounds");
+                }
+            }
+        }
+#endif        
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -258,72 +296,13 @@ public class RoadSystem : MonoBehaviour
     // 계산된 roadState(막힘 비트)에 따라 적절한 변형 타일을 SetTile
     private void DrawTile(Vector3Int cell, int roadState)
     {
-        switch (roadState)
+        _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RoadTiles[roadState]);
+
+        var roadRuntimeAPI = _gridHandler.RoadTilemap.GetComponent<RoadRuntimeAPI>();
+
+        if (roadRuntimeAPI != null)
         {
-            case (int)RoadDir.None:
-                Debug.Log("Tile: Center");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.CenterTile);
-                break;
-            case (int)RoadDir.Right:
-                Debug.Log("Tile: Right");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RightTile);
-                break;
-            case (int)RoadDir.Left:
-                Debug.Log("Tile: Left");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftTile);
-                break;
-            case (int)RoadDir.Down:
-                Debug.Log("Tile: Down");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownTile);
-                break;
-            case (int)RoadDir.Up:
-                Debug.Log("Tile: Up");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpTile);
-                break;
-            case (int)RoadDir.UpRight:
-                Debug.Log("Tile: UpRight");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpRightTile);
-                break;
-            case (int)RoadDir.UpLeft:
-                Debug.Log("Tile: UpLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpLeftTile);
-                break;
-            case (int)RoadDir.DownRight:
-                Debug.Log("Tile: DownRight");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownRightTile);
-                break;
-            case (int)RoadDir.DownLeft:
-                Debug.Log("Tile: DownLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownLeftTile);
-                break;
-            case (int)RoadDir.UpRightLeft:
-                Debug.Log("Tile: UpRightLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpRightLeftTile);
-                break;
-            case (int)RoadDir.RightLeft:
-                Debug.Log("Tile: RightLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RightLeftTile);
-                break;
-            case (int)RoadDir.DownRightLeft:
-                Debug.Log("Tile: DownRightLeft");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.DownRightLeftTile);
-                break;
-            case (int)RoadDir.UpDown:
-                Debug.Log("Tile: UpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.UpDownTile);
-                break;
-            case (int)RoadDir.RightUpDown:
-                Debug.Log("Tile: RightUpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.RightUpDownTile);
-                break;
-            case (int)RoadDir.LeftUpDown:
-                Debug.Log("Tile: LeftUpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftUpDownTile);
-                break;
-            case (int)RoadDir.LeftRightUpDown:
-                Debug.Log("Tile: LeftRightUpDown");
-                _gridHandler.RoadTilemap.SetTile(cell, _roadTileData.LeftRightUpDownTile);
-                break;
+            roadRuntimeAPI.Place(cell, _roadTileData.RoadTiles[roadState]);
         }
     }
 
@@ -331,6 +310,13 @@ public class RoadSystem : MonoBehaviour
     private void RemoveRoadTile(Vector3Int cell)
     {
         _gridHandler.RoadTilemap.SetTile(cell, null);
+
+        var roadRuntimeAPI = _gridHandler.RoadTilemap.GetComponent<RoadRuntimeAPI>();
+
+        if (roadRuntimeAPI != null)
+        {
+            roadRuntimeAPI.Remove(cell);
+        }
     }
 
     // 설치 미리보기 오브젝트 생성(설치 모드 전용)
@@ -378,5 +364,11 @@ public class RoadSystem : MonoBehaviour
                 0.05f,
                 indicatorWorld.z);
         }
+    }
+
+    public RoadMode SwitchInstallMode()
+    {
+        _roadMode = (_roadMode == RoadMode.Install) ? RoadMode.UnInstall : RoadMode.Install;
+        return _roadMode;
     }
 }
