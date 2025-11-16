@@ -52,8 +52,6 @@ public class MobileCameraPan : MonoBehaviour
     void HandlePan()
     {
 #if UNITY_EDITOR
-        if (UIUtils.IsPointerOverUIObject(Input.mousePosition)) return;
-
         if (Input.GetMouseButtonDown(0)) dragging = TryScreenToGround(Input.mousePosition, out lastHit);
         else if (Input.GetMouseButton(0) && dragging) PanTo(Input.mousePosition);
         else if (Input.GetMouseButtonUp(0)) dragging = false;
@@ -62,9 +60,6 @@ public class MobileCameraPan : MonoBehaviour
         if (Input.touchCount == 1)
         {
             UITouch t = Input.GetTouch(0);
-
-            if (UIUtils.IsPointerOverUIObject(t.position)) return;
-
             if (t.phase == UITouchPhase.Began) dragging = TryScreenToGround(t.position, out lastHit);
             else if (t.phase == UITouchPhase.Moved && dragging) PanTo(t.position);
             else if (t.phase == UITouchPhase.Ended || t.phase == UITouchPhase.Canceled) dragging = false;
@@ -80,9 +75,6 @@ public class MobileCameraPan : MonoBehaviour
 
         UITouch t0 = Input.GetTouch(0);
         UITouch t1 = Input.GetTouch(1);
-
-        if (UIUtils.IsPointerOverUIObject(t0.position)) return;
-        if (UIUtils.IsPointerOverUIObject(t1.position)) return;
 
         Vector2 prev0 = t0.position - t0.deltaPosition;
         Vector2 prev1 = t1.position - t1.deltaPosition;

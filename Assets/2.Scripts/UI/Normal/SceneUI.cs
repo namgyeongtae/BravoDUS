@@ -16,8 +16,7 @@ public class SceneUI : CanvasPanel
     private Coroutine _ironCoroutine = null;
 
     [Header("SideGroup")]
-    [Bind("BuildButton")] private UIButton _buildButton;
-    [Bind("RoadButton")] private UIButton _roadButton;
+    [Bind("HomeButton")] private UIButton _homeButton;
     [Bind("SettingButton")] private UIButton _settingButton;
     [Bind("QuestionButton")] private UIButton _questionButton;
     [Bind("MenuButton")] private UIButton _menuButton;
@@ -32,8 +31,7 @@ public class SceneUI : CanvasPanel
     {
         base.Initialize();
 
-        BindEvent(_buildButton, OnBuildButtonClicked);
-        BindEvent(_roadButton, OnRoadButtonClicked);
+        BindEvent(_homeButton, OnShopButtonClicked);
     }
 
     public override void Open()
@@ -43,15 +41,10 @@ public class SceneUI : CanvasPanel
         _ironAmount.text = Managers.Commodity.GetIngredient(IngredientType.Iron).Amount.ToString();
     }
 
-    private void OnBuildButtonClicked()
+    private void OnShopButtonClicked()
     {
-        Managers.UI.AddPanel<UIBuildingMenu>();
-    }
-
-    private void OnRoadButtonClicked()
-    {
-        Managers.Construct.SwitchConstructMode(ConstructMode.Road);
-        Managers.UI.AddPanel<UIRoadPlacement>();
+        // TODO
+        // ī�޶� ���� ������ �����̰� ���� UI ����
     }
     private IEnumerator CoAddCommodity(Ingredient ingredient, float amount)
     {

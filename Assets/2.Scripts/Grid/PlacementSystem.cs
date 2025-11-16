@@ -11,30 +11,26 @@ public class PlacementSystem : MonoBehaviour
 {
     [SerializeField] private Material _previewMaterial;
     [SerializeField] private GridHandler _gridHandler;
+
+    [SerializeField] private GameObject _testBuildingPrefab;
     [SerializeField] private PlacementMode _placementMode = PlacementMode.Install;
 
-    private bool _canBuild = true;
     private GameObject _currentBuilding = null;
-    private int _buildingSize = 0;
     private List<Material> _cachedOriginMaterials = new();
-
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Managers.Construct.ConstructMode != ConstructMode.Placement) return;
+        if (Input.GetKeyDown(KeyCode.I))
+            _placementMode = (_placementMode == PlacementMode.Install) ? PlacementMode.UnInstall : PlacementMode.Install;
 
-        /* if (Input.GetKeyDown(KeyCode.I))
-            _placementMode = (_placementMode == PlacementMode.Install) ? PlacementMode.UnInstall : PlacementMode.Install; */
-
-        UpdatePlacement();
-
-        /* if (_placementMode == PlacementMode.Install)
+        if (_placementMode == PlacementMode.Install)
         {
             if (Input.GetKeyDown(KeyCode.K))
             {
@@ -46,10 +42,10 @@ public class PlacementSystem : MonoBehaviour
             UpdatePlacement();
         }
         else
-            UnInstallPlacement(); */
+            UnInstallPlacement();
     }
 
-    public void StartPlacement(GameObject buildingPrefab, int buildingSize)
+    public void StartPlacement(GameObject buildingPrefab)
     {
         if (_currentBuilding != null)
         {
@@ -57,20 +53,7 @@ public class PlacementSystem : MonoBehaviour
         }
 
         _currentBuilding = Instantiate(buildingPrefab);
-        _buildingSize = buildingSize;
 
-        // 첫 포지션은 스크린 가운데 포인트로 설정
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
-        {
-            Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-            _currentBuilding.transform.position = _gridHandler.CellToWorld(cell.x, cell.y);
-        }
-        else
-        {
-            _currentBuilding.transform.position = Vector3.zero;
-        }
-
-        // 프리뷰 머터리얼 설정
         var materials = _currentBuilding.GetComponentInChildren<MeshRenderer>().materials;
 
         _cachedOriginMaterials.Clear();
@@ -86,67 +69,32 @@ public class PlacementSystem : MonoBehaviour
         }
 
         _currentBuilding.GetComponentInChildren<MeshRenderer>().materials = materials;
-
-        DetectCollision(_buildingSize);
     }
 
     private void UpdatePlacement()
     {
         if (_currentBuilding == null) return;
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("Rotate Building");
-            RotateBuilding();
-        }
-
-        // #if UNITY_EDITOR
-        /* Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+#if UNITY_EDITOR
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+#elif UNITY_ANDROID || UNITY_IOS
+        Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+#endif
         if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
         {
             Vector3Int cell = _gridHandler.WorldToCell(hit.point);
             if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
             {
-                UpdateBuildingPosition(cell, isEven: true);
-            }
-        } */
-        // #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Moved)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
-                {
-                    Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                    if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2)
-                    {
-                        if (!UIUtils.IsPointerOverUIObject(touch.position))
-                        {
-                            UpdateBuildingPosition(cell);
-                        }
-                    }
-                }
+                UpdateBuildingPosition(cell, isEven: false);
             }
         }
-        // #endif
-
 
         // TODO:
         // 이후 모바일에서는 그냥 터치로 끝내는 게 아닌 중간 과정의 UI/UX가 필요해 보임(정책 결정 필요)
-        /* #if UNITY_EDITOR
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0))
         {
             EndPlacement();
         }
-        #elif UNITY_ANDROID || UNITY_IOS
-        if (touch.phase == TouchPhase.Ended)
-        {
-            EndPlacement();
-        }
-        #endif */
     }
 
     private void UnInstallPlacement()
@@ -154,8 +102,7 @@ public class PlacementSystem : MonoBehaviour
         // TODO:
         // 마찬가지로 이후 모바일에서 그냥 터치한다고 파괴되는 게 아니라 UI/UX 정책이 필요하다.
         // 현재는 테스트 용으로 PC 기준 입력만 고려
-#if UNITY_EDITOR
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -165,23 +112,10 @@ public class PlacementSystem : MonoBehaviour
                 _currentBuilding = null;
             }
         }
-#elif UNITY_ANDROID || UNITY_IOS
-        Touch touch = Input.GetTouch(0);
-        if (touch.phase == TouchPhase.Ended)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Building")))
-            {
-                Managers.Resource.Destroy(hit.collider.gameObject);
-                _currentBuilding = null;
-            }
-#endif
     }
 
-    private void UpdateBuildingPosition(Vector3Int cell)
+    private void UpdateBuildingPosition(Vector3Int cell,bool isEven)
     {
-        bool isEven = _buildingSize % 2 == 0;
-
         if (isEven)
         {
             Vector3 cellToWorld = _gridHandler.CellToWorld(cell.x, cell.y);
@@ -194,10 +128,10 @@ public class PlacementSystem : MonoBehaviour
             _currentBuilding.transform.position = _gridHandler.CellToWorld(cell.x, cell.y);
         }
 
-        _canBuild = !DetectCollision(_buildingSize);
+        DetectCollision(buildingSize: 3);
     }
 
-    private bool DetectCollision(int buildingSize)
+    private void DetectCollision(int buildingSize)
     {
         bool isEven = buildingSize % 2 == 0;
 
@@ -246,30 +180,12 @@ public class PlacementSystem : MonoBehaviour
 
         foreach (var mat in materials)
         {
-            Debug.Log("Set Color: " + matColor);
             mat.SetColor("_Color", matColor);
         }
-
-        return isCollide;
     }
 
-    public bool EndPlacement(bool isCancel = false)
+    private void EndPlacement()
     {
-        if (!_canBuild && !isCancel)
-        {
-            Managers.UI.AddPanel<UIToastPopup>().SettingPopup("그쪽은 못짓겠는데요?");
-            return false;
-        }
-
-        _gridHandler.ExitBuildMode();
-
-        if (isCancel)
-        {
-            Managers.Resource.Destroy(_currentBuilding);
-            _currentBuilding = null;
-            return isCancel;
-        }
-
         var materials = new Material[_cachedOriginMaterials.Count];
 
         for (int i = 0; i < materials.Length; i++)
@@ -279,63 +195,7 @@ public class PlacementSystem : MonoBehaviour
         }
 
         _currentBuilding.GetComponentInChildren<MeshRenderer>().materials = materials;
-        _currentBuilding.GetComponent<Building>().StartConstruction();
-
-        SetTileTypeConstructed();
-
         _currentBuilding = null;
-
-        _gridHandler.ExitBuildMode();
-
-        return true;
-    }
-
-    private void SetTileTypeConstructed()
-    {
-        if (_currentBuilding == null)
-            return;
-
-        Vector3 startPos;
-
-        bool isEven = _buildingSize % 2 == 0;
-
-        if (!isEven)
-        {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-        else
-        {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-
-        for (int i = 0; i < _buildingSize; i++)
-        {
-            for (int j = 0; j < _buildingSize; j++)
-            {
-                float posX = startPos.x + (_gridHandler.CellSize.x * i);
-                float posZ = startPos.z + (_gridHandler.CellSize.y * j);
-
-                Vector3Int cell = _gridHandler.WorldToCell(new Vector3(posX, 0, posZ));
-
-                _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Constructed);
-            }
-        }
-    }
-
-    public void RotateBuilding()
-    {
-        if (_currentBuilding == null) return;
-
-        float currentY = _currentBuilding.transform.rotation.eulerAngles.y;
-        float rotationY = (currentY >= 90) ? 0 : 90;
-
-        _currentBuilding.transform.rotation = Quaternion.Euler(0, rotationY, 0);
     }
 
     private void OnDrawGizmos()
@@ -344,28 +204,29 @@ public class PlacementSystem : MonoBehaviour
 
         Vector3 startPos;
 
-        bool isEven = _buildingSize % 2 == 0;
+        bool isEven = true;
+        int buildingSize = 4;
 
         if (!isEven)
         {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
+            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
         else
         {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
+            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
+            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
 
         // Gizmos.DrawCube(startPos, new Vector3(_gridHandler.CellSize.x, _gridHandler.CellSize.x, _gridHandler.CellSize.x));
 
-        for (int i = 0; i < _buildingSize; i++)
+        for (int i = 0; i < buildingSize; i++)
         {
-            for (int j = 0; j < _buildingSize; j++)
+            for (int j = 0; j < buildingSize; j++)
             {
                 float posX = startPos.x + (_gridHandler.CellSize.x * i);
                 float posZ = startPos.z + (_gridHandler.CellSize.y * j);

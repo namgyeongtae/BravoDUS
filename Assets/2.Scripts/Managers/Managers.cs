@@ -8,7 +8,7 @@ public class Managers
     private static EventManager _event = new EventManager();
     private static HRManager _hr = new HRManager();
     private static ItemManager _item = new ItemManager();
-    private static ConstructManager _construct = new ConstructManager();
+    // ����: _game new ���� (�� ��ġ GameManager.Instance ���)
 
     public static CommodityManager Commodity => _commodity;
     public static ResourceManager Resource => _resource;
@@ -16,7 +16,7 @@ public class Managers
     public static EventManager Event => _event;
     public static HRManager HR => _hr;
     public static ItemManager Item => _item;
-    public static ConstructManager Construct => _construct;
+    public static GameManager Game => GameManager.Instance; // ����: Instance ����
 
     public void Init()
     {
@@ -25,7 +25,6 @@ public class Managers
         _event.Init();
         _hr.Init();
         _item.Init();
-        _construct.Init();
     }
 
     public void Update()
