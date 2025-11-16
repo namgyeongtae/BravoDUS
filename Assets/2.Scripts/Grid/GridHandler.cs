@@ -6,8 +6,9 @@ using UnityEngine.Tilemaps;
 // 여러 시스템(Field, Road, Building 등)에서 공통으로 사용 가능하므로 클래스 밖에 둠
 public enum TileType
 {
-    Field,  // 일반 땅
-    Road    // 도로
+    Field,
+    Road,
+    Constructed
 }
 
 // 🎨 브러시 모드 (사용자가 어떤 종류의 타일을 칠할지)
@@ -68,15 +69,11 @@ public class GridHandler : MonoBehaviour
         // 🟢 Space: 빌드 모드 토글
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // 카메라 팬 스크립트(MobileCameraPan) 활성/비활성 반전
-            Camera.main.GetComponent<MobileCameraPan>().enabled =
-                !Camera.main.GetComponent<MobileCameraPan>().enabled;
-
-            // 빌드 모드 on/off
-            _buildMode = !_buildMode;
-
-            // 격자 시각화 on/off
-            _gridVisualizer.SetActive(_buildMode);
+            EnterBuildMode();
+        } 
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ExitBuildMode();
         }
 
         // 🟣 Tab: 브러시 모드 순환 (None→Field→Road→Building→None)
@@ -176,5 +173,19 @@ public class GridHandler : MonoBehaviour
     {
         Vector3Int cell = WorldToCell(worldPosition);
         return GetGridTileType(cell.x, cell.y);
+    }
+
+    public void EnterBuildMode()
+    {
+        Camera.main.GetComponent<MobileCameraPan>().enabled = false;
+        _buildMode = true;
+        _gridVisualizer.SetActive(_buildMode);
+    }
+
+    public void ExitBuildMode()
+    {
+        Camera.main.GetComponent<MobileCameraPan>().enabled = true;
+        _buildMode = false;
+        _gridVisualizer.SetActive(_buildMode);
     }
 }

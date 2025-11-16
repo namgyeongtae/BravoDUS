@@ -14,22 +14,7 @@ public enum RoadType
 public class RoadTileData
 {
     public RoadType RoadType;
-    public TileBase UpTile;
-    public TileBase RightTile;
-    public TileBase DownTile;
-    public TileBase LeftTile;
-    public TileBase UpRightTile;
-    public TileBase UpLeftTile;
-    public TileBase DownRightTile;
-    public TileBase DownLeftTile;
-    public TileBase UpRightLeftTile;
-    public TileBase DownRightLeftTile;
-    public TileBase RightLeftTile;
-    public TileBase UpDownTile;
-    public TileBase RightUpDownTile;
-    public TileBase LeftUpDownTile;
-    public TileBase LeftRightUpDownTile;
-    public TileBase CenterTile;
+    public List<TileBase> RoadTiles;
 }
 
 [CreateAssetMenu(fileName = "RoadTileSO", menuName = "ScriptableObjects/RoadTileSO")]
