@@ -74,7 +74,6 @@ public class SceneUI : CanvasPanel
         while (currentAmount < amount)
         {
             currentAmount += 1;
-            Debug.Log($"AddCommodity : {currentAmount} / {amount}");
             yield return new WaitForSeconds(0.01f);
 
             switch (type)
@@ -86,15 +85,6 @@ public class SceneUI : CanvasPanel
                     // _ironAmount.text = currentAmount.ToString();
                     break;
             }
-        }
-
-        if (ingredient.Type == IngredientType.Wood)
-        {
-            _woodAddCoroutine = null;
-        }
-        else if (ingredient.Type == IngredientType.Iron)
-        {
-            _ironAddCoroutine = null;
         }
     }
 
@@ -124,15 +114,6 @@ public class SceneUI : CanvasPanel
                     break;
             }
         }
-
-        if (ingredient.Type == IngredientType.Wood)
-        {
-            _woodSubCoroutine = null;
-        }
-        else if (ingredient.Type == IngredientType.Iron)
-        {
-            _ironSubCoroutine = null;
-        }
     }
 
     public void AddCommodity(Ingredient ingredient, float amount)
@@ -140,22 +121,20 @@ public class SceneUI : CanvasPanel
         switch (ingredient.Type)
         {
             case IngredientType.Wood:
-                /* if (_woodCoroutine != null)
+                if (_woodCoroutine != null)
                 {
                     StopCoroutine(_woodCoroutine);
                     _woodCoroutine = null;
-                } */
-                if (_woodAddCoroutine == null)
-                    _woodAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
+                }
+                _woodCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
                 break;
             case IngredientType.Iron:
-                /* if (_ironCoroutine != null)
+                if (_ironCoroutine != null)
                 {
                     StopCoroutine(_ironCoroutine);
                     _ironCoroutine = null;
-                } */
-                if (_ironAddCoroutine == null)
-                    _ironAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
+                }
+                _ironCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
                 break;
         }
     }
@@ -165,20 +144,20 @@ public class SceneUI : CanvasPanel
         switch (ingredient.Type)
         {
             case IngredientType.Wood:
-                /* if (_woodSubCoroutine != null)
+                if (_woodCoroutine != null)
                 {
-                    StopCoroutine(_woodSubCoroutine);
-                    _woodSubCoroutine = null;
-                } */
-                _woodSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
+                    StopCoroutine(_woodCoroutine);
+                    _woodCoroutine = null;
+                }
+                _woodCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
                 break;
             case IngredientType.Iron:
-                /* if (_ironSubCoroutine != null)
+                if (_ironCoroutine != null)
                 {
-                    StopCoroutine(_ironSubCoroutine);
-                    _ironSubCoroutine = null;
-                } */
-                _ironSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
+                    StopCoroutine(_ironCoroutine);
+                    _ironCoroutine = null;
+                }
+                _ironCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
                 break;
         }
     }

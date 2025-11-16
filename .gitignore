@@ -14,3 +14,5 @@ Assembly-CSharp-Editor.csproj
 *.db
 *.vsidx
 *.csproj
+.vs/BravoDUS/v17/.suo
+.vs/BravoDUS/v17/fileList.bin

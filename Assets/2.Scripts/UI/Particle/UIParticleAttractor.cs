@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,8 +40,7 @@ public class UIParticleAttractor : MonoBehaviour
 
     [Header("Attracted Event")]
     [Tooltip("파티클이 목표 UI에 도달했을 때 발생하는 이벤트.")]
-    public Action OnAttracted = null;
-    public UnityEvent OnAttractedCompleted;
+    public UnityEvent OnAttracted;
     // 캐시
     // private ParticleSystem _ps;
     private Camera _uiCam;                       // Canvas가 Overlay면 null
@@ -62,12 +60,6 @@ public class UIParticleAttractor : MonoBehaviour
     {
         foreach (var uiParticle in _uiParticles)
         {
-            if (uiParticle == null || uiParticle.gameObject.activeInHierarchy == false)
-            {
-                _uiParticles.Remove(uiParticle);
-                Managers.Resource.Destroy(uiParticle.gameObject);
-                break;
-            }
             AttractParticles(uiParticle);
         }
     }
@@ -185,12 +177,6 @@ public class UIParticleAttractor : MonoBehaviour
 
         // 수정 반영
         ps.SetParticles(parts, alive);
-
-        if (ps.particleCount == 0)
-        {
-            OnAttractedCompleted?.Invoke();
-            uiParticle.gameObject.SetActive(false);
-        }
     }
 
 
@@ -203,11 +189,6 @@ public class UIParticleAttractor : MonoBehaviour
         // 0..1
         float u = (x & 0x00FFFFFF) / 16777215f;
         return u * 2f - 1f; // -1..1
-    }
-
-    public void AddParticle(UIParticle particle)
-    {
-        _uiParticles.Add(particle);
     }
 
     public void Log()
