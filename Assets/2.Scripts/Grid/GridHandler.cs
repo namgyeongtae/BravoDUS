@@ -46,6 +46,8 @@ public class GridHandler : MonoBehaviour
     // 현재 빌드 모드 상태 (Space로 토글)
     [SerializeField] private bool _buildMode = false;
 
+    [SerializeField] private TileBase _selectedTile;
+
     private Dictionary<Vector3Int, Building> _buildingByCellDict = new();
 
     private TileType[,] _gridTileTypes = new TileType[80, 80];

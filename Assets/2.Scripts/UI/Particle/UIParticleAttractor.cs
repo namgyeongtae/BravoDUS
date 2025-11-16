@@ -179,6 +179,11 @@ public class UIParticleAttractor : MonoBehaviour
         ps.SetParticles(parts, alive);
     }
 
+    public void AddParticle(UIParticle particle)
+    {
+        _uiParticles.Add(particle);
+    }
+
 
     // randomSeed -> [-1, +1] 근사 맵핑 (간단 해시)
     private static float HashToRangeMinusOneToOne(uint seed)

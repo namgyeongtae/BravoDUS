@@ -121,20 +121,20 @@ public class SceneUI : CanvasPanel
         switch (ingredient.Type)
         {
             case IngredientType.Wood:
-                if (_woodCoroutine != null)
+                if (_woodAddCoroutine != null)
                 {
-                    StopCoroutine(_woodCoroutine);
-                    _woodCoroutine = null;
+                    StopCoroutine(_woodAddCoroutine);
+                    _woodAddCoroutine = null;
                 }
-                _woodCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
+                _woodAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
                 break;
             case IngredientType.Iron:
-                if (_ironCoroutine != null)
+                if (_ironAddCoroutine != null)
                 {
-                    StopCoroutine(_ironCoroutine);
-                    _ironCoroutine = null;
+                    StopCoroutine(_woodAddCoroutine);
+                    _ironAddCoroutine = null;
                 }
-                _ironCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
+                _ironAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
                 break;
         }
     }
@@ -144,20 +144,20 @@ public class SceneUI : CanvasPanel
         switch (ingredient.Type)
         {
             case IngredientType.Wood:
-                if (_woodCoroutine != null)
+                if (_woodSubCoroutine != null)
                 {
-                    StopCoroutine(_woodCoroutine);
-                    _woodCoroutine = null;
+                    StopCoroutine(_woodSubCoroutine);
+                    _woodSubCoroutine = null;
                 }
-                _woodCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
+                _woodSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
                 break;
             case IngredientType.Iron:
-                if (_ironCoroutine != null)
+                if (_ironSubCoroutine != null)
                 {
-                    StopCoroutine(_ironCoroutine);
-                    _ironCoroutine = null;
+                    StopCoroutine(_ironSubCoroutine);
+                    _ironSubCoroutine = null;
                 }
-                _ironCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
+                _ironSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
                 break;
         }
     }
