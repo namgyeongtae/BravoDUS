@@ -1022,7 +1022,7 @@ GameObject:
   - component: {fileID: 350528641}
   - component: {fileID: 350528640}
   - component: {fileID: 350528639}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1131,7 +1131,7 @@ GameObject:
   - component: {fileID: 387969840}
   - component: {fileID: 387969839}
   - component: {fileID: 387969838}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1699,7 +1699,7 @@ GameObject:
   - component: {fileID: 639977765}
   - component: {fileID: 639977764}
   - component: {fileID: 639977763}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3328,7 +3328,7 @@ GameObject:
   - component: {fileID: 1166464310}
   - component: {fileID: 1166464309}
   - component: {fileID: 1166464308}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4181,10 +4181,9 @@ MonoBehaviour:
   _gridVisualizer: {fileID: 1164527292}
   _fieldTilemap: {fileID: 1978903321}
   _roadTilemap: {fileID: 971966350}
-  _selectedTile: {fileID: 11400000, guid: 3d0234a61dec43b4aa83fa1eea9c71e6, type: 2}
-  _curBrushMode: 0
   _grid: {fileID: 1209669448}
   _buildMode: 0
+  _selectedTile: {fileID: 11400000, guid: 3d0234a61dec43b4aa83fa1eea9c71e6, type: 2}
 --- !u!4 &1430383163
 Transform:
   m_ObjectHideFlags: 0
@@ -4212,7 +4211,7 @@ GameObject:
   - component: {fileID: 1442396653}
   - component: {fileID: 1442396652}
   - component: {fileID: 1442396651}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4321,7 +4320,7 @@ GameObject:
   - component: {fileID: 1472380110}
   - component: {fileID: 1472380109}
   - component: {fileID: 1472380108}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4778,7 +4777,7 @@ GameObject:
   - component: {fileID: 1551280288}
   - component: {fileID: 1551280287}
   - component: {fileID: 1551280286}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5934,6 +5933,7 @@ MonoBehaviour:
   _roadTileSO: {fileID: 11400000, guid: 67d72351246e58b4e93edf2f5a92b80a, type: 2}
   _roadType: 0
   _roadMode: 0
+  _limitedDeltaTouch: 10
 --- !u!4 &1942028514
 Transform:
   m_ObjectHideFlags: 0
@@ -6132,7 +6132,7 @@ GameObject:
   - component: {fileID: 2089463383}
   - component: {fileID: 2089463382}
   - component: {fileID: 2089463381}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6332,7 +6332,7 @@ GameObject:
   - component: {fileID: 2126812708}
   - component: {fileID: 2126812707}
   - component: {fileID: 2126812706}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
