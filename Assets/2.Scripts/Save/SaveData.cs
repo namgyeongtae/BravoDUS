@@ -1,42 +1,39 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-// °ÔÀÓ ÀüÃ¼ ÀúÀå µ¥ÀÌÅÍÀÇ ·çÆ®
 [Serializable]
 public class SaveData
 {
-    public int version;          // ¼¼ÀÌºê ¹öÀü
-    public long savedAt;         // ÀúÀå ½Ã°£ (UTC Ticks)
+    public int version = 1;
+    public long savedAt;
 
-    public CommoditySaveData commodities;        // ÀÚ¿ø(Ingredient)µé
-    public List<BuildingSaveData> buildings;     // ºôµù »óÅÂ (´ÙÀ½ ´Ü°è¿¡¼­ Ã¤¿ò)
-    public CityStatsSaveData cityStats;          // µµ½Ã ½ºÅÈ (EventManager.CityStat)
-    public List<ItemSaveData> inventory;         // ÀÎº¥Åä¸® (³ªÁß¿¡ ItemManager º¸°í Ã¤¿ò)
+    public CommoditySaveData commodities = new CommoditySaveData();
+    public List<BuildingSaveData> buildings = new List<BuildingSaveData>();
+    public CityStatSaveData cityStats = new CityStatSaveData();
+    public List<InventoryItemSaveData> inventory = new List<InventoryItemSaveData>();
 }
 
-// ---------------- ÀÚ¿ø(Ingredient) ----------------
-
+// === ìì› (ëˆ + ì˜ˆì „ ì¬í™” êµ¬ì¡°) ===
 [Serializable]
 public class CommoditySaveData
 {
-    public List<IngredientSaveData> ingredients = new();
+    public float money = 0f;                         // ğŸ’° Money
+    public List<IngredientSaveData> ingredients = new List<IngredientSaveData>();
 }
 
 [Serializable]
 public class IngredientSaveData
 {
-    public int type;      // IngredientType enumÀ» int·Î ÀúÀå
-    public float amount;  // ÇØ´ç ÀÚ¿ø º¸À¯·®
+    public int type;      // IngredientType
+    public float amount;
 }
 
-// ---------------- ºôµù ----------------
-
+// === ê±´ë¬¼ ì„¸ì´ë¸Œ ë°ì´í„° ===
 [Serializable]
 public class BuildingSaveData
 {
-    public string buildingName;   // ¾À¿¡¼­ÀÇ ÀÌ¸§ (ex: House_01)
-    public int buildingType;      // BuildingType enumÀ» int·Î ÀúÀå
+    public int buildingType;     // (int)BuildingType
+    public string buildingName;  // gameObject.name
 
     public float posX;
     public float posY;
@@ -44,38 +41,25 @@ public class BuildingSaveData
 
     public float rotY;
 
-    public int level;             // Building.Level
-    public int state;             // Building.State (int·Î Ä³½ºÆÃ)
+    public int level;            // Building.Level
+    public int state;            // (int)Building.State
 
     public bool isConstructing;
     public bool isUpgrading;
 }
 
-
+// === CityStat ì„¸ì´ë¸Œìš© ===
 [Serializable]
-public class BuffSaveData
+public class CityStatSaveData
 {
-    public string buffId;
-    public float value;
-    public float remainTime;
+    public float responsePower;
+    public float suppressPower;
+    public float healPower;
 }
 
-// ---------------- µµ½Ã ½ºÅÈ ----------------
-
+// === ì¸ë²¤í† ë¦¬ ì„¸ì´ë¸Œ ===
 [Serializable]
-public class CityStatsSaveData
-{
-    public float responsePower;   // ´ëÀÀ·Â
-    public float suppressPower;   // Áø¾Ğ·Â
-    public float healPower;       // Ä¡·á·Â
-
-    // ³ªÁß¿¡ population, happiness °°Àº °Å ÀÖÀ¸¸é Ãß°¡
-}
-
-// ---------------- ÀÎº¥Åä¸® ----------------
-
-[Serializable]
-public class ItemSaveData
+public class InventoryItemSaveData
 {
     public string itemId;
     public int count;

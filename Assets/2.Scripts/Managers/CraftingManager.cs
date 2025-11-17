@@ -38,6 +38,47 @@ public class CraftingManager : MonoBehaviour
 
     public List<Building> Buildings => buildings;
 
+    // ========================================
+    // 💰 Wood / Iron → Money 환산용 단가 테이블
+    // JSON(requiredResources) 그대로 쓰면서,
+    // 여기서 “얼마짜리 재료인지”만 정의해서 돈으로 환산한다.
+    // ========================================
+    private readonly Dictionary<IngredientType, float> _priceTable =
+        new Dictionary<IngredientType, float>
+        {
+            { IngredientType.Wood, 10f }, // Wood 1개당 10원
+            { IngredientType.Iron, 20f }, // Iron 1개당 20원
+        };
+
+    /// <summary>
+    /// BuildingRequirement 안의 requiredResources를 이용해
+    /// 이 레벨 업그레이드/건설에 필요한 총 금액 계산
+    /// </summary>
+    private float CalcCost(BuildingRequirement req)
+    {
+        if (req.requiredResources == null || req.requiredResources.Count == 0)
+            return 0f;
+
+        float total = 0f;
+
+        foreach (var r in req.requiredResources)
+        {
+            IngredientType type = (IngredientType)r.type;
+            if (_priceTable.TryGetValue(type, out float unit))
+            {
+                total += unit * r.amount;
+            }
+            else
+            {
+                Debug.LogWarning($"[CalcCost] PriceTable 에 없는 타입: {type} (raw:{r.type})");
+            }
+        }
+
+        return total;
+    }
+
+    // ========================================
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -147,18 +188,10 @@ public class CraftingManager : MonoBehaviour
                 Debug.Log($"Raycast hit: {hit.transform.name}, Building: {building.name}");
                 if (building.CurrentState == Building.State.Ruin)
                 {
-                    // building.StartConstruction();
-                    /* var buildButtonGroup = Managers.UI.GetUI<UIBuildButtonGroup>();
-                    if (buildButtonGroup != null && buildButtonGroup.SelectedBuilding != building)
-                    {
-                        buildButtonGroup.Close();
-                    }
-                    
-                    // Managers.UI.AddPanel<UIBuildButtonGroup>(building); */
+                    // 건축 시작 UI 열기 등...
                 }
                 else if (building.CurrentState == Building.State.Base)
                 {
-                    //building.Upgrade();
                     Debug.Log($"Key press detected for {gameObject.name} - BuildingType: {building.BuildingType}");
                     Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(building);
                 }
@@ -175,15 +208,18 @@ public class CraftingManager : MonoBehaviour
         buildings.Add(newBuilding);
     }
 
+    // ================== 건설/업그레이드 ==================
+
     public bool StartBuildingConstruction(Building building)
     {
         if (!CheckResources(building, 1))
         {
-            Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
-            Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
-            Debug.LogWarning($"Construction failed for {building.name}: Insufficient resources or government level.");
+            Debug.Log("자원이 부족해서 실패하였습니다.(Money)");
+            Managers.Commodity.LogMoney();
+            Debug.LogWarning($"Construction failed for {building.name}: Insufficient money or government level.");
             return false;
         }
+
         ConsumeResources(building, 1);
         building.StartConstruction();
         return true;
@@ -194,13 +230,15 @@ public class CraftingManager : MonoBehaviour
         int nextLevel = building.Level + 1;
         if (nextLevel > 10 || !CheckResources(building, nextLevel))
         {
-            Debug.Log("자원이 부족해서 실패하였습니다."); // 추가: 한국어 실패 로그
-            Managers.Commodity.LogAmounts(); // 추가: 현재 자원 로그 출력 (Wood: X, Iron: Y)
-            Debug.LogWarning($"Upgrade failed for {building.name}: Max level reached or insufficient resources/government level.");
+            Debug.Log("자원이 부족해서 실패하였습니다.(Money)");
+            Managers.Commodity.LogMoney();
+            Debug.LogWarning($"Upgrade failed for {building.name}: Max level reached or insufficient money/government level.");
             return;
         }
+
         ConsumeResources(building, nextLevel);
         building.Upgrade();
+
         var req = GetRequirement(building.name, nextLevel);
         if (req != null)
         {
@@ -208,6 +246,9 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// targetLevel 업그레이드/건설에 필요한 돈이 있는지 확인
+    /// </summary>
     public bool CheckResources(Building building, int targetLevel)
     {
         if (!_buildingReqs.TryGetValue(building.name, out var reqs))
@@ -215,44 +256,62 @@ public class CraftingManager : MonoBehaviour
             Debug.LogError($"No requirements found for building: {building.name}");
             return false;
         }
+
         var req = reqs.Find(r => r.level == targetLevel);
         if (req == null)
         {
             Debug.LogError($"No requirement for level {targetLevel} in {building.name}");
             return false;
         }
-        // 수정: Government 빌딩은 정부 레벨 체크 스킵 (초기 업그레이드 허용)
+
+        // Government 빌딩은 정부 레벨 체크 스킵(기존 로직 유지)
         if (building.name != "Government" && GetGovernmentLevel() < req.requiredGovernmentLevel)
         {
             Debug.LogWarning($"Government level too low: Required {req.requiredGovernmentLevel}, Current {GetGovernmentLevel()}");
             return false;
         }
-        foreach (var res in req.requiredResources)
+
+        float cost = CalcCost(req);
+        bool ok = Managers.Commodity.HasMoney(cost);
+
+        if (!ok)
         {
-            IngredientType type = (IngredientType)res.type;
-            var ingredient = Managers.Commodity.GetIngredient(type);
-            if (ingredient == null || ingredient.Amount < res.amount)
-            {
-                Debug.LogWarning($"Insufficient {type}: Required {res.amount}, Available {ingredient?.Amount ?? 0}");
-                return false;
-            }
+            Debug.Log($"[CheckResources] 돈 부족: 필요={cost}, 보유={Managers.Commodity.Money}");
+            Managers.Commodity.LogMoney();
         }
-        return true;
+        else
+        {
+            Debug.Log($"[CheckResources] OK: {building.name} L{targetLevel}, Cost={cost}, Money={Managers.Commodity.Money}");
+        }
+
+        return ok;
     }
 
+    /// <summary>
+    /// targetLevel 업그레이드/건설 비용을 돈으로 차감
+    /// </summary>
     public void ConsumeResources(Building building, int targetLevel)
     {
-        if (!_buildingReqs.TryGetValue(building.name, out var reqs)) return;
+        if (!_buildingReqs.TryGetValue(building.name, out var reqs))
+            return;
 
         var req = reqs.Find(r => r.level == targetLevel);
-        if (req == null) return;
+        if (req == null)
+            return;
 
-        foreach (var res in req.requiredResources)
+        float cost = CalcCost(req);
+
+        if (!Managers.Commodity.TrySpend(cost))
         {
-            IngredientType type = (IngredientType)res.type;
-            Managers.Commodity.GetIngredient(type)?.Consume(res.amount);
+            Debug.LogWarning($"[ConsumeResources] TrySpend 실패. 필요={cost}, 보유={Managers.Commodity.Money}");
+        }
+        else
+        {
+            Debug.Log($"[ConsumeResources] {building.name} L{targetLevel} 비용 {cost} 지불 완료. 남은 돈={Managers.Commodity.Money}");
         }
     }
+
+    // ================== 기타 유틸 ==================
 
     private BuildingRequirement GetRequirement(string buildingName, int level)
     {
@@ -263,6 +322,8 @@ public class CraftingManager : MonoBehaviour
         return null;
     }
 
+    // ⚠️ 이제는 쓰지 않는 함수 (Wood/Iron 기반 환불)
+    // 필요 없으면 나중에 Money 환불로 바꾸거나 삭제
     public void RefundResources(int wood, int iron)
     {
         Managers.Commodity.AddIngredient(IngredientType.Wood, wood);
@@ -288,6 +349,8 @@ public class CraftingManager : MonoBehaviour
     {
         Debug.Log("인구 치료: " + amount);
     }
+
+    // ================== JSON 로드 ==================
 
     private void LoadBuildingRequirements()
     {

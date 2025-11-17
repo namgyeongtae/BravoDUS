@@ -196,8 +196,7 @@ public class Building : MonoBehaviour
         // SwapModel(ruinPrefab);
         if (!_isTestMode)
         {
-            Managers.Commodity.AddIngredient(IngredientType.Wood, 50);
-            Managers.Commodity.AddIngredient(IngredientType.Iron, 30);
+            Managers.Commodity.AddMoney(100f);
         }
         constructionCoroutine = null;
         // 이펙트 및 건물 상태 복구
@@ -305,8 +304,7 @@ public class Building : MonoBehaviour
         CurrentState = State.Base;
         if (!_isTestMode)
         {
-            Managers.Commodity.AddIngredient(IngredientType.Wood, 100);
-            Managers.Commodity.AddIngredient(IngredientType.Iron, 50);
+            Managers.Commodity.AddMoney(200f); // 업그레이드 취소 환불 금액
         }
         upgradeCoroutine = null;
         // 이펙트 및 건물 상태 복구

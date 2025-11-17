@@ -8,6 +8,7 @@ public class SaveLoadService : MonoBehaviour
     private string SavePath => Path.Combine(Application.persistentDataPath, SaveFileName);
 
     [SerializeField] private BuildingPrefabDB _buildingPrefabDB;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.S))
@@ -23,6 +24,7 @@ public class SaveLoadService : MonoBehaviour
         }
     }
 
+    // ================== Save ==================
     public void SaveGame()
     {
         SaveData data = CollectCurrentGameState();
@@ -40,6 +42,72 @@ public class SaveLoadService : MonoBehaviour
         }
     }
 
+    // 현재 게임 상태 → SaveData로 수집
+    private SaveData CollectCurrentGameState()
+    {
+        var data = new SaveData();
+        data.version = 1;
+        data.savedAt = System.DateTime.UtcNow.Ticks;
+
+        // 1) 자원(돈 + 기존 Ingredient) 저장
+        data.commodities = new CommoditySaveData();
+
+        // 💰 Money 저장
+        data.commodities.money = Managers.Commodity.Money;
+        Debug.Log($"[Save] Money = {data.commodities.money}");
+
+        // ⚙️ 기존 Ingredient(Wood, Iron 등)도 같이 저장 (나중에 완전 제거 가능)
+        var dict = Managers.Commodity.Ingredients; // IReadOnlyDictionary
+        foreach (var kvp in dict)
+        {
+            IngredientType type = kvp.Key;
+            Ingredient ingredient = kvp.Value;
+
+            data.commodities.ingredients.Add(new IngredientSaveData
+            {
+                type = (int)type,
+                amount = ingredient.Amount
+            });
+        }
+
+        // 2) CityStat 저장 (EventManager 내부)
+        var city = Managers.Event.CityStat;
+        data.cityStats = new CityStatSaveData
+        {
+            responsePower = city.ResponsePower,
+            suppressPower = city.SuppressPower,
+            healPower = city.HealPower
+        };
+
+        // 3) 빌딩 저장
+        data.buildings = new List<BuildingSaveData>();
+
+        var crafting = CraftingManager.Instance;
+        if (crafting != null && crafting.Buildings != null && crafting.Buildings.Count > 0)
+        {
+            foreach (var b in crafting.Buildings)
+            {
+                if (b == null) continue;
+                data.buildings.Add(b.ToSaveData());
+            }
+        }
+        else
+        {
+            // 혹시 CraftingManager 없거나 비어 있으면 Find로 fallback
+            var allBuildings = GameObject.FindObjectsOfType<Building>();
+            foreach (var b in allBuildings)
+            {
+                data.buildings.Add(b.ToSaveData());
+            }
+        }
+
+        // 4) 인벤토리 (아직 사용 안 하면 빈 리스트 유지)
+        data.inventory = new List<InventoryItemSaveData>();
+
+        return data;
+    }
+
+    // ================== Load ==================
     public void LoadGame()
     {
         if (!File.Exists(SavePath))
@@ -68,73 +136,26 @@ public class SaveLoadService : MonoBehaviour
         }
     }
 
-    // ================== 여기부터 진짜 구현 ==================
-
-    private SaveData CollectCurrentGameState()
+    private void ApplyLoadedGameState(SaveData data)
     {
-        var data = new SaveData();
-        data.version = 1;
-        data.savedAt = System.DateTime.UtcNow.Ticks;
-
-        // 1) 자원(Ingredient) 저장
-        data.commodities = new CommoditySaveData();
-        var dict = Managers.Commodity.Ingredients; // IReadOnlyDictionary
-
-        foreach (var kvp in dict)
+        // 0) 💰 Money 복원
+        if (data.commodities != null)
         {
-            IngredientType type = kvp.Key;
-            Ingredient ingredient = kvp.Value;
-
-            data.commodities.ingredients.Add(new IngredientSaveData
-            {
-                type = (int)type,
-                amount = ingredient.Amount
-            });
-        }
-
-        // 2) CityStat 저장 (EventManager 내부)
-        var city = Managers.Event.CityStat;
-        data.cityStats = new CityStatsSaveData
-        {
-            responsePower = city.ResponsePower,
-            suppressPower = city.SuppressPower,
-            healPower = city.HealPower
-        };
-
-        // 3) 빌딩, 인벤토리는 나중에 채움
-        data.buildings = new List<BuildingSaveData>();
-
-        var crafting = CraftingManager.Instance;
-        if (crafting != null && crafting.Buildings != null && crafting.Buildings.Count > 0)
-        {
-            foreach (var b in crafting.Buildings)
-            {
-                if (b == null) continue;
-                data.buildings.Add(b.ToSaveData());
-            }
+            float money = data.commodities.money;
+            Managers.Commodity.SetMoney(money);
+            Debug.Log($"[Load] Money = {money}");
         }
         else
         {
-            // 혹시 CraftingManager 없거나 비어 있으면 Find로 fallback
-            var allBuildings = GameObject.FindObjectsOfType<Building>();
-            foreach (var b in allBuildings)
-            {
-                data.buildings.Add(b.ToSaveData());
-            }
+            Managers.Commodity.SetMoney(0f);
+            Debug.Log("[Load] No commodities found. Money reset to 0.");
         }
-        data.inventory = new List<ItemSaveData>();
 
-        return data;
-    }
-
-    private void ApplyLoadedGameState(SaveData data)
-    {
-        
-        // 1) 자원 복원 (이미 구현되어 있던 부분 유지)
+        // 1) Ingredient 자원 복원 (기존 구조 유지 – 나중에 삭제 가능)
         var dict = Managers.Commodity.Ingredients;
         foreach (var kvp in dict)
         {
-            kvp.Value.SetAmount(0); // 또는 Consume로 0 만들기
+            kvp.Value.SetAmount(0);
         }
 
         if (data.commodities != null && data.commodities.ingredients != null)
@@ -146,24 +167,6 @@ public class SaveLoadService : MonoBehaviour
                 if (ingredient != null)
                 {
                     ingredient.SetAmount(ingData.amount);
-                }
-            }
-        }
-
-        if (data.commodities != null && data.commodities.ingredients != null)
-        {
-            foreach (var ingData in data.commodities.ingredients)
-            {
-                IngredientType type = (IngredientType)ingData.type;
-                var ingredient = Managers.Commodity.GetIngredient(type);
-                if (ingredient != null)
-                {
-                    // 원하는 방식 선택:
-                    // ① 현재 값 무시하고 덮어쓰기
-                    ingredient.SetAmount(ingData.amount);
-
-                    // ② 0에서 시작해서 Gather로 채우기 (SetAmount 없을 때)
-                    // ingredient.Gather(ingData.amount);
                 }
             }
         }
@@ -177,7 +180,7 @@ public class SaveLoadService : MonoBehaviour
             city.HealPower = data.cityStats.healPower;
         }
 
-        // 3) 기존 빌딩 제거 🔥
+        // 3) 기존 빌딩 제거
         var crafting = CraftingManager.Instance;
         if (crafting != null && crafting.Buildings != null)
         {
@@ -197,7 +200,7 @@ public class SaveLoadService : MonoBehaviour
             }
         }
 
-        // 4) 세이브된 빌딩 다시 생성 🔥
+        // 4) 세이브된 빌딩 다시 생성
         if (data.buildings != null)
         {
             foreach (var bData in data.buildings)
@@ -206,9 +209,10 @@ public class SaveLoadService : MonoBehaviour
             }
         }
 
-        Debug.Log("ApplyLoadedGameState: resources + CityStat + buildings restored.");
+        Debug.Log("ApplyLoadedGameState: money + resources + CityStat + buildings restored.");
     }
 
+    // ================== Building Spawn ==================
     private Building SpawnBuildingFromSave(BuildingSaveData data)
     {
         // 0) DB 체크
@@ -229,9 +233,9 @@ public class SaveLoadService : MonoBehaviour
             return null;
         }
 
-        // 3) 그냥 Instantiate로 생성 (ResourceManager 안 써도 됨)
+        // 3) Instantiate
         GameObject go = Instantiate(prefab);
-        go.name = prefab.name; // 보기 좋게 이름 맞춰주기
+        go.name = prefab.name;
 
         var building = go.GetComponent<Building>();
         if (building == null)
