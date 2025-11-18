@@ -45,7 +45,13 @@ public class UIBuildPlacement : CanvasPanel
         {
             return;
         }
+
+        CraftingManager.Instance.ConsumeResources(_buildingObject.GetComponent<Building>(), 1);
+
         Managers.Construct.SwitchConstructMode(ConstructMode.None);
+
+        Managers.UI.GetUI<SceneUI>("SceneUI").SubCommodity(Managers.Commodity.Money);
+
         Close();
     }
 

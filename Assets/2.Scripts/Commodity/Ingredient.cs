@@ -33,13 +33,6 @@ public class Ingredient : BaseResource
 
     protected override void OnAmountChanged(float amount, bool isAdd)
     {
-        if (isAdd)
-        {
-            Managers.UI.GetUI<SceneUI>("SceneUI").AddCommodity(this, amount);
-        }
-        else
-        {
-            Managers.UI.GetUI<SceneUI>("SceneUI").SubCommodity(this, amount);
-        }
+        
     }
 }

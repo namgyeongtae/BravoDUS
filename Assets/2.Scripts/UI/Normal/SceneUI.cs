@@ -11,13 +11,9 @@ public class SceneUI : CanvasPanel
 
     [Header("Commodity")]
     [Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
-    // [Bind("IronIcon")] private UIParticleAttractor _ironParticleAttractor;
     [Bind("WoodAmount")] private Text _woodAmount;
-    // [Bind("IronAmount")] private Text _ironAmount;
     private Coroutine _woodAddCoroutine = null;
-    private Coroutine _ironAddCoroutine = null;
-    private Coroutine _woodSubCoroutine = null;
-    private Coroutine _ironSubCoroutine = null;
+    private Coroutine _woodSubCoroutine = null;    private Coroutine _ironSubCoroutine = null;
     [Header("SideGroup")]
     [Bind("BuildButton")] private UIButton _buildButton;
     [Bind("RoadButton")] private UIButton _roadButton;
@@ -31,7 +27,6 @@ public class SceneUI : CanvasPanel
     public UIBuildingSelection BuildingSelection => _buildingSelection;
 
     public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
-    // public UIParticleAttractor IronParticleAttractor => _ironParticleAttractor;
 
 
     protected override void Initialize()
@@ -44,10 +39,7 @@ public class SceneUI : CanvasPanel
 
     public override void Open()
     {
-        // _buildingSelection = Managers.UI.AddPanel<UIBuildingSelection>();
-        _woodAmount.text = Managers.Commodity.GetIngredient(IngredientType.Wood).Amount.ToString();
-        
-        // _ironAmount.text = Managers.Commodity.GetIngredient(IngredientType.Iron).Amount.ToString();
+        _woodAmount.text = Managers.Commodity.Money.ToString();
     }
 
     private void OnBuildButtonClicked()
@@ -60,106 +52,51 @@ public class SceneUI : CanvasPanel
         Managers.Construct.SwitchConstructMode(ConstructMode.Road);
         Managers.UI.AddPanel<UIRoadPlacement>();
     }
-    private IEnumerator CoAddCommodity(Ingredient ingredient, float amount)
+    private IEnumerator CoAddCommodity(float amount)
     {
-        IngredientType type = ingredient.Type;
-
-        float currentAmount = type switch
-        {
-            IngredientType.Wood => Convert.ToSingle(_woodAmount.text),
-            // IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
-            _ => 0f
-        };
+        float currentAmount = Convert.ToSingle(_woodAmount.text);
 
         while (currentAmount < amount)
         {
             currentAmount += 1;
             yield return new WaitForSeconds(0.01f);
 
-            switch (type)
-            {
-                case IngredientType.Wood:
-                    _woodAmount.text = currentAmount.ToString();
-                    break;
-                case IngredientType.Iron:
-                    // _ironAmount.text = currentAmount.ToString();
-                    break;
-            }
+            _woodAmount.text = currentAmount.ToString();
         }
     }
 
-    private IEnumerator CoSubCommodity(Ingredient ingredient, float amount)
+    private IEnumerator CoSubCommodity(float amount)
     {
-        IngredientType type = ingredient.Type;
-
-        float currentAmount = type switch
-        {
-            IngredientType.Wood => Convert.ToSingle(_woodAmount.text),
-            // IngredientType.Iron => Convert.ToSingle(_ironAmount.text),
-            _ => 0f
-        };
+        float currentAmount = Convert.ToSingle(_woodAmount.text);
 
         while (currentAmount > amount)
         {
             currentAmount -= 1;
             yield return new WaitForSeconds(0.01f);
 
-            switch (type)
-            {
-                case IngredientType.Wood:
-                    _woodAmount.text = currentAmount.ToString();
-                    break;
-                case IngredientType.Iron:
-                    // _ironAmount.text = currentAmount.ToString();
-                    break;
-            }
+            _woodAmount.text = currentAmount.ToString();
         }
     }
 
-    public void AddCommodity(Ingredient ingredient, float amount)
+    public void AddCommodity(float amount)
     {
-        switch (ingredient.Type)
+        if (_woodAddCoroutine != null)
         {
-            case IngredientType.Wood:
-                if (_woodAddCoroutine != null)
-                {
-                    StopCoroutine(_woodAddCoroutine);
-                    _woodAddCoroutine = null;
-                }
-                _woodAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
-                break;
-            case IngredientType.Iron:
-                if (_ironAddCoroutine != null)
-                {
-                    StopCoroutine(_woodAddCoroutine);
-                    _ironAddCoroutine = null;
-                }
-                _ironAddCoroutine = StartCoroutine(CoAddCommodity(ingredient, amount));
-                break;
+            StopCoroutine(_woodAddCoroutine);
+            _woodAddCoroutine = null;
         }
+
+        _woodAddCoroutine = StartCoroutine(CoAddCommodity(amount));
     }
 
-    public void SubCommodity(Ingredient ingredient, float amount)
+    public void SubCommodity(float amount)
     {
-        switch (ingredient.Type)
+        if (_woodSubCoroutine != null)
         {
-            case IngredientType.Wood:
-                if (_woodSubCoroutine != null)
-                {
-                    StopCoroutine(_woodSubCoroutine);
-                    _woodSubCoroutine = null;
-                }
-                _woodSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
-                break;
-            case IngredientType.Iron:
-                if (_ironSubCoroutine != null)
-                {
-                    StopCoroutine(_ironSubCoroutine);
-                    _ironSubCoroutine = null;
-                }
-                _ironSubCoroutine = StartCoroutine(CoSubCommodity(ingredient, amount));
-                break;
+            StopCoroutine(_woodSubCoroutine);
+            _woodSubCoroutine = null;
         }
+        _woodSubCoroutine = StartCoroutine(CoSubCommodity(amount));
     }
 
     // 빌딩 선택 창 열기 혹은 닫기

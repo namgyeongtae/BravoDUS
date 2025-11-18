@@ -30,6 +30,14 @@ public class UIBuildingSlot : UIBind
     {
         Debug.Log("OnClickSlotButton");
 
+        // 자원 조건 체크
+        if (!CraftingManager.Instance.CheckResources(_buildingPrefab.GetComponent<Building>(), 1))
+        {
+            var toast = Managers.UI.AddPanel<UIToastPopup>();
+            toast.SettingPopup("자원이 부족해서 건설할 수 없습니다.");
+            return;
+        }
+
         Managers.Construct.SwitchConstructMode(ConstructMode.Placement);
 
         Managers.UI.AddPanel<UIBuildPlacement>(_buildingPrefab);
