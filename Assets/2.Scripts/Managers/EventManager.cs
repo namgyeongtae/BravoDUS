@@ -13,6 +13,7 @@ public class EventManager : IManagerBase
     public FireEventController Fire => _events[EventType.FireRiskEvent] as FireEventController;
     public SecurityEventController Security => _events[EventType.SecurityEvent] as SecurityEventController;
     public InjureEventController Injure => _events[EventType.InjureEvent] as InjureEventController;
+    public List<Incident> Incidents => _incidents;
     public void Init()
     {
         // Load Events from Database

@@ -5,10 +5,15 @@ using UnityEngine;
 public class FireEventController : EventController
 {
     private List<FireStationRole> _fireStationRoles = new List<FireStationRole>();
-    private Dictionary<Incident, Building> _incidentBuildings = new Dictionary<Incident, Building>();
+    private Dictionary<Building, Incident> _incidentBuildings = new Dictionary<Building, Incident>();
+    private Dictionary<Incident, UIFireEventWarning> _incidentUIWarnings = new Dictionary<Incident, UIFireEventWarning>();
+    private Dictionary<Incident, WorkForce> _resolvingWorkForces = new Dictionary<Incident, WorkForce>();
 
     public List<FireStationRole> FireStationRoles => _fireStationRoles;
-
+    public Dictionary<Building, Incident> IncidentBuildings => _incidentBuildings;
+    public Dictionary<Incident, UIFireEventWarning> IncidentUIWarnings => _incidentUIWarnings;
+    public Dictionary<Incident, WorkForce> ResolvingWorkForces => _resolvingWorkForces;
+    
     public FireEventController(float baseRatePerMin) : base(EventType.FireRiskEvent)
     {
         _baseRatePerMin = baseRatePerMin;
@@ -30,10 +35,16 @@ public class FireEventController : EventController
 
     protected override Incident ExecuteSpawn(float now, CityStat stat)
     {
+        // TODO: 조건 개선
         // 현재 완공이 되었고 디버프가 없는 건물 리스트
+        // 조건이 너무 많음.... 추가되었을 때 계속 && 붙여야 함....
+        // 이 구조는 상당히 좋지 않음.... 개선되야함
         var buildings = CraftingManager.Instance.Buildings.Where(b => 
-                                                b.GetComponent<RoleHandler>()?.DebuffCount <= 0
+                                                b.GetComponent<Building>().CurrentState != Building.State.Fired
                                              && b.GetComponent<Building>().BuildingType != BuildingType.FireStation
+                                             && b.GetComponent<Building>().BuildingType != BuildingType.Hospital
+                                             && b.GetComponent<Building>().BuildingType != BuildingType.PoliceStation
+                                             && b.GetComponent<Building>().BuildingType != BuildingType.Government
                                              && b.CurrentState != Building.State.Ruin 
                                              && b.CurrentState != Building.State.Constructing);
 
@@ -59,6 +70,8 @@ public class FireEventController : EventController
             }
         }
 
+        _targetBuilding.SetCurrentState(Building.State.Fired);
+
         return base.ExecuteSpawn(now, stat);
     }
 
@@ -72,30 +85,36 @@ public class FireEventController : EventController
 
         _targetBuilding.GetComponent<RoleHandler>()?.OnDeBuff();
 
-        _incidentBuildings.Add(inc, _targetBuilding);
+        _incidentBuildings.Add(_targetBuilding, inc);
 
         var fireVFX = Managers.Resource.Instantiate("VFX/FireSmokeVFX", _targetBuilding.transform).GetComponent<ParticleSystem>();
         fireVFX.transform.localPosition = Vector3.zero;
         fireVFX.Play();
 
-        Managers.UI.AddPanel<UIFireEventWarning>(_targetBuilding, true);
+        var uiWarning = Managers.UI.AddPanel<UIFireEventWarning>(_targetBuilding, true);
+        _incidentUIWarnings.Add(inc, uiWarning);
 
         _targetBuilding = null;
     }
 
     protected override void OnResolved_Event(Incident inc)
     {
-        var building = _incidentBuildings[inc];
+        var building = _incidentBuildings.FirstOrDefault(x => x.Value == inc).Key;
 
         building.GetComponent<RoleHandler>()?.OnResolved();
 
-        var fireVFX = building.GetComponent<ParticleSystem>();
+        var fireVFX = building.GetComponentInChildren<ParticleSystem>();
+        if (fireVFX == null)
+        {
+            Debug.LogError("FireEventController: Fire VFX not found");
+            return;
+        }
         Managers.Resource.Destroy(fireVFX.gameObject);
     }
 
     protected override void OnUpdateTick_Event(Incident inc)
     {
-        _incidentBuildings[inc].GetComponent<RoleHandler>()?.OnDeBuff();
+        // _incidentBuildings[inc].GetComponent<RoleHandler>()?.OnDeBuff();
     }
 
     private bool SuppressedEvent(FireStationRole fireStationRole, Building building)
@@ -112,5 +131,10 @@ public class FireEventController : EventController
     public void AddFireStationRole(FireStationRole role)
     {
         _fireStationRoles.Add(role);
+    }
+
+    public bool IsSuppressing(WorkForce workForce)
+    {
+        return _resolvingWorkForces.ContainsValue(workForce);
     }
 }

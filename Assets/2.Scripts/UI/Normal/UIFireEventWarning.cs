@@ -30,7 +30,7 @@ public class UIFireEventWarning : CanvasPanel
 
     public override void CallAfterSetting()
     {
-        Rect.position = Camera.main.WorldToScreenPoint(_targetBuilding.transform.position) + Vector3.up * 100f;
+        Rect.position = Camera.main.WorldToScreenPoint(_targetBuilding.transform.position) + Vector3.up * 300f;
     }
 
     void Update()
@@ -40,7 +40,7 @@ public class UIFireEventWarning : CanvasPanel
             _animateCoroutine = StartCoroutine(AnimateShake());
         }
 
-        Rect.position = Camera.main.WorldToScreenPoint(_targetBuilding.transform.position) + Vector3.up * 100f;
+        Rect.position = Camera.main.WorldToScreenPoint(_targetBuilding.transform.position) + Vector3.up * 300f;
     }
 
     private IEnumerator AnimateShake()
@@ -82,9 +82,23 @@ public class UIFireEventWarning : CanvasPanel
         {
             if (fireStationRole.CanProtect(_targetBuilding))
             {
-                int wfCount = fireStationRole.GetComponent<Building>().WorkForceList.Where(x => x.HRState == HRState.None).Count();
+                /* int wfCount = fireStationRole.GetComponent<Building>().WorkForceList.Where(x => x.HRState == HRState.Work && !Managers.Event.Fire.IsSuppressing(x)).Count();
                 if (wfCount >= 0) // 이후 > 0 으로 수정해야 함. Test를 위해 <= 0 으로 설정
                 {
+                    fireStationRole.DispatchFireTruck(_targetBuilding);
+                    isSuccess = true;
+                    break;
+                } */
+                
+                var fireFighter = fireStationRole.GetComponent<Building>().WorkForceList
+                                            .Where(x => x.HRState == HRState.Work 
+                                                    && !Managers.Event.Fire.IsSuppressing(x))
+                                            .FirstOrDefault();
+                if (fireFighter != null)
+                {
+                    var inc = Managers.Event.Fire.IncidentBuildings[_targetBuilding];
+                    Managers.Event.Fire.ResolvingWorkForces.Add(inc, fireFighter);
+                    
                     fireStationRole.DispatchFireTruck(_targetBuilding);
                     isSuccess = true;
                     break;

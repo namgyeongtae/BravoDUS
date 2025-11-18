@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class FireTruck : MonoBehaviour
     private bool _isMoving = false;
 
     [SerializeField] private float _moveSpeed = 5f;
+
+    public Building TargetBuilding => _targetBuilding;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -94,6 +97,23 @@ public class FireTruck : MonoBehaviour
         _moveCoroutine = StartCoroutine(MoveAlongPath());
     }
 
+    public void Return()
+    {
+        if (_path.Count <= 0)
+        {
+            Managers.UI.OpenToastPopup("소방차 경로를 찾을 수 없습니다.");
+            return;
+        }
+
+        // 이미 이동 중이면 중지하고 새 경로로 시작
+        if (_isMoving && _moveCoroutine != null)
+        {
+            StopCoroutine(_moveCoroutine);
+        }
+
+        _moveCoroutine = StartCoroutine(ReturnAlongPath());
+    }
+
     private IEnumerator MoveAlongPath()
     {
         _isMoving = true;
@@ -121,9 +141,68 @@ public class FireTruck : MonoBehaviour
         OnReachedDestination();
     }
 
+    private IEnumerator ReturnAlongPath()
+    {
+        _isMoving = true;
+
+        for (int i = _path.Count - 1; i >= 0; i--)
+        {
+            Vector3Int cell = _path[i];
+            Vector3 targetPosition = Managers.Construct.GridHandler.CellToWorld(cell.x, cell.y);
+            targetPosition.y = transform.position.y;
+
+            while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.deltaTime);
+                yield return null;
+            }
+
+            transform.position = targetPosition;
+        }
+
+        _isMoving = false;
+        _moveCoroutine = null;
+
+        OnReturnedToFireStation();
+    }
+
     private void OnReachedDestination()
     {
-        Debug.Log("목적지 도달");
+        if (_targetBuilding == null)
+        {
+            Debug.LogError("FireTruck: Target building is null");
+            return;
+        }
+
+        var inc = Managers.Event.Fire.IncidentBuildings[_targetBuilding];
+
+        if (inc == null)
+        {
+            Debug.LogError("FireTruck: Incident not found");
+            return;
+        }
+
+        inc.State = IncidentState.Resolving;
+
+        // 경고 UI 제거
+        var uiWarning = Managers.Event.Fire.IncidentUIWarnings[inc];
+        Managers.UI.RemovePanel(uiWarning);
+        Managers.Event.Fire.IncidentUIWarnings.Remove(inc);
+
+        // 진압 중 UI 추가
+        Managers.UI.AddPanel<UIFireResolve>(this, true);
+    }
+
+    private void OnReturnedToFireStation()
+    {
+        var inc = Managers.Event.Fire.IncidentBuildings[_targetBuilding];
+
+        if (Managers.Event.Fire.ResolvingWorkForces.ContainsKey(inc))
+        {
+            Managers.Event.Fire.ResolvingWorkForces.Remove(inc);
+        }
+
+        Managers.Resource.Destroy(this.gameObject);
     }
 
     void OnDrawGizmos()

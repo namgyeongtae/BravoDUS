@@ -21,7 +21,7 @@ public class Building : MonoBehaviour
     private List<WorkForce> _workForceList = new(); // 건물에 할당된 인력 리스트
     public Action OnWorkForceChanged;
 
-    public enum State { Ruin, Constructing, Base, Upgrading, Upgraded }
+    public enum State { Ruin, Constructing, Base, Upgrading, Upgraded, Fired }
     public State CurrentState { get; private set; } = State.Ruin; // 현재 상태
     public int Level { get; private set; } = 0; // 레벨
     public Vector3 FixedPosition { get; private set; } // 고정 위치
@@ -49,50 +49,6 @@ public class Building : MonoBehaviour
         if (collider != null) Destroy(collider);
     }
 
-    private void RemoveDuplicateComponents(GameObject obj)
-    {
-        // Building 컴포넌트 제거 (중복 방지)
-        Building[] buildings = obj.GetComponentsInChildren<Building>(true);
-        foreach (var b in buildings)
-        {
-            Destroy(b);
-            Debug.Log($"Removed duplicate Building from {obj.name}");
-        }
-        // ChildModelClickHandler 중복 제거 (하나만 유지)
-        ChildModelClickHandler[] handlers = obj.GetComponentsInChildren<ChildModelClickHandler>(true);
-        if (handlers.Length > 1)
-        {
-            for (int i = 1; i < handlers.Length; i++)
-            {
-                Destroy(handlers[i]);
-                Debug.Log($"Removed duplicate ChildModelClickHandler from {obj.name}");
-            }
-        }
-    }
-
-    void Start()
-    {
-        // transform.position = FixedPosition;
-    }
-
-    void Update()
-    {
-        /* #if UNITY_EDITOR
-                if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R))
-                {
-                    Debug.Log($"Update detected key press for {gameObject.name} - CurrentState: {CurrentState}");
-                    if (CurrentState == State.Ruin)
-                    {
-                        StartConstruction();
-                    }
-                    // else if (CurrentState == State.Base)
-                    // {
-                    // Upgrade();
-                    // }
-                }
-        #endif */
-    }
-
     public void StartConstruction()
     {
         Managers.Commodity.LogAmounts(); // 추가: 체크 직전 Amount 로그 (필요 시 유지/삭제)
@@ -108,10 +64,6 @@ public class Building : MonoBehaviour
     private IEnumerator ConstructCoroutine()
     {
         Debug.Log($"ConstructCoroutine started for {gameObject.name}");
-
-        // CreateConstructor(); // 건설자 프리팹 생성
-
-        // basePrefab.SetActive(false);
 
         _animator.SetTrigger("Construct");
 
@@ -322,58 +274,6 @@ public class Building : MonoBehaviour
         Debug.Log($"업그레이드 취소: {gameObject.name}, Level: {Level}, State: {CurrentState}");
     }
 
-    #region Swap Model
-    /* private void SwapModel(GameObject newPrefab)
-    {
-        // 🔹 1. 현재 모델 반환
-        if (currentModel != null)
-        {
-            // 현재 모델이 어떤 풀에서 나온 건지에 따라 반환
-            if (currentModel.CompareTag("Ruin"))
-            {
-                ruinPool.Release(currentModel);
-            }
-            else if (currentModel.CompareTag("Base"))
-            {
-                // basePool.Release(currentModel);
-            }
-            else if (currentModel.CompareTag("Upgraded"))
-            {
-                upgradedPool.Release(currentModel);
-            }
-            currentModel = null;
-        }
-
-        // 🔹 2. 새 모델 생성
-        if (newPrefab == ruinPrefab)
-        {
-            currentModel = ruinPool.Get();
-        }
-        else if (newPrefab == basePrefab)
-        {
-            currentModel = basePool.Get();
-        }
-        else
-        {
-            currentModel = upgradedPool.Get();
-        }
-
-        // 🔹 3. 배치 및 설정
-        if (currentModel != null)
-        {
-            currentModel.transform.SetParent(transform, false);
-            currentModel.transform.position = FixedPosition;
-            currentModel.transform.rotation = Quaternion.identity;
-            currentModel.SetActive(true);
-            Debug.Log($"✅ 모델 교체 완료: {gameObject.name}, 새 모델: {currentModel.name}, Position: {currentModel.transform.position}");
-        }
-        else
-        {
-            Debug.LogError($"❌ 모델 생성 실패: {gameObject.name}, 프리팹: {newPrefab.name}");
-        }
-    } */
-    #endregion
-
     public void DestroyBuilding()
     {
         var gridHandler = Managers.Construct.GridHandler;
@@ -412,27 +312,6 @@ public class Building : MonoBehaviour
         }
     }
 
-    private void CreateConstructor()
-    {
-        var collider = ruinPrefab.GetComponent<BoxCollider>();
-
-        Debug.Log($"Log Bounds : {collider.size}");
-
-        GameObject constructor = Managers.Resource.Instantiate("Avatar/Constructor");
-        constructor.transform.SetParent(transform);
-        constructor.transform.position = transform.position
-                    + transform.forward * (collider.size.z / 2f * 3.5f) * -1
-                    + transform.up * (collider.size.y / 2f * 0.5f) * -1;
-    }
-
-    private void DestroyConstructor()
-    {
-        var constructors = transform.Find("Constructor");
-
-        if (constructors != null)
-            Managers.Resource.Destroy(constructors.gameObject);
-    }
-
     public void AssignWorkForce(WorkForce workForce)
     {
         _workForceList.Add(workForce);
@@ -443,6 +322,11 @@ public class Building : MonoBehaviour
     {
         _workForceList.Remove(workForce);
         OnWorkForceChanged?.Invoke();
+    }
+
+    public void SetCurrentState(State state)
+    {
+        CurrentState = state;
     }
 
     // ============================

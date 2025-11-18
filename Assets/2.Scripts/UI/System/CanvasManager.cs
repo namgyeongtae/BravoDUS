@@ -211,7 +211,8 @@ public class CanvasManager : MonoBehaviour
         
         if (data.Key == null)
         {
-            Debug.LogWarning($"Failed to find panel : {uibase.name}");
+            Managers.Resource.Destroy(uibase.gameObject);
+            // Debug.LogWarning($"Failed to find panel : {uibase.name}");
             return;
         }
 
