@@ -17,19 +17,34 @@ MonoBehaviour:
     buildingIcon: {fileID: 21300000, guid: 7c8879c4fa6491b4fb607ca078137c7e, type: 3}
     buildingType: 2
     buildingPrefab: {fileID: 5842973268535889517, guid: 094f23e8bec5b2c49b12935ed1a30f21, type: 3}
+    Happiness: 10
+    Population: 0
     buildingSize: 4
   - buildingName: "\uACBD\uCC30\uC11C"
     buildingIcon: {fileID: 21300000, guid: 4a8f1b47aecffda4095d23762133e936, type: 3}
     buildingType: 3
     buildingPrefab: {fileID: 3768488022834937166, guid: 62529fe9c0dfb934fbd11a86efe4380b, type: 3}
+    Happiness: 0
+    Population: 10
     buildingSize: 4
   - buildingName: "\uC815\uBD80 \uC2DC\uC124"
     buildingIcon: {fileID: 21300000, guid: 13e4f9bf5e2754445b31aa8c11a8aca9, type: 3}
     buildingType: 1
     buildingPrefab: {fileID: 6708357938524194867, guid: a1a871387709c194688b4800592b4523, type: 3}
+    Happiness: 0
+    Population: 0
     buildingSize: 5
   - buildingName: "\uC18C\uBC29\uC11C"
     buildingIcon: {fileID: 21300000, guid: 4a8f1b47aecffda4095d23762133e936, type: 3}
     buildingType: 4
     buildingPrefab: {fileID: 3768488022834937166, guid: 6ee70168e48d2ca439dea0ac7a6ffd72, type: 3}
+    Happiness: 0
+    Population: 0
     buildingSize: 4
+  - buildingName: "\uBAA9\uACF5\uC18C"
+    buildingIcon: {fileID: 21300000, guid: c27c9b95e9d800b4a9c1047a9104cb67, type: 3}
+    buildingType: 6
+    buildingPrefab: {fileID: 4573888785615173616, guid: 16ff278cf2d3cdd4bb2c1e61e4021f22, type: 3}
+    Happiness: 0
+    Population: 10
+    buildingSize: 3

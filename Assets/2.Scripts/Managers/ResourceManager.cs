@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class ResourceManager
 {
+    public T LoadSO<T>(string path) where T : ScriptableObject
+    {
+        return Resources.Load<T>($"ScriptableObjects/{path}");
+    }
+
     public T Load<T>(string path) where T : Object
     {
         if (typeof(T) == typeof(GameObject))

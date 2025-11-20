@@ -8,6 +8,8 @@ public class BuildingData
     public Sprite buildingIcon;
     public BuildingType buildingType;
     public GameObject buildingPrefab;
+    public int Happiness;
+    public int Population;
     public int buildingSize;
 }
 
