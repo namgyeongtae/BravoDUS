@@ -1459,7 +1459,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   useCanvasScaleCompensation: 1
-  OnAttractedCompleted:
+  OnAttracted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &566332798
@@ -3060,7 +3060,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.015, z: 0}
-  m_LocalScale: {x: 18, y: 1, z: 18}
+  m_LocalScale: {x: 8, y: 1, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 147775866}
@@ -3993,9 +3993,9 @@ MonoBehaviour:
   _gridVisualizer: {fileID: 1164527292}
   _fieldTilemap: {fileID: 1978903321}
   _roadTilemap: {fileID: 971966350}
-  _selectedTile: {fileID: 11400000, guid: 3d0234a61dec43b4aa83fa1eea9c71e6, type: 2}
   _grid: {fileID: 1209669448}
   _buildMode: 0
+  _selectedTile: {fileID: 11400000, guid: 3d0234a61dec43b4aa83fa1eea9c71e6, type: 2}
 --- !u!4 &1430383163
 Transform:
   m_ObjectHideFlags: 0
