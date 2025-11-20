@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a461ed88dd716e40987355e47cd6a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _handleTerritorySize: 10
+  _handleTerritorySize: 30
   _handleBuildings: []
 --- !u!1 &6385568534220609578
 GameObject:

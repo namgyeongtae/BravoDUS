@@ -689,7 +689,7 @@ GameObject:
   - component: {fileID: 4127581775935551352}
   - component: {fileID: 8819865300103211895}
   m_Layer: 6
-  m_Name: Goverment
+  m_Name: Government
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
