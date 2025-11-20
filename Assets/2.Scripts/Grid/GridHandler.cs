@@ -37,8 +37,8 @@ public class GridHandler : MonoBehaviour
     [SerializeField] private Tilemap _fieldTilemap;
     [SerializeField] private Tilemap _roadTilemap;
 
-    private readonly int _width = 80;
-    private readonly int _height = 80;
+    private readonly int _width = 40;
+    private readonly int _height = 40;
 
     // Unity Grid Component (좌표 변환용)
     [SerializeField] private Grid _grid;
