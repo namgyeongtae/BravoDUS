@@ -70,7 +70,7 @@ public class RoadSystem : MonoBehaviour
     }
 
     private bool _canInstall = false;
-    [SerializeField] private int _limitedDeltaTouch = 10; // 도로 설치 시 허용되는 Touch 움직임 거리의 제한 -> 이거 넘긴 상태의 Touch는 도로 설치 못함
+    [SerializeField] private int _limitedDeltaTouch = 5; // 도로 설치 시 허용되는 Touch 움직임 거리의 제한 -> 이거 넘긴 상태의 Touch는 도로 설치 못함
 
     void Start()
     {
@@ -136,8 +136,6 @@ public class RoadSystem : MonoBehaviour
             if (touch.phase == TouchPhase.Moved)
             {
                 _canInstall = touch.deltaPosition.sqrMagnitude <= _limitedDeltaTouch * _limitedDeltaTouch;
-
-                Debug.Log("Can Install : " + _canInstall);
             }
             else if (touch.phase == TouchPhase.Ended)
             {
@@ -207,33 +205,40 @@ public class RoadSystem : MonoBehaviour
     // 도로 제거: 좌클릭한 셀이 도로면 지우고, 인접 4셀 재계산
     private void UnInstallRoad()
     {
-#if !UNITY_EDITOR
-        Touch touch = Input.GetTouch(0);
-        if (touch.phase == TouchPhase.Ended)
+//#if !UNITY_EDITOR
+        if (Input.touchCount > 0)
         {
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
-            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-            if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
-            {
-                Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                Debug.Log("cell: " + cell);
-                if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
-                && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
-                && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Road)
-                {
-                    _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Field);
+            Debug.Log("Remove Road");
 
-                    RemoveRoadTile(cell);
-                    DrawAdjacentRoadTile(cell);
-                }
-                else
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Ended)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+                if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
                 {
-                    Debug.Log("cell is out of bounds");
+                    Vector3Int cell = _gridHandler.WorldToCell(hit.point);
+                    Debug.Log("cell: " + cell);
+                    if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
+                    && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                    && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Road)
+                    {
+                        _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Field);
+
+                        RemoveRoadTile(cell);
+                        DrawAdjacentRoadTile(cell);
+                    }
+                    else
+                    {
+                        Debug.Log("cell is out of bounds");
+                    }
                 }
             }
         }
-#endif        
-        if (Input.GetMouseButton(0))
+    
+        
+//#endif        
+        /* if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
@@ -264,7 +269,7 @@ public class RoadSystem : MonoBehaviour
                     Debug.Log("cell is out of bounds");
                 }
             }
-        }
+        } */
     }
 
     // 인접 4방(오,왼,아래,위)에 "이미 도로"가 있으면 해당 셀을 다시 그려 연결부 업데이트

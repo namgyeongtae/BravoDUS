@@ -13,7 +13,8 @@ public class SceneUI : CanvasPanel
     [Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
     [Bind("WoodAmount")] private Text _woodAmount;
     private Coroutine _woodAddCoroutine = null;
-    private Coroutine _woodSubCoroutine = null;    private Coroutine _ironSubCoroutine = null;
+    private Coroutine _woodSubCoroutine = null;
+    
     [Header("SideGroup")]
     [Bind("BuildButton")] private UIButton _buildButton;
     [Bind("RoadButton")] private UIButton _roadButton;
