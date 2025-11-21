@@ -20,9 +20,11 @@ public class EventManager : IManagerBase
 
         // _cityStat = Managers.Data.LoadData<CityStat>("CityStat"); 어쨌든 현재 유저의 도시 스탯을 로드 (이 방식이 아닐 수 있음)
     
-        _events.Add(EventType.FireRiskEvent, new FireEventController(0.01f));
+        if (!_events.ContainsKey(EventType.FireRiskEvent))
+            _events.Add(EventType.FireRiskEvent, new FireEventController(0.01f));
         // _events.Add(EventType.SecurityEvent, new SecurityEventController(0.01f));
-        _events.Add(EventType.InjureEvent, new InjureEventController(0.01f));
+        if (!_events.ContainsKey(EventType.InjureEvent))
+            _events.Add(EventType.InjureEvent, new InjureEventController(0.01f));
     }
 
     public void Update()
