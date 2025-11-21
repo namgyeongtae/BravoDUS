@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneUI : CanvasPanel
@@ -28,6 +30,7 @@ public class SceneUI : CanvasPanel
 
     public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
 
+    int delta;
 
     protected override void Initialize()
     {
@@ -127,5 +130,25 @@ public class SceneUI : CanvasPanel
                 // _ironParticleAttractor.AddParticle(particle);
                 break;
         }
+    }
+
+    public void BuildingHappiness(Building building)
+    {
+        delta = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingName == building.name).Happiness;
+    }
+
+    public void BuildingPopulation(Building building)
+    {
+        delta = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingName == building.name).Population;
+    }
+
+    public void ApplyHappinessChange()
+    {
+        CityManager.Instance.happinessSystem.ApplyHappinessChange(delta);
+    }
+
+    public void ApplyPopulationChange()
+    {
+        CityManager.Instance.populationSystem.ApplyPopulationChange(delta);
     }
 }

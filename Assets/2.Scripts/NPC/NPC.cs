@@ -10,13 +10,13 @@ public class NPC : MonoBehaviour
         PopulationSystem = FindFirstObjectByType<PopulationSystem>();
     }
 
-    private void OnEnable()
-    {
-        PopulationSystem.AddPopulation();
-    }
+    //private void OnEnable()
+    //{
+    //    PopulationSystem.AddPopulation();
+    //}
 
-    private void OnDisable()
-    {
-        PopulationSystem.RemovePopulation();
-    }
+    //private void OnDisable()
+    //{
+    //    PopulationSystem.RemovePopulation();
+    //}
 }
