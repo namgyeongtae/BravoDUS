@@ -10,7 +10,7 @@ public class HappinessSystem : MonoBehaviour
     [Header("UI")]
     public Image targetImage; // 표시할 아이콘 UI
     
-    public int happiness = 0; // 행복도 수치 (0~100)
+    int happiness = 100; // 행복도 수치
     float productivityMultiplier = 1.0f;
     float populationChangeRate;
 
@@ -31,22 +31,15 @@ public class HappinessSystem : MonoBehaviour
 
     void Update()
     {
-        // 테스트 입력
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            happiness += 10;
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            happiness -= 10;
-
         // 범위 제한
-        happiness = Mathf.Clamp(happiness, 0, 100);
+        //happiness = Mathf.Clamp(happiness, 0, 100);
 
         // 아이콘 갱신 (같은 아이콘이면 교체 안함)
-        UpdateIcon();
+        //UpdateIcon();
         // 생산성 배율 갱신
-        UpdateProductivity();
+        //UpdateProductivity();
         // 인구 감소&증가 확률 갱신
-        UpdatePopulationChangeMultiplier();
+        //UpdatePopulationChangeMultiplier();
     }
 
     // 현재 행복도 구간에 맞는 아이콘으로 교체

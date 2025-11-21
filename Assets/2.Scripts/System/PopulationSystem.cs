@@ -9,14 +9,17 @@ public class PopulationSystem : MonoBehaviour
 
     GameObject npc;
 
-    int population;
+    int currentPopulation;
+    int maxPopulation;
 
     List<GameObject> npcs = new List<GameObject>();
 
     void Update()
     {
-        spawnNpc();
-        RemoveLastNpc();
+        Mathf.Clamp(currentPopulation, 0, CityManager.Instance.happinessSystem.GetHappiness());
+
+        //spawnNpc();
+        //RemoveLastNpc();
     }
 
     void spawnNpc()
@@ -41,21 +44,32 @@ public class PopulationSystem : MonoBehaviour
         }
     }
 
-    public int GetPopulation()
+    public int GetCurrentPopulation()
     {
-        return population;
+        return currentPopulation;
+    }
+
+    public int GetMaxPopulation()
+    {
+        return maxPopulation;
+    }
+
+    public void ApplyPopulationChange(int delta)
+    {
+        currentPopulation += delta;
+        maxPopulation += delta;
     }
 
     // 인구 수 증가
-    public void AddPopulation()
-    {
-        population++;
-    }
+    //public void AddPopulation()
+    //{
+    //    population++;
+    //}
 
     // 인구 수 감소
-    public void RemovePopulation()
-    {
-        population--;      
-        population = Mathf.Max(population, 0); // 범위 제한
-    }
+    //public void RemovePopulation()
+    //{
+    //    population--;      
+    //    population = Mathf.Max(population, 0); // 범위 제한
+    //}
 }

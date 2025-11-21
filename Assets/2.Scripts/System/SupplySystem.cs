@@ -37,7 +37,7 @@ public class SupplySystem : MonoBehaviour
 
     void Update()
     {
-        RecalculateSupply();
+        //RecalculateSupply();
         UpdateText();
     }
 
@@ -53,17 +53,17 @@ public class SupplySystem : MonoBehaviour
         supplyText.text = supplyRate.ToString() + "%";
     }
 
-    void RecalculateSupply()
-    {
-        food = foodSystem.GetFood();
-        population = populationSystem.GetPopulation();
+    //void RecalculateSupply()
+    //{
+    //    food = foodSystem.GetFood();
+    //    population = populationSystem.GetPopulation();
 
-        // 보급률 = (식량 / 인구 수) X 100% // RoundToInt : 소수점 첫번째 자리에서 반올림
-        supplyRate = (population > 0) ? Mathf.RoundToInt((float)food / population * 100) : 0;
+    //    // 보급률 = (식량 / 인구 수) X 100% // RoundToInt : 소수점 첫번째 자리에서 반올림
+    //    supplyRate = (population > 0) ? Mathf.RoundToInt((float)food / population * 100) : 0;
 
-        // 범위 제한
-        supplyRate = Mathf.Max(supplyRate, 0);
-    }
+    //    // 범위 제한
+    //    supplyRate = Mathf.Max(supplyRate, 0);
+    //}
 
     // 현재 보급률 구간에 따른 행복도 변화량 적용
     void UpdateHappinessBySupply()
