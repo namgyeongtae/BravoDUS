@@ -54,7 +54,7 @@ public class TaxSystem : MonoBehaviour
     void RecalculateTaxAmount()
     {
         // RoundToInt : 소수점 첫번째 자리에서 반올림
-        taxAmount = Mathf.RoundToInt(populationSystem.GetPopulation() * taxUnit * (float)taxRate / 100);
+        taxAmount = Mathf.RoundToInt(populationSystem.GetCurrentPopulation() * taxUnit * (float)taxRate / 100);
     }
 
     // 현재 세율 구간에 따른 행복도 변화량 적용
