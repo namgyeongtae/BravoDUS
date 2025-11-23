@@ -132,6 +132,9 @@ public class Building : MonoBehaviour
             fireStationRole.RegisterBuilding(this);
         }
         //////////////////////////////////////////////////////////
+         
+        Managers.UI.GetUI<SceneUI>().BuildingHappiness(this);
+        Managers.UI.GetUI<SceneUI>().BuildingPopulation(this);
 
         Debug.Log($"건설 완료: {gameObject.name}, Level: {Level}, State: {CurrentState}");
 

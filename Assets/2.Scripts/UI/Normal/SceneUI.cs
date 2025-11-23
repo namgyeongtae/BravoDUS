@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -24,6 +25,12 @@ public class SceneUI : CanvasPanel
     [Bind("QuestionButton")] private UIButton _questionButton;
     [Bind("MenuButton")] private UIButton _menuButton;
 
+    [Header("Eco System")]
+    [Bind("HappinessSlider")] private Image _happinessSlider;
+    [Bind("HappinessText")] private TextMeshProUGUI _happinessText;
+    [Bind("PopulationSlider")] private Image _populationSlider;
+    [Bind("PopulationText")] private TextMeshProUGUI _populationText;
+
     [Header("Build")]
     [Bind("UIBuildingSelection")] private UIBuildingSelection _buildingSelection;
 
@@ -31,7 +38,6 @@ public class SceneUI : CanvasPanel
 
     public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
 
-    int delta;
 
     protected override void Initialize()
     {
@@ -135,21 +141,17 @@ public class SceneUI : CanvasPanel
 
     public void BuildingHappiness(Building building)
     {
-        delta = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingName == building.name).Happiness;
+        int happiness = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingType == building.BuildingType).Happiness;
+        CityManager.Instance.happinessSystem.ApplyHappinessChange(happiness);
+
+        _happinessText.text = $"{CityManager.Instance.happinessSystem.GetHappiness()}";
     }
 
     public void BuildingPopulation(Building building)
     {
-        delta = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingName == building.name).Population;
-    }
+        int population = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingType == building.BuildingType).Population;
+        CityManager.Instance.populationSystem.ApplyPopulationChange(population);
 
-    public void ApplyHappinessChange()
-    {
-        CityManager.Instance.happinessSystem.ApplyHappinessChange(delta);
-    }
-
-    public void ApplyPopulationChange()
-    {
-        CityManager.Instance.populationSystem.ApplyPopulationChange(delta);
+        _populationText.text = $"{CityManager.Instance.populationSystem.GetCurrentPopulation()}/{CityManager.Instance.populationSystem.GetMaxPopulation()}";
     }
 }

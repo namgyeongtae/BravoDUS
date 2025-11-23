@@ -26,8 +26,8 @@ public class CityManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateCityState();
-        cityUI.UpdateUI(city);
+        /* UpdateCityState();
+        cityUI.UpdateUI(city); */
     }
 
     void UpdateCityState()
