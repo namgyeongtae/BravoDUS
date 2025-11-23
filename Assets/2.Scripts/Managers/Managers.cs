@@ -10,6 +10,7 @@ public class Managers
     private static ItemManager _item = new ItemManager();
     private static ConstructManager _construct = new ConstructManager();
     private static SOManager _so = new SOManager();
+    private static LevelManager _level = new LevelManager();
 
     public static CommodityManager Commodity => _commodity;
     public static ResourceManager Resource => _resource;
@@ -19,6 +20,7 @@ public class Managers
     public static ItemManager Item => _item;
     public static ConstructManager Construct => _construct;
     public static SOManager SO => _so;
+    public static LevelManager Level => _level;
     public void Init()
     {
         _commodity.Init();
@@ -28,6 +30,7 @@ public class Managers
         _item.Init();
         _construct.Init();
         _so.Init();
+        _level.Init();
     }
 
     public void Update()

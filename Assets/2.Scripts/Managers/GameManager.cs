@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 
     private Managers _managers = new Managers();
 
+    public Managers Managers => _managers;
+
     private void Awake()
     {
         Instance = this;

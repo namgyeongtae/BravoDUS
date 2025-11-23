@@ -40,6 +40,19 @@
       "description": "기본"
     },
     {
+      "buildingName": "FireStation",
+      "level": 1,
+      "requiredResources": [
+        {"type": 1, "amount": 0},
+        {"type": 2, "amount": 0}
+      ],
+      "requiredGovernmentLevel": 0,
+      "constructionTime": 5,
+      "productionRate": 5.0,
+      "cycleSeconds": 5,
+      "description": "기본"
+    },
+    {
       "buildingName": "PoliceOffice",
       "level": 1,
       "requiredResources": [
@@ -53,10 +66,10 @@
       "description": "기본"
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 1,
       "requiredResources": [
-        {"type": 1, "amount": 5000},
+        {"type": 1, "amount": 50},
         {"type": 2, "amount": 0}
       ],
       "requiredGovernmentLevel": 0,
@@ -66,7 +79,7 @@
       "description": "기본"
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 2,
       "requiredResources": [
         {"type": 1, "amount": 10},
@@ -79,7 +92,7 @@
       "description": "소량 목재 보상"
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 3,
       "requiredResources": [
         {"type": 1, "amount": 100},
@@ -92,7 +105,7 @@
       "description": ""
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 4,
       "requiredResources": [
         {"type": 1, "amount": 15},
@@ -105,7 +118,7 @@
       "description": ""
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 5,
       "requiredResources": [
         {"type": 1, "amount": 15},
@@ -118,7 +131,7 @@
       "description": "중간 성장 체감"
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 6,
       "requiredResources": [
         {"type": 1, "amount": 20},
@@ -131,7 +144,7 @@
       "description": ""
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 7,
       "requiredResources": [
         {"type": 1, "amount": 20},
@@ -144,7 +157,7 @@
       "description": ""
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 8,
       "requiredResources": [
         {"type": 1, "amount": 25},
@@ -157,7 +170,7 @@
       "description": ""
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 9,
       "requiredResources": [
         {"type": 1, "amount": 25},
@@ -170,7 +183,7 @@
       "description": "거의 최대치"
     },
     {
-      "buildingName": "WoodCraft",
+      "buildingName": "Woodcraft",
       "level": 10,
       "requiredResources": [
         {"type": 1, "amount": 30},
