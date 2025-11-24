@@ -76,7 +76,7 @@ public class AStar
                 if (closedSet.Contains(checkNode)) continue;
 
                 TileType tileType = Managers.Construct.GridHandler.GetGridTileType(nextX, nextY);
-                if (tileType == TileType.Field || tileType == TileType.Road)
+                if (tileType == TileType.Road)
                 {
                     int newGCost = curNode.gCost + 1;
 

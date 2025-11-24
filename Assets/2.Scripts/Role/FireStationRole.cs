@@ -92,7 +92,7 @@ public class FireStationRole : RoleHandler
                 int nextY = cell.y + dirY[i];
 
                 TileType tileType = Managers.Construct.GridHandler.GetGridTileType(nextX, nextY);
-                if (tileType == TileType.Field || tileType == TileType.Road)
+                if (tileType == TileType.Road)
                 {
                     isFound = true;
                     spawnCell = new Vector3Int(nextX, nextY, 0);
@@ -115,7 +115,11 @@ public class FireStationRole : RoleHandler
 
             Vector3Int truckCell = Managers.Construct.GridHandler.WorldToCell(truck.transform.position);
 
-            truck.SetDestination(truckCell, targetBuilding);
+            bool isSuccess = truck.SetDestination(truckCell, targetBuilding);
+            if (!isSuccess)
+            {
+                Managers.Resource.Destroy(truck.gameObject);
+            }
         }
     }
 

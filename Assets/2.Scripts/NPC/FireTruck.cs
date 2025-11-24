@@ -31,8 +31,10 @@ public class FireTruck : MonoBehaviour
         
     }
 
-    public void SetDestination(Vector3Int startCell, Building target)
+    public bool SetDestination(Vector3Int startCell, Building target)
     {
+        bool isSuccess = false;
+
         int[] dirX = {0, 1, 0, -1};
         int[] dirY = {-1, 0, 1, 0};
         
@@ -40,6 +42,8 @@ public class FireTruck : MonoBehaviour
 
         bool isFound = false;
         Vector3Int destinationCell = Vector3Int.zero;
+
+        _targetBuilding = target;
 
         foreach (var cell in cells)
         {
@@ -49,11 +53,10 @@ public class FireTruck : MonoBehaviour
                 int nextY = cell.y + dirY[i];
 
                 TileType tileType = Managers.Construct.GridHandler.GetGridTileType(nextX, nextY);
-                if (tileType == TileType.Field || tileType == TileType.Road)
+                if (tileType == TileType.Road)
                 {
                     isFound = true;
                     _destinationCell = new Vector3Int(nextX, nextY, 0);
-                    _targetBuilding = target;
                     break;
                 }
             }
@@ -69,15 +72,33 @@ public class FireTruck : MonoBehaviour
         }
         else
         {
-            FindPath();
+            isSuccess = FindPath();
         }
+
+        if (!isSuccess)
+        {
+            var inc = Managers.Event.Fire.IncidentBuildings[_targetBuilding];
+
+            if (Managers.Event.Fire.ResolvingWorkForces.ContainsKey(inc))
+            {
+                Managers.Event.Fire.ResolvingWorkForces.Remove(inc);
+            }
+        }
+
+        return isSuccess;
     }
 
-    private void FindPath()
+    private bool FindPath()
     {
         _path = AStar.AStarPathFinding(_startCell, _destinationCell);
 
-        Dispatch();
+        if (_path.Count > 0)
+        {
+            Dispatch();
+            return true;
+        }
+
+        return false;
     }
 
     private void Dispatch()
