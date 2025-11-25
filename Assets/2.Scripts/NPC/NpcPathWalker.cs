@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.ShaderGraph.Legacy;
 using UnityEngine;
 using UnityEngine.Rendering;
 

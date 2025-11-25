@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 [DefaultExecutionOrder(0)]
