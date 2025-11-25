@@ -12,21 +12,21 @@ public class HappinessSystem : MonoBehaviour
     
     int happiness = 100; // 행복도 수치
     float productivityMultiplier = 1.0f;
-    float populationChangeRate;
+    //float populationChangeRate;
 
     // 아이콘 캐싱
-    Sprite sad, neutral, smile, happy;
+    //Sprite sad, neutral, smile, happy;
 
     // 현재 표시 중인 아이콘
-    Sprite currentSprite;
+    //Sprite currentSprite;
 
     void Start()
     {
         // 시작 시 한번만 로드
-        sad = Resources.Load<Sprite>("Icon/sad");
-        neutral = Resources.Load<Sprite>("Icon/neutral");
-        smile = Resources.Load<Sprite>("Icon/smile");
-        happy = Resources.Load<Sprite>("Icon/happy");
+        //sad = Resources.Load<Sprite>("Icon/sad");
+        //neutral = Resources.Load<Sprite>("Icon/neutral");
+        //smile = Resources.Load<Sprite>("Icon/smile");
+        //happy = Resources.Load<Sprite>("Icon/happy");
     }
 
     void Update()
@@ -45,23 +45,23 @@ public class HappinessSystem : MonoBehaviour
     // 현재 행복도 구간에 맞는 아이콘으로 교체
     void UpdateIcon()
     {
-        Sprite newSprite = null;
+        //Sprite newSprite = null;
 
-        if (happiness < 30)         // 불만
-            newSprite = sad;
-        else if (happiness < 60)    // 보통
-            newSprite = neutral;
-        else if (happiness < 90)    // 만족
-            newSprite = smile;
-        else 
-            newSprite = happy;      // 행복
+        //if (happiness < 30)         // 불만
+        //    newSprite = sad;
+        //else if (happiness < 60)    // 보통
+        //    newSprite = neutral;
+        //else if (happiness < 90)    // 만족
+        //    newSprite = smile;
+        //else 
+        //    newSprite = happy;      // 행복
 
-        // 새로운 아이콘이 현재 아이콘과 다를 때만 교체
-        if (newSprite != currentSprite)
-        {
-            currentSprite = newSprite;
-            targetImage.sprite = currentSprite;
-        }
+        //// 새로운 아이콘이 현재 아이콘과 다를 때만 교체
+        //if (newSprite != currentSprite)
+        //{
+        //    currentSprite = newSprite;
+        //    targetImage.sprite = currentSprite;
+        //}
     }
 
     // 생산성 배율 갱신
