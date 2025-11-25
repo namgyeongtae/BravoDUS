@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote Group
+  m_GUID: 987c93850c81e9d49b821381c6ae8f9d
+  m_SerializeEntries:
+  - m_GUID: 00df00f2e7486b24fb8178a93246c962
+    m_Address: UIBuildProgress
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ca3bb9911fa88141b9357c3ae1b3289
+    m_Address: UIWorkForceSlot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a22868beb7ae8d45b498e582cbc6c9e
+    m_Address: UIFireEventWarning
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d3df9b69aed2b149827166460b3acc3
+    m_Address: UIFireResolve
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3600c8da902edb2418268e10f0e0d042
+    m_Address: UIBuildingMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52e2ce0c725d4c442894b879c9c5f0fa
+    m_Address: UIWorkerSlot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f0d7cb4771b6bc47b4287d5e3073d79
+    m_Address: UIBuildingSelection
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c9eefb639f2ee04b926840cc781be7f
+    m_Address: UIWorkForce
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92c71e910679fe044a2e6793c7e1abbc
+    m_Address: FadeSceneTransition
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95de9ab9a23ff5942ab85ce10b7d3c01
+    m_Address: UIBuildPlacement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8e6724c25f6aea42b3b9858d177f504
+    m_Address: UIBuildButtonGroup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad3dd092f3f9047478d644470cf5710d
+    m_Address: UIToastPopup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aedcd88ee7974114593c36a0b78c2514
+    m_Address: UIBuildingSlot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0c0b9e94cd591c4e847f07124b54958
+    m_Address: BuildingActionButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d961c30fb66f8a24eb28c3e986bd7ab9
+    m_Address: UIRoadPlacement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc311a67a88a0d840a6267c6bf862519
+    m_Address: UIPatientManage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e80f962ea2c34a6478c9bf2c04f00706
+    m_Address: UIResourceGather
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: edd07b35c484ed54e9858ff02eaf6379
+    m_Address: UIAlarmNotWorkForce
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef7d3d4157d2936448bb9e7c32fbb8cb
+    m_Address: UIHirePanel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 16227bcdb1620b6429077f5587763011, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f63638ea145420b4286120e3837a8984, type: 2}
+    - {fileID: 11400000, guid: fffa558fd55575449bcaa97a8488174e, type: 2}

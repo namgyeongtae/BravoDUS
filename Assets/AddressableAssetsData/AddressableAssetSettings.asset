@@ -24,11 +24,11 @@ MonoBehaviour:
   m_InternalBundleIdMode: 1
   m_AssetLoadMode: 0
   m_BundledAssetProviderType:
-    m_AssemblyName: 
-    m_ClassName: 
+    m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider
   m_AssetBundleProviderType:
-    m_AssemblyName: 
-    m_ClassName: 
+    m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider
   m_IgnoreUnsupportedFilesInBuild: 0
   m_UniqueBundleIds: 1
   m_EnableJsonCatalog: 0
@@ -53,12 +53,13 @@ MonoBehaviour:
     m_Id: 48dbf54d72a8db84595f5b38a6b83e3a
   m_RemoteCatalogLoadPath:
     m_Id: 305bde483e6b9c14dabaeae3d744f601
-  m_ContentStateBuildPathProfileVariableName: <default settings path>
+  m_ContentStateBuildPathProfileVariableName: <custom>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: 3219466f6c067e14ea17fd014ddefd1d, type: 2}
   - {fileID: 11400000, guid: 7031ecbd44ecdd743a24e1770eb88e7a, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
@@ -70,7 +71,7 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 305bde483e6b9c14dabaeae3d744f601
-        m_Value: <undefined>
+        m_Value: 'https://s3.ap-southeast-2.amazonaws.com/com.bravo.citybuilder/[BuildTarget]'
       - m_Id: 48dbf54d72a8db84595f5b38a6b83e3a
         m_Value: 'ServerData/[BuildTarget]'
       - m_Id: 61cb6f371aa593245848d48f0ef46ce9
