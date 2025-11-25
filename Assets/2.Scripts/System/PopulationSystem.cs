@@ -9,8 +9,8 @@ public class PopulationSystem : MonoBehaviour
 
     GameObject npc;
 
-    int currentPopulation;
-    int maxPopulation;
+    int currentPopulation = 1;
+    int maxPopulation = 1;
 
     List<GameObject> npcs = new List<GameObject>();
 

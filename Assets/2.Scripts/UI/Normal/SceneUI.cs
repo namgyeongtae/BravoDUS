@@ -38,6 +38,7 @@ public class SceneUI : CanvasPanel
 
     public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
 
+    int delta;
 
     protected override void Initialize()
     {
