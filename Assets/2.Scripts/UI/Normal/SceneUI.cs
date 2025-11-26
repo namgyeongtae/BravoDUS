@@ -13,8 +13,8 @@ public class SceneUI : CanvasPanel
     [Bind("Level")] private Text _levelText;
 
     [Header("Commodity")]
-    [Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
-    [Bind("WoodAmount")] private Text _woodAmount;
+    //[Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
+    [Bind("MoneyText")] private TextMeshProUGUI _moneyText;
     private Coroutine _woodAddCoroutine = null;
     private Coroutine _woodSubCoroutine = null;
     
@@ -36,7 +36,7 @@ public class SceneUI : CanvasPanel
 
     public UIBuildingSelection BuildingSelection => _buildingSelection;
 
-    public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
+    //public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
 
     int delta;
 
@@ -50,7 +50,7 @@ public class SceneUI : CanvasPanel
 
     public override void Open()
     {
-        _woodAmount.text = Managers.Commodity.Money.ToString();
+        _moneyText.text = Managers.Commodity.Money.ToString();
     }
 
     private void OnBuildButtonClicked()
@@ -65,27 +65,27 @@ public class SceneUI : CanvasPanel
     }
     private IEnumerator CoAddCommodity(float amount)
     {
-        float currentAmount = Convert.ToSingle(_woodAmount.text);
+        float currentAmount = Convert.ToSingle(_moneyText.text);
 
         while (currentAmount < amount)
         {
             currentAmount += 1;
             yield return new WaitForSeconds(0.01f);
 
-            _woodAmount.text = currentAmount.ToString();
+            _moneyText.text = currentAmount.ToString();
         }
     }
 
     private IEnumerator CoSubCommodity(float amount)
     {
-        float currentAmount = Convert.ToSingle(_woodAmount.text);
+        float currentAmount = Convert.ToSingle(_moneyText.text);
 
         while (currentAmount > amount)
         {
             currentAmount -= 1;
             yield return new WaitForSeconds(0.01f);
 
-            _woodAmount.text = currentAmount.ToString();
+            _moneyText.text = currentAmount.ToString();
         }
     }
 
@@ -132,7 +132,7 @@ public class SceneUI : CanvasPanel
         switch (type)
         {
             case IngredientType.Wood:
-                _woodParticleAttractor.AddParticle(particle);
+                //_woodParticleAttractor.AddParticle(particle);
                 break;
             case IngredientType.Iron:
                 // _ironParticleAttractor.AddParticle(particle);
