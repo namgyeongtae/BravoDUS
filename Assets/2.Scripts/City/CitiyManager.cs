@@ -8,7 +8,6 @@ public class CityManager : MonoBehaviour
 
     public CityUI cityUI;
     public PopulationSystem populationSystem;
-    public MoneySystem moneySystem;
     public HappinessSystem happinessSystem;
     public TaxSystem taxSystem;
     public DateSystem dateSystem;
@@ -36,7 +35,6 @@ public class CityManager : MonoBehaviour
     {
         city.currentPopulation = populationSystem.GetCurrentPopulation();
         city.maxPopulation = populationSystem.GetMaxPopulation();
-        city.money = moneySystem.GetMoney();
         city.happiness = happinessSystem.GetHappiness();
         city.taxRate = taxSystem.GetTaxRate();
     }
