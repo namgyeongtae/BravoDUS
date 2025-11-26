@@ -79,7 +79,8 @@ public class UIBuildingSelection : CanvasPanel
 
     private UIBuildingActionButton SpawnActionButton(Building building, BuildingAction buildingAction)
     {
-        UIBuildingActionButton button = Managers.Resource.Instantiate("UI/Buttons/BuildingActionButton")
+        UIBuildingActionButton button = Managers.Resource
+                                                .InstantiateAddressable("BuildingActionButton", Vector3.zero, Quaternion.identity)
                                                 .GetComponent<UIBuildingActionButton>();
         button.SettingUI(buildingAction);
         button.BindEvent(_actionDict[buildingAction.actionType]);

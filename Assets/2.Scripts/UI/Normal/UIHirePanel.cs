@@ -67,7 +67,7 @@ public class UIHirePanel : CanvasPanel
         var jobList = Managers.HR.WorkForceDictionary[tab];
         foreach (var job in jobList)
         {
-            var slot = Managers.Resource.Instantiate("UI/UIWorkerSlot").GetComponent<UIWorkerSlot>();
+            var slot = Managers.Resource.InstantiateAddressable("UIWorkerSlot", Vector3.zero, Quaternion.identity, _jobScroll.content).GetComponent<UIWorkerSlot>();
             slot.transform.SetParent(_jobScroll.content);
             slot.transform.localScale = Vector3.one;
             slot.SetSlot(job);

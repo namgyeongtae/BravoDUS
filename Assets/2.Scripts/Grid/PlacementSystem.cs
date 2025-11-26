@@ -404,41 +404,4 @@ public class PlacementSystem : MonoBehaviour
 
         return false;
     }
-
-    private void OnDrawGizmos()
-    {
-        if (_currentBuilding == null) return;
-
-        Vector3 startPos;
-
-        bool isEven = _buildingSize % 2 == 0;
-
-        if (!isEven)
-        {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-        else
-        {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-
-        // Gizmos.DrawCube(startPos, new Vector3(_gridHandler.CellSize.x, _gridHandler.CellSize.x, _gridHandler.CellSize.x));
-
-        for (int i = 0; i < _buildingSize; i++)
-        {
-            for (int j = 0; j < _buildingSize; j++)
-            {
-                float posX = startPos.x + (_gridHandler.CellSize.x * i);
-                float posZ = startPos.z + (_gridHandler.CellSize.y * j);
-
-                Gizmos.DrawCube(new Vector3(posX, 0, posZ), new Vector3(_gridHandler.CellSize.x, _gridHandler.CellSize.x, _gridHandler.CellSize.x));
-            }
-        }
-    }
 }

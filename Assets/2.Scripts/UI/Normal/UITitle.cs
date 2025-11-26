@@ -1,9 +1,15 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 public class UITitle : CanvasPanel
 {
     private Animator _animator;
+
+    [SerializeField] private GameObject _downloadPanel;
+    [SerializeField] private Image _downloadProgress;
+    [SerializeField] private Text _downloadProgressText;
 
 
     protected override void Start()
@@ -20,10 +26,69 @@ public class UITitle : CanvasPanel
     {
         Debug.Log("OnStartButtonClicked");
 
+        // 이미 다운 받았는지 확인
+        var downloadSize = await Addressables.GetDownloadSizeAsync("default");
+        if(downloadSize > 0)
+        {
+            await DownloadAsync("default");
+        }
+        
+        await Managers.Level.LoadSceneAsync("MainScene");
+        
         _animator.SetTrigger("Fade");
 
-        await Managers.Level.LoadSceneAsync("MainScene");
 
         GameManager.Instance.Managers.Init();
+    }
+
+    public async UniTask DownloadAsync(string label)
+    {
+        _downloadPanel.SetActive(true);
+        _downloadProgress.fillAmount = 0;
+        _downloadProgressText.text = "0.00 %";
+
+        await Addressables.InitializeAsync();
+
+        try
+        {
+            var downLoadSizeHandle = Addressables.GetDownloadSizeAsync(label);
+            var downLoadSize = await downLoadSizeHandle;
+            
+            Debug.Log($"서버 링크: {Addressables.RuntimePath}");
+            Debug.Log($"다운로드 사이즈 :{downLoadSize} bytes");
+            
+            // Handle를 해제해야 합니다
+            Addressables.Release(downLoadSizeHandle);
+            
+            if(downLoadSize > 0)
+            {
+                var handle = Addressables.DownloadDependenciesAsync(label);
+                while(!handle.IsDone)
+                {
+                    var downStatus = handle.GetDownloadStatus();
+                    Debug.Log($"{downStatus.DownloadedBytes}/{downStatus.TotalBytes}");
+                    Debug.Log($"{downStatus.Percent * 100f} %");
+
+                    _downloadProgress.fillAmount = downStatus.Percent;
+                    _downloadProgressText.text = $"{downStatus.Percent * 100f:F2} %";
+
+                    await UniTask.Yield();
+                }
+
+                /* if(handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                {
+                    //성공
+                    await OnStartButtonClicked();
+                } */
+                
+                Addressables.Release(handle);
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"다운로드 사이즈 확인 실패 (라벨: {label}): {e.Message}");
+            Debug.LogError($"에러 타입: {e.GetType().Name}");
+            throw;
+        }
     }
 }

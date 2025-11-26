@@ -87,8 +87,8 @@ public class FireEventController : EventController
 
         _incidentBuildings.Add(_targetBuilding, inc);
 
-        var fireVFX = Managers.Resource.Instantiate("VFX/FireSmokeVFX", _targetBuilding.transform).GetComponent<ParticleSystem>();
-        fireVFX.transform.localPosition = Vector3.zero;
+        var fireVFX = Managers.Resource.InstantiateAddressable("FireSmokeVFX", Vector3.zero, Quaternion.identity, _targetBuilding.transform).GetComponent<ParticleSystem>();
+        // fireVFX.transform.localPosition = Vector3.zero;
         fireVFX.Play();
 
         var uiWarning = Managers.UI.AddPanel<UIFireEventWarning>(_targetBuilding, true);

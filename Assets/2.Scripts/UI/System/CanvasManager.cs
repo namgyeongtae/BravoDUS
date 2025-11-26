@@ -52,7 +52,7 @@ public class CanvasManager : MonoBehaviour
 
         } */
 
-        GameObject obj = Managers.Resource.Instantiate($"UI/Popup/{name}", transform);
+        GameObject obj = Managers.Resource.InstantiateAddressable($"{name}", Vector3.zero, Quaternion.identity, transform);
         if (obj == null)
         {
             Debug.LogError($"Failed to load prefab: {name}");
@@ -127,7 +127,7 @@ public class CanvasManager : MonoBehaviour
             return null;
         }
 
-        GameObject obj = Managers.Resource.Instantiate($"UI/{name}", transform);
+        GameObject obj = Managers.Resource.InstantiateAddressable($"{name}", Vector3.zero, Quaternion.identity, transform);
         if (obj == null)
         {
             Debug.LogError($"Failed to load prefab: {name}");

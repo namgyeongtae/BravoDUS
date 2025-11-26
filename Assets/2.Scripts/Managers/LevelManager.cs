@@ -1,6 +1,10 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+
 
 public class LevelManager : IManagerBase
 {
@@ -16,10 +20,10 @@ public class LevelManager : IManagerBase
 
     public async UniTask LoadSceneAsync(string sceneName)
     {
-        await FadeIn();
         await UniTask.Delay(1000);
+        await FadeIn();
 
-        var asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        /* var asyncOperation = SceneManager.LoadSceneAsync(sceneName);
         asyncOperation.allowSceneActivation = false;
 
         while (asyncOperation.progress < 0.9f)
@@ -29,6 +33,19 @@ public class LevelManager : IManagerBase
 
         asyncOperation.allowSceneActivation = true;
         await FadeOut(asyncOperation);
+
+        GameManager.Instance.Managers.Init() */;
+         // 어드레서블 씬 로드
+        var handle = Addressables.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        
+        // 진행률이 90% 이상이 될 때까지 대기
+        while (handle.PercentComplete < 0.9f)
+        {
+            await UniTask.Yield();
+        }
+
+        // 씬 활성화 및 페이드 아웃
+        await FadeOut(handle);
 
         GameManager.Instance.Managers.Init();
     }
@@ -47,11 +64,9 @@ public class LevelManager : IManagerBase
         await fadeSceneTransition.AnimateTransitionIn();
     }
 
-    public async UniTask FadeOut(AsyncOperation asyncOperation = null)
+    public async UniTask FadeOut(AsyncOperationHandle<SceneInstance> handle)
     {
-        asyncOperation.allowSceneActivation = true;
-
-        await UniTask.WaitUntil(() => asyncOperation.isDone);
+        await handle.Task;
 
         var fadeSceneTransition = Managers.UI.GetUI<FadeSceneTransition>("FadeSceneTransition");
 

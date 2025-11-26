@@ -69,7 +69,7 @@ public class UIWorkForce : CanvasPanel
 
         for (int i = 0; i < _maxWorkForceCount; i++)
         {
-            var slot = Managers.Resource.Instantiate("UI/UIWorkForceSlot").GetComponent<UIWorkForceSlot>();
+            var slot = Managers.Resource.InstantiateAddressable("UIWorkForceSlot", Vector3.zero, Quaternion.identity, _workForceGroup.transform).GetComponent<UIWorkForceSlot>();
             slot.transform.SetParent(_workForceGroup.transform);
             slot.transform.localScale = Vector3.one;
             _workForceSlots.Add(slot);

@@ -28,7 +28,7 @@ public class UIBuildingMenu : CanvasPanel
     {
         foreach (var buildingData in _buildingSO.buildingDatas)
         {
-            var slot = Managers.Resource.Instantiate("UI/UIBuildingSlot").GetComponent<UIBuildingSlot>();
+            var slot = Managers.Resource.InstantiateAddressable("UIBuildingSlot", Vector3.zero, Quaternion.identity, _buildingScroll.content).GetComponent<UIBuildingSlot>();
             slot.transform.SetParent(_buildingScroll.content);
             slot.transform.localScale = Vector3.one;
             slot.SetSlot(buildingData);
