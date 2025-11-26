@@ -225,16 +225,4 @@ public class FireTruck : MonoBehaviour
 
         Managers.Resource.Destroy(this.gameObject);
     }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-
-        Gizmos.DrawSphere(Managers.Construct.GridHandler.CellToWorld(_startCell.x, _startCell.y), 1f);
-
-        for (int i = 0; i < _path.Count; i++)
-        {
-            Gizmos.DrawSphere(Managers.Construct.GridHandler.CellToWorld(_path[i].x, _path[i].y), 1f);
-        }
-    }
 }

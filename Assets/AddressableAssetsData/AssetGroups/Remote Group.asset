@@ -45,6 +45,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - default
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44c0a1d8171e9c3408c4aca57d83f34a
+    m_Address: FireSmokeVFX
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 52e2ce0c725d4c442894b879c9c5f0fa
     m_Address: UIWorkerSlot
     m_ReadOnly: 0
@@ -65,6 +71,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 92c71e910679fe044a2e6793c7e1abbc
     m_Address: FadeSceneTransition
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94fb057eba3862a4e98a8df4c51cda9c
+    m_Address: MainScene
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
