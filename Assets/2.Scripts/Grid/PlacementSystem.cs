@@ -192,6 +192,7 @@ public class PlacementSystem : MonoBehaviour
                 Managers.Resource.Destroy(hit.collider.gameObject);
                 _currentBuilding = null;
             }
+        }
 #endif
     }
 

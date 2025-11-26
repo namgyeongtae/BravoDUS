@@ -6,10 +6,12 @@ public class CityManager : MonoBehaviour
 
     public CityState city = new CityState();
 
+    public CityUI cityUI;
     public PopulationSystem populationSystem;
     public MoneySystem moneySystem;
     public HappinessSystem happinessSystem;
-    public CityUI cityUI;
+    public TaxSystem taxSystem;
+    public DateSystem dateSystem;
 
     private void Awake()
     {
@@ -26,8 +28,8 @@ public class CityManager : MonoBehaviour
 
     private void Update()
     {
-        /* UpdateCityState();
-        cityUI.UpdateUI(city); */
+        UpdateCityState();
+        cityUI.UpdateUI(city);
     }
 
     void UpdateCityState()
@@ -36,5 +38,6 @@ public class CityManager : MonoBehaviour
         city.maxPopulation = populationSystem.GetMaxPopulation();
         city.money = moneySystem.GetMoney();
         city.happiness = happinessSystem.GetHappiness();
+        city.taxRate = taxSystem.GetTaxRate();
     }
 }
