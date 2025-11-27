@@ -59,17 +59,4 @@ public class PopulationSystem : MonoBehaviour
         currentPopulation += delta;
         maxPopulation += delta;
     }
-
-    // 인구 수 증가
-    //public void AddPopulation()
-    //{
-    //    population++;
-    //}
-
-    // 인구 수 감소
-    //public void RemovePopulation()
-    //{
-    //    population--;      
-    //    population = Mathf.Max(population, 0); // 범위 제한
-    //}
 }

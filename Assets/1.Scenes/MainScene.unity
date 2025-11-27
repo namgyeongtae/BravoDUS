@@ -485,11 +485,12 @@ RectTransform:
   m_Children:
   - {fileID: 113947021}
   - {fileID: 2089225530}
+  - {fileID: 1189523594}
   m_Father: {fileID: 1680361300}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 408, y: -12}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 369, y: -68}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &93296473
@@ -2915,7 +2916,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   populationText: {fileID: 813117480}
   happinessText: {fileID: 1493313028}
-  moneyText: {fileID: 321350419}
   taxRateText: {fileID: 201397949}
 --- !u!1 &413188032
 GameObject:
@@ -3855,7 +3855,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &604390671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7954,6 +7954,126 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174972519}
   m_CullTransparentMesh: 1
+--- !u!1 &1189523593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1189523594}
+  - component: {fileID: 1189523597}
+  - component: {fileID: 1189523596}
+  - component: {fileID: 1189523595}
+  m_Layer: 5
+  m_Name: DateButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1189523594
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189523593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 54859584}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 398, y: 313}
+  m_SizeDelta: {x: 84.1, y: 77.7797}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1189523595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189523593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1189523596}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1189523596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189523593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 5dd815ec59e483c44b7eade45edce2e6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1189523597
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189523593}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1203085700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8313,19 +8433,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1229201795}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 604390671}
-        m_TargetAssemblyTypeName: TaxRatePanel, Assembly-CSharp
-        m_MethodName: DeActivatePanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1229201795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8816,6 +8924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDay: 1
   dateText: {fileID: 2089225531}
+  dateButton: {fileID: 1189523595}
 --- !u!1 &1314381122
 GameObject:
   m_ObjectHideFlags: 0
@@ -10040,7 +10149,6 @@ MonoBehaviour:
     taxRate: 0
   cityUI: {fileID: 403692271}
   populationSystem: {fileID: 1893234406}
-  moneySystem: {fileID: 1341468503}
   happinessSystem: {fileID: 1222389320}
   taxSystem: {fileID: 1717760919}
   dateSystem: {fileID: 1312388177}
@@ -10910,19 +11018,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1556405236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1717760919}
-        m_TargetAssemblyTypeName: TaxSystem, Assembly-CSharp
-        m_MethodName: DecreaseTaxRate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1556405236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11433,19 +11529,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1610359111}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1717760919}
-        m_TargetAssemblyTypeName: TaxSystem, Assembly-CSharp
-        m_MethodName: IncreaseTaxRate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1610359111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11645,19 +11729,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1613521661}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 604390671}
-        m_TargetAssemblyTypeName: TaxRatePanel, Assembly-CSharp
-        m_MethodName: ActivatePanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1621821498
 GameObject:
   m_ObjectHideFlags: 0
@@ -12178,7 +12250,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: -0.00012207031}
   m_SizeDelta: {x: -2292, y: -766}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1704933052
@@ -12301,8 +12373,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6718efba05b83d74c9a1d6ff2c705007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taxText: {fileID: 1679913888}
+  sceneUI: {fileID: 1330242136}
   expected_Happiness_Change_Text: {fileID: 1525256072}
+  taxText: {fileID: 1679913888}
+  taxRateButton: {fileID: 1613521663}
+  closeButton: {fileID: 1229201794}
+  upButton: {fileID: 1610359110}
+  downButton: {fileID: 1556405235}
+  taxRatePanel: {fileID: 604390670}
 --- !u!1001 &1730275703
 PrefabInstance:
   m_ObjectHideFlags: 0
