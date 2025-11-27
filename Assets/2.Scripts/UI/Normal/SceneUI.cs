@@ -27,9 +27,9 @@ public class SceneUI : CanvasPanel
 
     [Header("Eco System")]
     [Bind("HappinessSlider")] private Image _happinessSlider;
-    [Bind("HappinessText")] private TextMeshProUGUI _happinessText;
+    [Bind("Happiness_Text")] private TextMeshProUGUI _happinessText;
     [Bind("PopulationSlider")] private Image _populationSlider;
-    [Bind("PopulationText")] private TextMeshProUGUI _populationText;
+    [Bind("Population_Text")] private TextMeshProUGUI _populationText;
 
     [Header("Build")]
     [Bind("UIBuildingSelection")] private UIBuildingSelection _buildingSelection;

@@ -15,14 +15,12 @@ public class TaxSystem : MonoBehaviour
     int tax; // 세금 금액 (인구수 x 세금률) 
     int expected_Happiness_Change;
 
-    MoneySystem moneySystem;
     DateSystem dateSystem;
     PopulationSystem populationSystem;
     HappinessSystem happinessSystem;
 
     private void Start()
     {
-        moneySystem = CityManager.Instance.moneySystem;
         dateSystem = CityManager.Instance.dateSystem;
         populationSystem = CityManager.Instance.populationSystem;
         happinessSystem = CityManager.Instance.happinessSystem;
@@ -50,7 +48,7 @@ public class TaxSystem : MonoBehaviour
     void OnDayChanged()
     {
         // 세금 징수
-        moneySystem.CollectTax(tax);
+        // moneySystem.CollectTax(tax);
         // 행복도 변화량 적용
         ApplyHappinessByTaxRate();
     }
