@@ -16,3 +16,5 @@ Assembly-CSharp-Editor.csproj
 *.csproj
 .vs/BravoDUS/v17/.suo
 .vs/BravoDUS/v17/fileList.bin
+ServerData
+Assets/AddressableAssetsData/Windows/addressables_content_state.bin

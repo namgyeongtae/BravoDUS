@@ -22,19 +22,7 @@ public class LevelManager : IManagerBase
     {
         await UniTask.Delay(1000);
         await FadeIn();
-
-        /* var asyncOperation = SceneManager.LoadSceneAsync(sceneName);
-        asyncOperation.allowSceneActivation = false;
-
-        while (asyncOperation.progress < 0.9f)
-        {
-            await UniTask.Yield();
-        }
-
-        asyncOperation.allowSceneActivation = true;
-        await FadeOut(asyncOperation);
-
-        GameManager.Instance.Managers.Init() */;
+        
          // 어드레서블 씬 로드
         var handle = Addressables.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         

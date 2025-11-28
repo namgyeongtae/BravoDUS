@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Managers
 {
+    private static CDNManager _cdn = new CDNManager();
     private static CommodityManager _commodity = new CommodityManager();
     private static ResourceManager _resource = new ResourceManager();
     private static UIManager _ui = new UIManager();
@@ -12,6 +13,7 @@ public class Managers
     private static SOManager _so = new SOManager();
     private static LevelManager _level = new LevelManager();
 
+    public static CDNManager CDN => _cdn;
     public static CommodityManager Commodity => _commodity;
     public static ResourceManager Resource => _resource;
     public static UIManager UI => _ui;
@@ -23,6 +25,7 @@ public class Managers
     public static LevelManager Level => _level;
     public void Init()
     {
+        _cdn.Init();
         _commodity.Init();
         _ui.Init();
         _event.Init();

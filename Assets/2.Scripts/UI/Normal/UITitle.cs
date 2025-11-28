@@ -3,6 +3,10 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+#endif
 public class UITitle : CanvasPanel
 {
     private Animator _animator;
@@ -47,22 +51,16 @@ public class UITitle : CanvasPanel
         _downloadProgress.fillAmount = 0;
         _downloadProgressText.text = "0.00 %";
 
-        await Addressables.InitializeAsync();
-
-        try
+        try 
         {
             var downLoadSizeHandle = Addressables.GetDownloadSizeAsync(label);
             var downLoadSize = await downLoadSizeHandle;
-            
-            Debug.Log($"서버 링크: {Addressables.RuntimePath}");
-            Debug.Log($"다운로드 사이즈 :{downLoadSize} bytes");
-            
-            // Handle를 해제해야 합니다
+
             Addressables.Release(downLoadSizeHandle);
-            
+
             if(downLoadSize > 0)
             {
-                var handle = Addressables.DownloadDependenciesAsync(label);
+                var handle = Managers.CDN.DownloadAsync(label);
                 while(!handle.IsDone)
                 {
                     var downStatus = handle.GetDownloadStatus();
@@ -74,12 +72,6 @@ public class UITitle : CanvasPanel
 
                     await UniTask.Yield();
                 }
-
-                /* if(handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
-                {
-                    //성공
-                    await OnStartButtonClicked();
-                } */
                 
                 Addressables.Release(handle);
             }
