@@ -11,7 +11,12 @@ public class ResourceManager
 
     public T LoadSO<T>(string path) where T : ScriptableObject
     {
-        return Resources.Load<T>($"ScriptableObjects/{path}");
+        // return Resources.Load<T>($"ScriptableObjects/{path}");
+        var handle = Addressables.LoadAssetAsync<T>(path);
+
+        handle.WaitForCompletion();
+
+        return handle.Result;
     }
 
     public T Load<T>(string path) where T : Object

@@ -51,10 +51,11 @@ public class RoadSystem : MonoBehaviour
     [SerializeField] private int _size = 1; // 추후 영역 페인트 크기(현재 미사용)
     [SerializeField] private GameObject _constructIndicator; // 설치 미리보기 프리팹
     [SerializeField] private GridHandler _gridHandler;       // 셀 변환/타입 관리
-    [SerializeField] private RoadTileSO _roadTileSO;         // 타일 변형 데이터 모음(SO)
 
     [SerializeField] private RoadType _roadType = RoadType.Dirt; // 흙길/포장 등 종류
     [SerializeField] private RoadMode _roadMode = RoadMode.Install;
+    
+    private RoadTileSO _roadTileSO;         // 타일 변형 데이터 모음(SO)
 
     private List<RoadData> _roadDataList = new(); // 추후 영역/경로 기록용(현재 미사용)
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType]; // 선택형 타일셋
@@ -74,6 +75,8 @@ public class RoadSystem : MonoBehaviour
 
     void Start()
     {
+        _roadTileSO = Managers.Resource.LoadSO<RoadTileSO>("RoadTileSO");
+
         InitRoadTiles();
     }
 

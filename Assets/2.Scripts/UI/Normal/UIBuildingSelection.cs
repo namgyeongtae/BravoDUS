@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class UIBuildingSelection : CanvasPanel
 {
-    [SerializeField] private BuildingSelectionSO _buildingSelectionSO;
     [SerializeField] private float _spacing = 10f;
 
     private bool _isOpen = false; // 빌딩 선택 창 열려있는지 여부 (토글용)
@@ -17,10 +16,18 @@ public class UIBuildingSelection : CanvasPanel
 
     private BuildingType _selectedBuildingType = BuildingType.None;
     private Building _selectedBuilding = null;
+    private BuildingSelectionSO _buildingSelectionSO;
 
     private Coroutine _animateCoroutine = null;
 
     public bool IsOpen => _isOpen;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        _buildingSelectionSO = Managers.Resource.LoadSO<BuildingSelectionSO>("BuildingSelectionSO");
+    }
 
     protected override void Initialize()
     {

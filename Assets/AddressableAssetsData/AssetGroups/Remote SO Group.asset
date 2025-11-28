@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote SO Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote SO Group
+  m_GUID: 592161426e7350f49bff283e4da7fe14
+  m_SerializeEntries:
+  - m_GUID: 0df34d16bfd498644b4b7fc8ed16803e
+    m_Address: BuildingSelectionSO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67d72351246e58b4e93edf2f5a92b80a
+    m_Address: RoadTileSO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ac41ad22829dd9448f3e0c334d1b028
+    m_Address: BuildingSO
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 16227bcdb1620b6429077f5587763011, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 27af6749413c94c4ea5085b22d3cbf50, type: 2}
+    - {fileID: 11400000, guid: 704dc3656c31f6044acaf10573dc3c1b, type: 2}
