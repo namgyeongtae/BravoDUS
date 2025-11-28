@@ -59,12 +59,8 @@ public class CDNManager : IManagerBase
         Debug.Log($"[CDNManager] GetResourceVersionForApp '{appVersion}'");
         switch (appVersion)
         {
-            case "1.0.0": return "0.1.2";
-            case "1.0.1": return "0.1.2";
-            case "1.0.2": return "0.1.3";
-            case "1.0.3": return "0.1.4";
-            case "1.0.4": return "0.1.5";
-            default:      return "0.1.6";
+            case "1.0.4": return "0.1.6";
+            default:      return "0.1.7";
         }
     }
 }

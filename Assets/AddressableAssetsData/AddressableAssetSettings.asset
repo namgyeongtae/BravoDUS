@@ -73,7 +73,7 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 0c3416fcc96345849a8c3caffc150ec9
-        m_Value: 0.1.5
+        m_Value: 0.1.6
       - m_Id: 305bde483e6b9c14dabaeae3d744f601
         m_Value: 'https://s3.ap-southeast-2.amazonaws.com/com.bravo.citybuilder/[BuildTarget]/[CatalogVersion]'
       - m_Id: 48dbf54d72a8db84595f5b38a6b83e3a
