@@ -53,6 +53,11 @@ public class SceneUI : CanvasPanel
         _moneyText.text = Managers.Commodity.Money.ToString();
     }
 
+    public void UpdateMoneyText()
+    {
+        _moneyText.text = Managers.Commodity.Money.ToString();
+    }
+
     private void OnBuildButtonClicked()
     {
         Managers.UI.AddPanel<UIBuildingMenu>();

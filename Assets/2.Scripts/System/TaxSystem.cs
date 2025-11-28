@@ -5,9 +5,17 @@ using UnityEngine.InputSystem.Controls;
 
 public class TaxSystem : MonoBehaviour
 {
-    public Text taxText;
+    [SerializeField] SceneUI sceneUI;
     public Text expected_Happiness_Change_Text;
 
+    [Header("Tax")]
+    public Text taxText;
+    [SerializeField] Button taxRateButton;
+    [SerializeField] Button closeButton;
+    [SerializeField] Button upButton;
+    [SerializeField] Button downButton;
+    [SerializeField] GameObject taxRatePanel;
+ 
     int taxRate = 5; // 세율 (세금 비율)
     int taxRate_Min = 5;
     int taxRate_Max = 15;
@@ -30,6 +38,11 @@ public class TaxSystem : MonoBehaviour
             dateSystem.OnDayChanged += OnDayChanged;
 
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
+
+        taxRateButton.onClick.AddListener(ActivatePanel);
+        closeButton.onClick.AddListener(DeActivatePanel);
+        upButton.onClick.AddListener(IncreaseTaxRate);
+        downButton.onClick.AddListener(DecreaseTaxRate);
     }
 
     private void OnDisable()
@@ -48,7 +61,9 @@ public class TaxSystem : MonoBehaviour
     void OnDayChanged()
     {
         // 세금 징수
-        // moneySystem.CollectTax(tax);
+        Managers.Commodity.AddMoney(tax);
+        // 텍스트 갱신 함수 호출 (임시)
+        sceneUI.UpdateMoneyText();
         // 행복도 변화량 적용
         ApplyHappinessByTaxRate();
     }
@@ -71,14 +86,6 @@ public class TaxSystem : MonoBehaviour
     // 현재 세율 구간에 따른 행복도 변화량 적용
     void ApplyHappinessByTaxRate()
     {
-        // 행복도 변화량
-        //int delta =
-        //    taxRate < 5 ? 2 :   // 0 ~ 4%   : 세금 거의 없음 -> 시민 기쁨
-        //    taxRate < 10 ? 0 :  // 5 ~ 9%   : 적정선 -> 변화 없음
-        //    taxRate < 15 ? -1 : // 10 ~ 14% : 약간 부담 느낌
-        //    taxRate < 20 ? -3 : // 15 ~ 19% : 부담이 커짐
-        //                    -5; // 20% 이상 : 세금 폭탄 느낌 -> 불만 크게 증가
-        
         // 실제 행복도 변화 적용
         happinessSystem.ApplyHappinessChange(expected_Happiness_Change);
     }
@@ -105,5 +112,15 @@ public class TaxSystem : MonoBehaviour
     {
         taxRate -= 5;
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
+    }
+
+    public void ActivatePanel()
+    {
+        taxRatePanel.SetActive(true);
+    }
+
+    public void DeActivatePanel()
+    {
+        taxRatePanel.SetActive(false);
     }
 }
