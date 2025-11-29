@@ -1,47 +1,24 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class PopulationSystem : MonoBehaviour
 {
-    public GameObject npcPrefab;
-    public Transform entrance; // 출입구(시작 위치)
+    [SerializeField] GameObject warningIcon;
+    [SerializeField] Image guage;
 
-    GameObject npc;
+    public int currentPopulation = 1;
+    public int maxPopulation = 1;
 
-    int currentPopulation = 1;
-    int maxPopulation = 1;
-
-    List<GameObject> npcs = new List<GameObject>();
+    bool isWarning = false;
 
     void Update()
     {
         Mathf.Clamp(currentPopulation, 0, CityManager.Instance.happinessSystem.GetHappiness());
 
-        //spawnNpc();
-        //RemoveLastNpc();
-    }
-
-    void spawnNpc()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            npc = Instantiate(npcPrefab, entrance.position, Quaternion.identity);
-            npcs.Add(npc);
-        }
-    }
-
-    void RemoveLastNpc()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (npcs.Count > 0)
-            {
-                GameObject target = npcs[npcs.Count - 1];   // 마지막 NPC 가져오기
-                npcs.RemoveAt(npcs.Count - 1);              // 리스트에서 제거
-                Destroy(target);                            // 게임 오브젝트 삭제
-            }                 
-        }
+        Warning();
+        Guage();
     }
 
     public int GetCurrentPopulation()
@@ -58,5 +35,30 @@ public class PopulationSystem : MonoBehaviour
     {
         currentPopulation += delta;
         maxPopulation += delta;
+    }
+
+    void Warning()
+    {
+        if (maxPopulation > CityManager.Instance.city.happiness && !isWarning)
+        {
+            isWarning = true;
+            warningIcon.SetActive(true);
+            guage.color = new Color32(255, 69, 0, 255);
+        }
+
+        else if (maxPopulation < CityManager.Instance.city.happiness && isWarning)
+        {
+            isWarning = false;
+            warningIcon.SetActive(false);
+            guage.color = new Color32(255, 255, 255, 255);
+        }
+    }
+
+    void Guage()
+    {
+        if (maxPopulation > currentPopulation)
+        {
+            guage.fillAmount = (float)currentPopulation / (float)maxPopulation;
+        }
     }
 }
