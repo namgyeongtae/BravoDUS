@@ -16,7 +16,7 @@ public class NpcPathWalker : MonoBehaviour
     [SerializeField] private Transform entrance; // 출입구
 
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 1.0f;
+    [SerializeField] private float moveSpeed = 3.0f;
     [SerializeField] private float arriveThreshold = 0.08f; // 도착임계값
 
     private Waypoint currentWP; // 현재 노드
@@ -59,7 +59,6 @@ public class NpcPathWalker : MonoBehaviour
         if (dist > arriveThreshold)
         {
             transform.position += dir.normalized * moveSpeed * Time.deltaTime;
-            transform.rotation = Quaternion.LookRotation(dir);
         }
         else
         {

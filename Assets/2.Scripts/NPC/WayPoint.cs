@@ -7,7 +7,7 @@ public class Waypoint : MonoBehaviour
 {
     private void Start()
     {
-        transform.position += new Vector3(0, 0, 0);
+        transform.position += new Vector3(0, 0.45f, 0);
     }
 
     // 인스펙터에서 확인하기 쉽게 public 리스트로 둔다.

@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class NpcSystem : MonoBehaviour
 {
-    [SerializeField] GameObject[] npcPrefabs = new GameObject[6];
+    [SerializeField] GameObject npcPrefab;
     [SerializeField] Transform entrance;
 
     void Start()
@@ -14,8 +13,7 @@ public class NpcSystem : MonoBehaviour
 
     void SpawnNpc()
     {
-        int i = Random.Range(0, npcPrefabs.Length);
-        Instantiate(npcPrefabs[i], entrance.position, Quaternion.identity);
+        Instantiate(npcPrefab, entrance.position, Quaternion.identity);
     }
 
     void OnDayChanged()
