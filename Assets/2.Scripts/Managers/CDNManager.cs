@@ -2,6 +2,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.AddressableAssets.Initialization;
 
 public class CDNManager : IManagerBase
 {
@@ -15,7 +16,7 @@ public class CDNManager : IManagerBase
         await InitializeAsync();
     }
 
-    public static async UniTask InitializeAsync()
+    public static async UniTask<AsyncOperationHandle> InitializeAsync()
     {
         string appVersion = Application.version;
 
@@ -32,8 +33,16 @@ public class CDNManager : IManagerBase
         #endif
 
         CurrentCatalogUrl = $"{BaseUrl}/{targetFolder}/{catalogVersion}/catalog_{catalogVersion}.json";
+
+        var InitializeHandle = Addressables.InitializeAsync();
+
+        InitializeHandle.Completed += op => {
+            Addressables.Release(InitializeHandle);
+        };
+
+        await InitializeHandle.Task;
         
-        var handle = Addressables.LoadContentCatalogAsync(CurrentCatalogUrl);
+        var handle = Addressables.LoadContentCatalogAsync(CurrentCatalogUrl, true);
         await handle.Task;
 
         if (handle.Status != AsyncOperationStatus.Succeeded)
@@ -44,6 +53,8 @@ public class CDNManager : IManagerBase
         {
             Debug.Log($"[Addressables] Catalog loaded from: {CurrentCatalogUrl}");
         }
+
+        return handle;
     }
 
     public AsyncOperationHandle DownloadAsync(string label)
@@ -59,8 +70,8 @@ public class CDNManager : IManagerBase
         Debug.Log($"[CDNManager] GetResourceVersionForApp '{appVersion}'");
         switch (appVersion)
         {
-            case "1.0.4": return "0.1.6";
-            default:      return "0.1.7";
+            case "1.0.5": return "0.2.1";
+            default:      return "0.2.2";
         }
     }
 }
