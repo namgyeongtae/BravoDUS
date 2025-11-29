@@ -7,11 +7,17 @@ public class NpcSystem : MonoBehaviour
 
     void Start()
     {
-        
+        CityManager.Instance.dateSystem.OnDayChanged += OnDayChanged;
+        Invoke("SpawnNpc", 0.2f);
     }
 
-    void Update()
+    void SpawnNpc()
     {
-        
+        Instantiate(npcPrefab, entrance.position, Quaternion.identity);
+    }
+
+    void OnDayChanged()
+    {
+        SpawnNpc();
     }
 }

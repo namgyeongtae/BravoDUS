@@ -78,6 +78,8 @@ public class RoadSystem : MonoBehaviour
         _roadTileSO = Managers.Resource.LoadSO<RoadTileSO>("RoadTileSO");
 
         InitRoadTiles();
+        // 도로 웨이포인트 초기 갱신
+        NotifyRoadsChanged();
     }
 
     void Update()

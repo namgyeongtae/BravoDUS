@@ -15,7 +15,7 @@ public class TaxSystem : MonoBehaviour
     [SerializeField] Button upButton;
     [SerializeField] Button downButton;
     [SerializeField] GameObject taxRatePanel;
- 
+
     int taxRate = 5; // 세율 (세금 비율)
     int taxRate_Min = 5;
     int taxRate_Max = 15;
@@ -23,19 +23,10 @@ public class TaxSystem : MonoBehaviour
     int tax; // 세금 금액 (인구수 x 세금률) 
     int expected_Happiness_Change;
 
-    DateSystem dateSystem;
-    PopulationSystem populationSystem;
-    HappinessSystem happinessSystem;
-
     private void Start()
     {
-        dateSystem = CityManager.Instance.dateSystem;
-        populationSystem = CityManager.Instance.populationSystem;
-        happinessSystem = CityManager.Instance.happinessSystem;
-
         // 날짜 이벤트 구독 : 하루가 지날 때마다 적용
-        if (dateSystem != null)
-            dateSystem.OnDayChanged += OnDayChanged;
+        CityManager.Instance.dateSystem.OnDayChanged += OnDayChanged;
 
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
 
@@ -47,8 +38,7 @@ public class TaxSystem : MonoBehaviour
 
     private void OnDisable()
     {
-        if (dateSystem != null)
-            dateSystem.OnDayChanged -= OnDayChanged;
+        CityManager.Instance.dateSystem.OnDayChanged -= OnDayChanged;
     }
 
     void Update()
@@ -71,7 +61,7 @@ public class TaxSystem : MonoBehaviour
     // 하루 세금 금액 계산
     void RecalculateTaxAmount()
     {
-        tax = populationSystem.GetCurrentPopulation() * taxRate;
+        tax = CityManager.Instance.populationSystem.GetCurrentPopulation() * taxRate;
     }
 
     void Update_Expected_Happiness_Change()
@@ -87,7 +77,7 @@ public class TaxSystem : MonoBehaviour
     void ApplyHappinessByTaxRate()
     {
         // 실제 행복도 변화 적용
-        happinessSystem.ApplyHappinessChange(expected_Happiness_Change);
+        CityManager.Instance.happinessSystem.ApplyHappinessChange(expected_Happiness_Change);
     }
 
     void UpdateText()
