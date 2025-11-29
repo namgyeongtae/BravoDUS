@@ -4668,7 +4668,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 787a5917f4794ba46b61e824c65acaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcPrefab: {fileID: 5400955912777325281, guid: 4d6aeb535490e0640a67f89852072528, type: 3}
+  npcPrefabs:
+  - {fileID: 6584613354768528393, guid: bae26acf817c6dc4e82f95d9ef4ab46a, type: 3}
+  - {fileID: 7501788059647666026, guid: bcc8c8f342f71a7439ac0579aa86f030, type: 3}
+  - {fileID: 1616406060653692748, guid: f71041fd118fbb34aa9d2dd6a1d96fce, type: 3}
+  - {fileID: 913845681951795218, guid: 2435736d6adca23458edd7c80c901e3e, type: 3}
+  - {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+  - {fileID: 5986958801767457440, guid: 87a7b985b15a4244091de35d7df9169a, type: 3}
   entrance: {fileID: 86243204}
 --- !u!1001 &760730269
 PrefabInstance:
