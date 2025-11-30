@@ -5,6 +5,11 @@ using System.Collections.Generic;
 // 인접(상하좌우) 웨이포인트를 neighbors에 보관.
 public class Waypoint : MonoBehaviour
 {
+    private void Start()
+    {
+        transform.position += new Vector3(0, 0, 0);
+    }
+
     // 인스펙터에서 확인하기 쉽게 public 리스트로 둔다.
     public List<Waypoint> neighbors = new();
 
