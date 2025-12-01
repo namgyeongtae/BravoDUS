@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class NpcSystem : MonoBehaviour
 {
     [SerializeField] GameObject[] npcPrefabs = new GameObject[6];
     [SerializeField] Transform entrance;
+    [SerializeField] RoadGraphFromGrid roadGraphFromGrid;
 
     void Start()
     {
         CityManager.Instance.dateSystem.OnDayChanged += OnDayChanged;
-        Invoke("SpawnNpc", 0.2f);
+        StartCoroutine(SpawnFirstNPC());
     }
 
     void SpawnNpc()
@@ -20,6 +23,13 @@ public class NpcSystem : MonoBehaviour
 
     void OnDayChanged()
     {
+        SpawnNpc();
+    }
+
+    private IEnumerator SpawnFirstNPC()
+    {
+        yield return new WaitUntil(() => roadGraphFromGrid.AllWayPoints().Any());
+
         SpawnNpc();
     }
 }

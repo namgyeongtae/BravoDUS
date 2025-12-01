@@ -4642,6 +4642,7 @@ MonoBehaviour:
   - {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
   - {fileID: 5986958801767457440, guid: 87a7b985b15a4244091de35d7df9169a, type: 3}
   entrance: {fileID: 681854155}
+  roadGraphFromGrid: {fileID: 1227149903}
 --- !u!1001 &717460063
 PrefabInstance:
   m_ObjectHideFlags: 0
