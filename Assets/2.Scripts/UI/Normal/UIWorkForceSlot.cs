@@ -127,14 +127,6 @@ public class UIWorkForceSlot : UIBind
         var buildingType = building.BuildingType;
         switch (buildingType)
         {
-            case BuildingType.ResourceCollector:
-                {
-                    var ingredient = building.GetComponent<ResourceCollectHandler>().ResourceType;
-
-                    if (ingredient == IngredientType.Wood) return JobType.WoodWorker;
-                    else
-                        return JobType.IronWorker;
-                }
             case BuildingType.Hospital:
                 return JobType.Doctor;
             case BuildingType.PoliceStation:

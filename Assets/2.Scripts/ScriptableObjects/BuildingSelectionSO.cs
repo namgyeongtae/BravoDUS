@@ -11,7 +11,10 @@ public enum BuildingType
     PoliceStation,
     FireStation,
     ConvenienceStore,
-    ResourceCollector
+    House_1,
+    House_2,
+    House_3,
+    BookStore
 }
 
 public enum BuildingActionType
