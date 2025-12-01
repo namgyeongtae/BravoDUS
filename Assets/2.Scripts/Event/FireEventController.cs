@@ -9,6 +9,22 @@ public class FireEventController : EventController
     private Dictionary<Incident, UIFireEventWarning> _incidentUIWarnings = new Dictionary<Incident, UIFireEventWarning>();
     private Dictionary<Incident, WorkForce> _resolvingWorkForces = new Dictionary<Incident, WorkForce>();
 
+    private HashSet<BuildingType> _excludeBuildingTypes = new HashSet<BuildingType> // 화재 발생 대상에서 제외되는 Building Type
+    {
+        BuildingType.FireStation,
+        BuildingType.Hospital,
+        BuildingType.PoliceStation,
+        BuildingType.Government,
+    };
+
+    private HashSet<Building.State> _excludeStates = new HashSet<Building.State> // 화재 발생 대상에서 제외되는 Building State
+    {
+        Building.State.Ruin,
+        Building.State.Constructing,
+        Building.State.Fired
+    };
+
+
     public List<FireStationRole> FireStationRoles => _fireStationRoles;
     public Dictionary<Building, Incident> IncidentBuildings => _incidentBuildings;
     public Dictionary<Incident, UIFireEventWarning> IncidentUIWarnings => _incidentUIWarnings;
@@ -23,30 +39,17 @@ public class FireEventController : EventController
 
     protected override float ScheduleNext(float now, CityStat stats)
     {
-        /* // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
+        // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
         float lambda = Mathf.Max(0.08f, _baseRatePerMin * Mathf.Clamp01(1 - stats.FireRate));
         // 지수분포: Δt(분) = -ln(1-u)/λ
         float u = Random.value;
         float minutes = -Mathf.Log(1f - u) / lambda;
-        return now + minutes * 60f; */
-
-        return now + 40f;
+        return now + minutes * 60f;
     }
 
     protected override Incident ExecuteSpawn(float now, CityStat stat)
     {
-        // TODO: 조건 개선
-        // 현재 완공이 되었고 디버프가 없는 건물 리스트
-        // 조건이 너무 많음.... 추가되었을 때 계속 && 붙여야 함....
-        // 이 구조는 상당히 좋지 않음.... 개선되야함
-        var buildings = CraftingManager.Instance.Buildings.Where(b => 
-                                                b.GetComponent<Building>().CurrentState != Building.State.Fired
-                                             && b.GetComponent<Building>().BuildingType != BuildingType.FireStation
-                                             && b.GetComponent<Building>().BuildingType != BuildingType.Hospital
-                                             && b.GetComponent<Building>().BuildingType != BuildingType.PoliceStation
-                                             && b.GetComponent<Building>().BuildingType != BuildingType.Government
-                                             && b.CurrentState != Building.State.Ruin 
-                                             && b.CurrentState != Building.State.Constructing);
+        var buildings = CraftingManager.Instance.Buildings.Where(b => IsFireableBuilding(b));
 
         if (buildings.Count() == 0)
         {
@@ -128,6 +131,15 @@ public class FireEventController : EventController
         return randomValue <= suppressionRate;
     }
 
+    private bool IsFireableBuilding(Building building)
+    {
+        if (_excludeBuildingTypes.Contains(building.BuildingType))
+            return false;
+        if (_excludeStates.Contains(building.CurrentState))
+            return false;
+
+        return true;
+    }
     public void AddFireStationRole(FireStationRole role)
     {
         _fireStationRoles.Add(role);
