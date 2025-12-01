@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BuildingSelectionSO
   m_EditorClassIdentifier: 
   actionSets:
-  - buildingType: 6
+  - buildingType: 0
     availableActions:
     - actionType: 1
       actionName: Info
