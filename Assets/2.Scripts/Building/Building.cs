@@ -63,9 +63,10 @@ public class Building : MonoBehaviour
 
     private IEnumerator ConstructCoroutine()
     {
-        Debug.Log($"ConstructCoroutine started for {gameObject.name}");
-
+        
+        basePrefab.SetActive(false);
         _animator.SetTrigger("Construct");
+        Debug.Log($"ConstructCoroutine started for {gameObject.name}");
 
         // 건물 숨김
         if (currentModel != null)
@@ -304,7 +305,7 @@ public class Building : MonoBehaviour
             Renderer modelRenderer = currentModel != null ? currentModel.GetComponent<Renderer>() : null;
             float heightOffset = modelRenderer != null ? modelRenderer.bounds.size.y / 2f : 1f; // 모델 중앙 높이
             // currentEffect.transform.position = FixedPosition + Vector3.up * heightOffset;
-            currentEffect.transform.localPosition = new Vector3(0, 1.5f, 0f);
+            currentEffect.transform.localPosition = new Vector3(0, 2.5f, 0f);
             ParticleSystem ps = currentEffect.GetComponent<ParticleSystem>();
             if (ps != null) ps.Play();
             Debug.Log($"Effect instantiated: {currentEffect.name}, Position: {currentEffect.transform.position}, Offset: {heightOffset}, Active: {currentEffect.activeSelf}");

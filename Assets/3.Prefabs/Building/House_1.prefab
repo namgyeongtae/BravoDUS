@@ -196,7 +196,7 @@ MonoBehaviour:
   _isTestMode: 0
   constructionTime: 5
   buildingSize: 5
-  BuildingType: 0
+  BuildingType: 6
 --- !u!95 &4127322627103734457
 Animator:
   serializedVersion: 7

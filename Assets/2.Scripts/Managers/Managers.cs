@@ -32,7 +32,6 @@ public class Managers
         _hr.Init();
         _item.Init();
         _construct.Init();
-        _so.Init();
         _level.Init();
     }
 

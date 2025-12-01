@@ -118,7 +118,7 @@ public class UIBuildingSelection : CanvasPanel
     private BuildingActionSet GetActionSetForBuilding(BuildingType type)
     {
         Debug.Log($"GetActionSetForBuilding: {type}");
-        return _buildingSelectionSO.actionSets.Find(set => set.buildingType == type);
+        return _buildingSelectionSO.actionSets.Find(set => set.buildingType == type) ?? _buildingSelectionSO.actionSets.Find(set => set.buildingType == BuildingType.None);
     }
 
     private IEnumerator ActiveActionButtons()
