@@ -119,8 +119,8 @@ GameObject:
   - component: {fileID: 405835760406446287}
   - component: {fileID: 69241329275847286}
   - component: {fileID: 5251893701616300949}
-  - component: {fileID: 6727650318853915517}
-  m_Layer: 0
+  - component: {fileID: 2189275898019198226}
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,11 +136,11 @@ Transform:
   m_GameObject: {fileID: 804864954988018110}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0.015, z: 0}
+  m_LocalPosition: {x: -1, y: 0.014999999, z: 1}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7934986500794042498}
+  m_Father: {fileID: 8789251999917211737}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &69241329275847286
 MeshFilter:
@@ -195,8 +195,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6727650318853915517
-MeshCollider:
+--- !u!65 &2189275898019198226
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -213,10 +213,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.0000004, y: 1.0000002, z: 0.06132816}
+  m_Center: {x: -4.3576386e-16, y: -0.000000003655453, z: -0.030664172}
 --- !u!1 &2765599831929208170
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,8 +368,8 @@ GameObject:
   - component: {fileID: 7354377584993521858}
   - component: {fileID: 9042827162561880922}
   - component: {fileID: 3219140248052420584}
-  m_Layer: 0
-  m_Name: city_hall
+  m_Layer: 6
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +387,8 @@ Transform:
   m_LocalPosition: {x: 1, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 405835760406446287}
   m_Father: {fileID: 7934986500794042498}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7354377584993521858
@@ -794,7 +794,7 @@ GameObject:
   - component: {fileID: 3648340421647737098}
   - component: {fileID: 4568627393571144798}
   - component: {fileID: 1648353514152679534}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Government
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -814,9 +814,8 @@ Transform:
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8789251999917211737}
   - {fileID: 849550139882178375}
-  - {fileID: 405835760406446287}
+  - {fileID: 8789251999917211737}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &3648340421647737098

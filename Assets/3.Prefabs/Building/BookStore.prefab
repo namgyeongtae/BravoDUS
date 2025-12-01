@@ -294,8 +294,8 @@ GameObject:
   - component: {fileID: 2427634066263126310}
   - component: {fileID: 4856002592492035024}
   - component: {fileID: 1534337250550600983}
-  - component: {fileID: 8966019607155913874}
-  m_Layer: 0
+  - component: {fileID: 8697620063799563637}
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,8 +370,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8966019607155913874
-MeshCollider:
+--- !u!65 &8697620063799563637
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -388,10 +388,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.0000002, y: 1.0000005, z: 0.14209151}
+  m_Center: {x: 0.000000016938635, y: -0.0000000084693195, z: -0.0710458}
 --- !u!1 &4565606910012023313
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +511,7 @@ GameObject:
   - component: {fileID: 3763600749914020517}
   - component: {fileID: 6515429767656957063}
   - component: {fileID: 2277784048911020066}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +764,7 @@ GameObject:
   - component: {fileID: 5190433716286593506}
   - component: {fileID: 6847439765651253532}
   - component: {fileID: 934982753366448040}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BookStore
   m_TagString: Untagged
   m_Icon: {fileID: 0}

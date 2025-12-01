@@ -14,7 +14,8 @@ public enum BuildingType
     House_1,
     House_2,
     House_3,
-    BookStore
+    BookStore,
+    ToyFactory
 }
 
 public enum BuildingActionType

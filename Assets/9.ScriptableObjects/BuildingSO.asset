@@ -30,14 +30,14 @@ MonoBehaviour:
   - buildingName: "\uC815\uBD80 \uC2DC\uC124"
     buildingIcon: {fileID: 21300000, guid: 13e4f9bf5e2754445b31aa8c11a8aca9, type: 3}
     buildingType: 1
-    buildingPrefab: {fileID: 6708357938524194867, guid: a1a871387709c194688b4800592b4523, type: 3}
+    buildingPrefab: {fileID: 8962847944763816215, guid: 9509956ce5dc4a14dbb44c33512a09d5, type: 3}
     Happiness: 0
     Population: 0
-    buildingSize: 5
+    buildingSize: 7
   - buildingName: "\uC18C\uBC29\uC11C"
     buildingIcon: {fileID: 21300000, guid: 4a8f1b47aecffda4095d23762133e936, type: 3}
     buildingType: 4
-    buildingPrefab: {fileID: 3768488022834937166, guid: 6ee70168e48d2ca439dea0ac7a6ffd72, type: 3}
+    buildingPrefab: {fileID: 9038072763571139337, guid: 5724309bfb8d2dd4b8e9ebbbbd2e5d5b, type: 3}
     Happiness: 0
     Population: 0
     buildingSize: 4
@@ -48,3 +48,38 @@ MonoBehaviour:
     Happiness: 0
     Population: 10
     buildingSize: 3
+  - buildingName: "\uC8FC\uD0DD1"
+    buildingIcon: {fileID: 0}
+    buildingType: 6
+    buildingPrefab: {fileID: 3123063387249584369, guid: 9ce116bd8a3c7074a933ff5118761471, type: 3}
+    Happiness: 0
+    Population: 10
+    buildingSize: 5
+  - buildingName: "\uC8FC\uD0DD2"
+    buildingIcon: {fileID: 0}
+    buildingType: 7
+    buildingPrefab: {fileID: 3342040161230174785, guid: 90f5cdd815eed184a933a4f6b960af30, type: 3}
+    Happiness: 0
+    Population: 10
+    buildingSize: 5
+  - buildingName: "\uC8FC\uD0DD3"
+    buildingIcon: {fileID: 0}
+    buildingType: 8
+    buildingPrefab: {fileID: 4729445768684862340, guid: f5be13b2ce148284c97de448d73a5871, type: 3}
+    Happiness: 0
+    Population: 10
+    buildingSize: 3
+  - buildingName: "\uC11C\uC810"
+    buildingIcon: {fileID: 0}
+    buildingType: 9
+    buildingPrefab: {fileID: 6831993874666462987, guid: 52994a8df09231e4c9693e494643f087, type: 3}
+    Happiness: 20
+    Population: 0
+    buildingSize: 3
+  - buildingName: "\uC7A5\uB09C\uAC10\uACF5\uC7A5"
+    buildingIcon: {fileID: 0}
+    buildingType: 10
+    buildingPrefab: {fileID: 8303669799659118815, guid: 8fba0a003c0aa324991952647640d335, type: 3}
+    Happiness: 30
+    Population: 0
+    buildingSize: 7
