@@ -4,7 +4,7 @@ using TMPro;
 
 public class VolumeController : MonoBehaviour
 {
-    [Header("TitleButton")]    
+    [Header("SoundButton")]    
     [SerializeField] Button soundButton;
 
     [Header("SoundPanel")]
