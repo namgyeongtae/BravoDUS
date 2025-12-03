@@ -23,9 +23,6 @@ public class TaxSystem : MonoBehaviour
     int tax; // 세금 금액 (인구수 x 세금률) 
     int expected_Happiness_Change;
 
-<<<<<<< Updated upstream:Assets/2.Scripts/System/TaxSystem.cs
-=======
-    MoneySystem moneySystem;
     DateSystem dateSystem;
     PopulationSystem populationSystem;
     HappinessSystem happinessSystem;
@@ -76,7 +73,7 @@ public class TaxSystem : MonoBehaviour
     }
     // ================================
 
->>>>>>> Stashed changes:Assets/2.Scripts/System/Tax/TaxSystem.cs
+//>>>>>>> Stashed changes:Assets/2.Scripts/System/Tax/TaxSystem.cs
     private void Start()
     {
         // 날짜 이벤트 구독 : 하루가 지날 때마다 적용
@@ -84,8 +81,7 @@ public class TaxSystem : MonoBehaviour
 
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
 
-        taxRateButton.onClick.AddListener(ActivatePanel);
-        closeButton.onClick.AddListener(DeActivatePanel);
+      
         upButton.onClick.AddListener(IncreaseTaxRate);
         downButton.onClick.AddListener(DecreaseTaxRate);
     }
@@ -109,17 +105,11 @@ public class TaxSystem : MonoBehaviour
         RecalculateTaxAmount();
 
         // 세금 징수
-<<<<<<< Updated upstream:Assets/2.Scripts/System/TaxSystem.cs
-        Managers.Commodity.AddMoney(tax);
-        // 텍스트 갱신 함수 호출 (임시)
-        sceneUI.UpdateMoneyText();
-=======
-        moneySystem.CollectTax(tax);
+
+        
 
         // 오늘 세금 누적 (하루에 1번만이긴 하지만, 혹시 나중에 추가 수입 있을 걸 대비해서 += 로)
         todayCollectedTax += tax;
-
->>>>>>> Stashed changes:Assets/2.Scripts/System/Tax/TaxSystem.cs
         // 행복도 변화량 적용
         ApplyHappinessByTaxRate();
 
@@ -172,16 +162,7 @@ public class TaxSystem : MonoBehaviour
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
     }
 
-<<<<<<< Updated upstream:Assets/2.Scripts/System/TaxSystem.cs
-    public void ActivatePanel()
-    {
-        taxRatePanel.SetActive(true);
-    }
 
-    public void DeActivatePanel()
-    {
-        taxRatePanel.SetActive(false);
-=======
     // ================================
     // 🔥 하루가 끝날 때 통계 정리
     // ================================
@@ -196,6 +177,5 @@ public class TaxSystem : MonoBehaviour
 
         // 다음 날을 위해 오늘 값 리셋
         todayCollectedTax = 0;
->>>>>>> Stashed changes:Assets/2.Scripts/System/Tax/TaxSystem.cs
     }
 }
