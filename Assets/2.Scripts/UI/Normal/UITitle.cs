@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
@@ -36,7 +36,10 @@ public class UITitle : CanvasPanel
         {
             await DownloadAsync("default");
         }
-        
+
+        GameManager.Instance.QuitPanel.transform.SetParent(null, false);
+        DontDestroyOnLoad(GameManager.Instance.QuitPanel);
+
         await Managers.Level.LoadSceneAsync("MainScene");
         
         _animator.SetTrigger("Fade");

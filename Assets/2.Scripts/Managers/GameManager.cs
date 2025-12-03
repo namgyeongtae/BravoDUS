@@ -1,41 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.AddressableAssets;
-using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(1)]
 public class GameManager : MonoBehaviour
 {
-    // 타이틀 씬
-    [Header("TitleButton")]
+    [Header("Title")]
     [SerializeField] Button startButton;
-    [SerializeField] Button soundButton;
-    [SerializeField] Button exitButton;
-
-    [Header("SoundPanel")]
-    [SerializeField] GameObject soundPanel;
-    [SerializeField] Button closeButton;
-
-    [Header("Sound_Master")]
-    [SerializeField] Slider masterSoundSlider;
-    [SerializeField] TextMeshProUGUI masterText;
-
-    [Header("Sound_BGM")]
-    [SerializeField] Slider bgmSoundSlider;
-    [SerializeField] TextMeshProUGUI bgmText;
-    [SerializeField] AudioSource bgmAudioSource;
-
-    [Header("Sound_SFX")]
-    [SerializeField] Slider sfxSoundSlider;
-    [SerializeField] TextMeshProUGUI sfxText;
-    [SerializeField] AudioSource sfxAudioSource;
-
-    [Header("SFX_Resource")]
     [SerializeField] AudioClip buttonPositiveConfirm;
-    [SerializeField] AudioClip buttonNegativeCancel;
 
-    // 메인 씬
+    [Header("QuitPanel")]
+    [SerializeField] GameObject quitPanel;
+    [SerializeField] Button quitButton;
+    [SerializeField] Button cancleButton;
+
+    AudioSource audioSource;
+
+    public GameObject QuitPanel => quitPanel;
 
     public static GameManager Instance { get; private set; }
 
@@ -45,6 +27,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
 
         Instance = this;
 
@@ -55,20 +38,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        soundPanel.SetActive(false);
+        quitPanel.SetActive(false);
 
-        // 로비
         startButton.onClick.AddListener(StartGame);
-        soundButton.onClick.AddListener(OpenSoundPanel);
-        exitButton.onClick.AddListener(ExitGame);
+        quitButton.onClick.AddListener(Quit);
+        cancleButton.onClick.AddListener(Cancle);
 
-        // 사운드 패널
-        closeButton.onClick.AddListener(CloseSoundPanel);
-
-        // 사운드 볼륨
-        masterSoundSlider.onValueChanged.AddListener(Master);
-        bgmSoundSlider.onValueChanged.AddListener(BGM);
-        sfxSoundSlider.onValueChanged.AddListener(SFX);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Update()
@@ -77,9 +53,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif
+            quitPanel.SetActive(true);
         }
     }
 
@@ -90,46 +64,25 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
-        sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
+        audioSource.PlayOneShot(buttonPositiveConfirm);
     }
 
-    void OpenSoundPanel()
+    void Quit()
     {
-        sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
-        soundPanel.SetActive(true);
-    }
-
-    void ExitGame()
-    {
-        sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
         Application.Quit();
-
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
 
-    void CloseSoundPanel()
+    void Cancle()
     {
-        sfxAudioSource.PlayOneShot(buttonNegativeCancel);
-        soundPanel.SetActive(false);
+        quitPanel.SetActive(false);
     }
 
-    void Master(float value)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        masterText.text = ((int)(value * 100)).ToString();
-        AudioListener.volume = value;
-    }
-
-    void BGM(float value)
-    {
-        bgmText.text = ((int)(value * 100)).ToString();
-        bgmAudioSource.volume = value;
-    }
-
-    void SFX(float value)
-    {
-        sfxText.text = ((int)(value * 100)).ToString();
-        sfxAudioSource.volume = value;
+        GameObject newParent = GameObject.Find("SceneUI");
+        quitPanel.transform.SetParent(newParent.transform, false);
     }
 }
