@@ -3799,7 +3799,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -1955045057, guid: 6d1a2570067e3ae4cb5c72a2bca3b8d5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4562,6 +4562,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579ac7db92ce38a4f9efb280d6423ae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundButton: {fileID: 0}
+  exitButton: {fileID: 0}
 --- !u!4 &739042213
 Transform:
   m_ObjectHideFlags: 0
@@ -4676,6 +4678,7 @@ MonoBehaviour:
   - {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
   - {fileID: 5986958801767457440, guid: 87a7b985b15a4244091de35d7df9169a, type: 3}
   entrance: {fileID: 86243204}
+  roadGraphFromGrid: {fileID: 0}
 --- !u!1001 &760730269
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8397,7 +8400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 764.55475, y: 297}
+  m_AnchoredPosition: {x: 729, y: 262}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1229201794
@@ -12658,7 +12661,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 290.00003}
+  m_AnchoredPosition: {x: 0, y: 277.2}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1786150375
@@ -113988,7 +113991,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -237, y: -138}
+  m_AnchoredPosition: {x: -237, y: -150.79999}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2006173397

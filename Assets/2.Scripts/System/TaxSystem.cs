@@ -25,6 +25,8 @@ public class TaxSystem : MonoBehaviour
 
     private void Start()
     {
+        taxRatePanel.SetActive(false);
+
         // 날짜 이벤트 구독 : 하루가 지날 때마다 적용
         CityManager.Instance.dateSystem.OnDayChanged += OnDayChanged;
 
