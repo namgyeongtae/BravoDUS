@@ -1,11 +1,8 @@
 ﻿using System;
 using UnityEngine;
-<<<<<<< Updated upstream
 using TMPro;
 using UnityEngine.UI;
-=======
-using TMPro;  // ← TextMeshPro 추가
->>>>>>> Stashed changes
+
 
 public class DateSystem : MonoBehaviour
 {
@@ -21,17 +18,7 @@ public class DateSystem : MonoBehaviour
 
     public event Action OnDayChanged;
 
-<<<<<<< Updated upstream
-    [SerializeField] Button dateButton;
 
-    private void Start()
-    {
-        dateButton.onClick.AddListener(DateTest);
-    }
-
-    void Update()
-    {
-=======
     private float _timeAcc = 0f; // 현실 시간 누적
 
     void Update()
@@ -55,7 +42,6 @@ public class DateSystem : MonoBehaviour
         }
 #endif
 
->>>>>>> Stashed changes
         UpdateText();
     }
 
@@ -66,15 +52,6 @@ public class DateSystem : MonoBehaviour
         Debug.Log($"[DateSystem] Day changed: {currentDay}");
     }
 
-<<<<<<< Updated upstream
-    void DateTest()
-    {
-        currentDay++;
-        // null 체크 겸용: 구독자가 있을 때만 이벤트 호출
-        // (?.Invoke는 구독자가 null이면 호출하지 않음 -> NRE 방지) 
-        OnDayChanged?.Invoke(); // <- 하루가 지날 때마다 통지
-    }
-=======
     private void UpdateText()
     {
         if (dateText != null)
@@ -85,6 +62,4 @@ public class DateSystem : MonoBehaviour
         currentDay++;
         OnDayChanged?.Invoke();
     }
-
->>>>>>> Stashed changes
 }
