@@ -1,20 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
-using UnityEngine.InputSystem.Controls;
+// using UnityEngine.InputSystem.Controls; // 안 쓰면 지워도 됨
 
 public class TaxSystem : MonoBehaviour
 {
-    [SerializeField] SceneUI sceneUI;
-    public Text expected_Happiness_Change_Text;
-
-    [Header("Tax")]
     public Text taxText;
-    [SerializeField] Button taxRateButton;
-    [SerializeField] Button closeButton;
-    [SerializeField] Button upButton;
-    [SerializeField] Button downButton;
-    [SerializeField] GameObject taxRatePanel;
+    public Text expected_Happiness_Change_Text;
 
     int taxRate = 5; // 세율 (세금 비율)
     int taxRate_Min = 5;
@@ -23,72 +14,88 @@ public class TaxSystem : MonoBehaviour
     int tax; // 세금 금액 (인구수 x 세금률) 
     int expected_Happiness_Change;
 
+    
     DateSystem dateSystem;
     PopulationSystem populationSystem;
     HappinessSystem happinessSystem;
 
-    // ================================
-    // 🔥 통계용 필드 추가
-    // ================================
-    int todayCollectedTax = 0;          // 오늘 하루 동안 실제로 징수된 세금 합계
-    private readonly System.Collections.Generic.List<int> dailyHistory
-        = new System.Collections.Generic.List<int>(); // 최근 최대 14일 기록 (전주 비교용)
+    // ===== 통계용 필드 =====
+    const int HISTORY_DAYS = 14;              // 최근 14일 기억 (이번 7일 + 지난 7일)
+    int[] _taxHistory = new int[HISTORY_DAYS];
+    int _historyCount = 0;                    // 지금까지 기록된 일수 (최대 14)
+    int _todayTax = 0;                        // 마지막으로 징수된 하루 세금
 
-    // 👉 패널에서 읽어 쓸 프로퍼티
-    public int TodayTax => todayCollectedTax;
+    /// <summary>오늘 세금(가장 최근 하루 세금)</summary>
+    public int TodayTax => _todayTax;
 
+    /// <summary>최근 7일 평균 세금</summary>
     public float SevenDayAverage
     {
         get
         {
-            if (dailyHistory.Count == 0) return 0f;
+            if (_historyCount == 0) return 0f;
 
-            int count = Mathf.Min(7, dailyHistory.Count);
+            int days = Mathf.Min(7, _historyCount);
             int sum = 0;
-            // 최근 count일 평균
-            for (int i = dailyHistory.Count - count; i < dailyHistory.Count; i++)
-                sum += dailyHistory[i];
 
-            return (float)sum / count;
+            // 가장 최근 days일 합
+            for (int i = _historyCount - days; i < _historyCount; i++)
+                sum += _taxHistory[i];
+
+            return (float)sum / days;
         }
     }
 
+    /// <summary>
+    /// 전주 대비 차이.
+    /// (최근 7일 합 - 그 이전 7일 합 / 데이터가 8일 미만이면 0)
+    /// </summary>
     public int WeeklyDiff
     {
         get
         {
-            // 전주 데이터까지 있으려면 최소 14일 필요
-            if (dailyHistory.Count < 14) return 0;
+            if (_historyCount < 8) return 0; // 최소 8일은 지나야 비교 가능
 
-            int last7Sum = 0;
-            for (int i = dailyHistory.Count - 7; i < dailyHistory.Count; i++)
-                last7Sum += dailyHistory[i];
+            int recentDays = Mathf.Min(7, _historyCount);
+            int prevDays = Mathf.Min(7, _historyCount - recentDays);
 
-            int prev7Sum = 0;
-            for (int i = dailyHistory.Count - 14; i < dailyHistory.Count - 7; i++)
-                prev7Sum += dailyHistory[i];
+            int recentSum = 0;
+            int prevSum = 0;
 
-            return last7Sum - prev7Sum; // 양수면 이번 주가 더 많이 번 것
+            // 최근 7일
+            int recentStart = _historyCount - recentDays;
+            for (int i = recentStart; i < _historyCount; i++)
+                recentSum += _taxHistory[i];
+
+            // 그 이전 7일
+            int prevStart = Mathf.Max(0, recentStart - prevDays);
+            for (int i = prevStart; i < recentStart; i++)
+                prevSum += _taxHistory[i];
+
+            return recentSum - prevSum;
         }
     }
-    // ================================
 
-//>>>>>>> Stashed changes:Assets/2.Scripts/System/Tax/TaxSystem.cs
+    // ========================
+
     private void Start()
     {
+        
+        dateSystem = CityManager.Instance.dateSystem;
+        populationSystem = CityManager.Instance.populationSystem;
+        happinessSystem = CityManager.Instance.happinessSystem;
+
         // 날짜 이벤트 구독 : 하루가 지날 때마다 적용
-        CityManager.Instance.dateSystem.OnDayChanged += OnDayChanged;
+        if (dateSystem != null)
+            dateSystem.OnDayChanged += OnDayChanged;
 
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
-
-      
-        upButton.onClick.AddListener(IncreaseTaxRate);
-        downButton.onClick.AddListener(DecreaseTaxRate);
     }
 
     private void OnDisable()
     {
-        CityManager.Instance.dateSystem.OnDayChanged -= OnDayChanged;
+        if (dateSystem != null)
+            dateSystem.OnDayChanged -= OnDayChanged;
     }
 
     void Update()
@@ -98,29 +105,46 @@ public class TaxSystem : MonoBehaviour
         Update_Expected_Happiness_Change();
     }
 
-    // ✅ 하루가 지날 때마다 호출되는 로직
     void OnDayChanged()
     {
-        // 최신 인구/세율 기준으로 세금 다시 계산
+        // 하루 세금 다시 계산 (인구 변동 등을 반영)
         RecalculateTaxAmount();
 
-        // 세금 징수
+        // 오늘 세금 기록
+        _todayTax = tax;
 
+        // 세금 징수
         
 
-        // 오늘 세금 누적 (하루에 1번만이긴 하지만, 혹시 나중에 추가 수입 있을 걸 대비해서 += 로)
-        todayCollectedTax += tax;
+        // 히스토리에 저장
+        RecordTodayTax(_todayTax);
+
         // 행복도 변화량 적용
         ApplyHappinessByTaxRate();
-
-        // 🔥 하루 마감 처리 (통계 업데이트)
-        EndOfDay();
     }
 
     // 하루 세금 금액 계산
     void RecalculateTaxAmount()
     {
-        tax = CityManager.Instance.populationSystem.GetCurrentPopulation() * taxRate;
+        tax = populationSystem.GetCurrentPopulation() * taxRate;
+    }
+
+    // 히스토리 배열에 오늘 세금 push
+    void RecordTodayTax(int amount)
+    {
+        if (_historyCount < HISTORY_DAYS)
+        {
+            _taxHistory[_historyCount] = amount;
+            _historyCount++;
+        }
+        else
+        {
+            // 14일 꽉 찼으면 한 칸씩 당기고 마지막에 오늘 값 삽입
+            for (int i = 1; i < HISTORY_DAYS; i++)
+                _taxHistory[i - 1] = _taxHistory[i];
+
+            _taxHistory[HISTORY_DAYS - 1] = amount;
+        }
     }
 
     void Update_Expected_Happiness_Change()
@@ -129,26 +153,25 @@ public class TaxSystem : MonoBehaviour
             taxRate == 5 ? 2 :   // 5%  : 세금 거의 없음 -> 시민 기쁨
             taxRate == 10 ? 0 :  // 10% : 적정선 -> 변화 없음
             taxRate == 15 ? -2 : // 15% : 부담 느낌
-                                0;
+            0;
     }
 
     // 현재 세율 구간에 따른 행복도 변화량 적용
     void ApplyHappinessByTaxRate()
     {
-        // 실제 행복도 변화 적용
-        CityManager.Instance.happinessSystem.ApplyHappinessChange(expected_Happiness_Change);
+        happinessSystem.ApplyHappinessChange(expected_Happiness_Change);
     }
 
     void UpdateText()
     {
-        taxText.text = "예상 세금 : " + tax;
-        expected_Happiness_Change_Text.text = "예상 행복도 변화량 : " + expected_Happiness_Change;
+        if (taxText != null)
+            taxText.text = "예상 세금 : " + tax;
+
+        if (expected_Happiness_Change_Text != null)
+            expected_Happiness_Change_Text.text = "예상 행복도 변화량 : " + expected_Happiness_Change;
     }
 
-    public int GetTaxRate()
-    {
-        return taxRate;
-    }
+    public int GetTaxRate() => taxRate;
 
     public void IncreaseTaxRate()
     {
@@ -160,22 +183,5 @@ public class TaxSystem : MonoBehaviour
     {
         taxRate -= 5;
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
-    }
-
-
-    // ================================
-    // 🔥 하루가 끝날 때 통계 정리
-    // ================================
-    void EndOfDay()
-    {
-        // 오늘 징수된 세금 기록
-        dailyHistory.Add(todayCollectedTax);
-
-        // 기록은 최대 14일만 유지 (최근 2주)
-        if (dailyHistory.Count > 14)
-            dailyHistory.RemoveAt(0);
-
-        // 다음 날을 위해 오늘 값 리셋
-        todayCollectedTax = 0;
     }
 }
