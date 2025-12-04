@@ -30,8 +30,8 @@
       "buildingName": "Hospital",
       "level": 1,
       "requiredResources": [
-        {"type": 1, "amount": 0},
-        {"type": 2, "amount": 0}
+        {"type": 1, "amount": 30},
+        {"type": 2, "amount": 10}
       ],
       "requiredGovernmentLevel": 0,
       "constructionTime": 5,
