@@ -14330,6 +14330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   taxRatePanel: {fileID: 604390670}
+  volumeController: {fileID: 1776023000}
   taxText: {fileID: 1679913888}
   expected_Happiness_Change_Text: {fileID: 1525256072}
 --- !u!1 &1719157224
@@ -14569,7 +14570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2dc84fcbc12c7540a3c87cca7b44a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundButton: {fileID: 257385057}
+  optionButton: {fileID: 257385057}
   soundPanel: {fileID: 959174733}
   closeButton: {fileID: 785705119}
   masterSoundSlider: {fileID: 1915328850}

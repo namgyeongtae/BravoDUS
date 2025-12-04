@@ -4,8 +4,8 @@ using TMPro;
 
 public class VolumeController : MonoBehaviour
 {
-    [Header("SoundButton")]    
-    [SerializeField] Button soundButton;
+    [Header("Button")]    
+    [SerializeField] Button optionButton;
 
     [Header("SoundPanel")]
     [SerializeField] GameObject soundPanel;
@@ -28,12 +28,16 @@ public class VolumeController : MonoBehaviour
     [SerializeField] AudioClip buttonPositiveConfirm;
     [SerializeField] AudioClip buttonNegativeCancel;
 
+    public AudioSource SfxAudioSource => sfxAudioSource;
+    public AudioClip ButtonPositiveConfirm => buttonPositiveConfirm;
+    public AudioClip ButtonNegativeCancel => buttonNegativeCancel;
+
     private void Start()
     {
         soundPanel.SetActive(false);
 
-        // 로비
-        soundButton.onClick.AddListener(OpenSoundPanel);
+        // 옵션 버튼
+        optionButton.onClick.AddListener(OpenSoundPanel);
 
         // 사운드 패널
         closeButton.onClick.AddListener(CloseSoundPanel);
