@@ -45,16 +45,6 @@ public class VolumeController : MonoBehaviour
         sfxSoundSlider.onValueChanged.AddListener(SFX);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif
-        }
-    }
-
     void OpenSoundPanel()
     {
         sfxAudioSource.PlayOneShot(buttonPositiveConfirm);

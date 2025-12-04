@@ -2,6 +2,11 @@
 
 public class TaxRatePanel : MonoBehaviour
 {
+
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
     public void ActivatePanel()
     {
         gameObject.SetActive(true);
