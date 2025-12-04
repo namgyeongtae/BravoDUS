@@ -708,7 +708,7 @@ RectTransform:
   m_Father: {fileID: 740017049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4328,26 +4328,13 @@ GameObject:
   - component: {fileID: 604390674}
   - component: {fileID: 604390673}
   - component: {fileID: 604390672}
-  - component: {fileID: 604390671}
   m_Layer: 5
   m_Name: TaxRate_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &604390671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604390670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7b46dde91a41d14097c7a7b7bfadaa3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_IsActive: 0
 --- !u!114 &604390672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4641,7 +4628,7 @@ RectTransform:
   m_Father: {fileID: 1284532951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5427,10 +5414,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startButton: {fileID: 0}
-  buttonPositiveConfirm: {fileID: 0}
   quitPanel: {fileID: 0}
   quitButton: {fileID: 0}
   cancleButton: {fileID: 0}
+  bgmAudioSource: {fileID: 0}
+  sfxAudioSource: {fileID: 0}
+  buttonPositiveConfirm: {fileID: 0}
+  buttonNegativeCancle: {fileID: 0}
 --- !u!4 &739042213
 Transform:
   m_ObjectHideFlags: 0
@@ -6610,7 +6600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &959174734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9911,7 +9901,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1229201795}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1717760919}
+        m_TargetAssemblyTypeName: TaxSystem, Assembly-CSharp
+        m_MethodName: DeActivatePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1229201795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10245,8 +10247,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1719157225}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12081,7 +12083,7 @@ RectTransform:
   m_Father: {fileID: 1784234889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12865,7 +12867,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1556405236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1717760919}
+        m_TargetAssemblyTypeName: TaxSystem, Assembly-CSharp
+        m_MethodName: DecreaseTaxRate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1556405236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13133,8 +13147,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1855423819}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -13451,7 +13465,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1610359111}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1717760919}
+        m_TargetAssemblyTypeName: TaxSystem, Assembly-CSharp
+        m_MethodName: IncreaseTaxRate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1610359111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13651,7 +13677,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1613521661}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1717760919}
+        m_TargetAssemblyTypeName: TaxSystem, Assembly-CSharp
+        m_MethodName: ActivatePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1621821498
 GameObject:
   m_ObjectHideFlags: 0
@@ -14291,6 +14329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6718efba05b83d74c9a1d6ff2c705007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  taxRatePanel: {fileID: 604390670}
   taxText: {fileID: 1679913888}
   expected_Happiness_Change_Text: {fileID: 1525256072}
 --- !u!1 &1719157224
@@ -14537,7 +14576,6 @@ MonoBehaviour:
   masterText: {fileID: 1202596218}
   bgmSoundSlider: {fileID: 1460926889}
   bgmText: {fileID: 1103256935}
-  bgmAudioSource: {fileID: 0}
   sfxSoundSlider: {fileID: 1246198703}
   sfxText: {fileID: 1950521018}
   sfxAudioSource: {fileID: 1776023002}
@@ -117245,8 +117283,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2008364672}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

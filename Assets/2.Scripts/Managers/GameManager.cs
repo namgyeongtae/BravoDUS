@@ -7,17 +7,25 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [Header("Title")]
-    [SerializeField] Button startButton;
-    [SerializeField] AudioClip buttonPositiveConfirm;
+    [SerializeField] Button startButton; 
 
     [Header("QuitPanel")]
     [SerializeField] GameObject quitPanel;
     [SerializeField] Button quitButton;
     [SerializeField] Button cancleButton;
 
-    AudioSource audioSource;
+    [Header("AudioSource")]
+    [SerializeField] AudioSource bgmAudioSource;
+    [SerializeField] AudioSource sfxAudioSource;
+
+    [Header("AudioClip")]
+    [SerializeField] AudioClip buttonPositiveConfirm;
+    [SerializeField] AudioClip buttonNegativeCancle;
+
 
     public GameObject QuitPanel => quitPanel;
+    public AudioSource BgmAudioSource => bgmAudioSource;
+    public AudioSource SfxAudioSource => sfxAudioSource;
 
     public static GameManager Instance { get; private set; }
 
@@ -27,8 +35,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
-
         Instance = this;
 
         _managers.Init();
@@ -64,11 +70,13 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
-        audioSource.PlayOneShot(buttonPositiveConfirm);
+        sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
     }
 
     void Quit()
     {
+        sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
+
         Application.Quit();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -77,6 +85,7 @@ public class GameManager : MonoBehaviour
 
     void Cancle()
     {
+        sfxAudioSource.PlayOneShot(buttonNegativeCancle);
         quitPanel.SetActive(false);
     }
 

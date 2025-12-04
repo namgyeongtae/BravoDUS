@@ -18,7 +18,6 @@ public class VolumeController : MonoBehaviour
     [Header("Sound_BGM")]
     [SerializeField] Slider bgmSoundSlider;
     [SerializeField] TextMeshProUGUI bgmText;
-    [SerializeField] AudioSource bgmAudioSource;
 
     [Header("Sound_SFX")]
     [SerializeField] Slider sfxSoundSlider;
@@ -51,16 +50,6 @@ public class VolumeController : MonoBehaviour
         soundPanel.SetActive(true);
     }
 
-    void ExitGame()
-    {
-        sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
-        Application.Quit();
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
-    }
-
     void CloseSoundPanel()
     {
         sfxAudioSource.PlayOneShot(buttonNegativeCancel);
@@ -76,12 +65,13 @@ public class VolumeController : MonoBehaviour
     void BGM(float value)
     {
         bgmText.text = ((int)(value * 100)).ToString();
-        bgmAudioSource.volume = value;
+        GameManager.Instance.BgmAudioSource.volume = value;
     }
 
     void SFX(float value)
     {
         sfxText.text = ((int)(value * 100)).ToString();
+        GameManager.Instance.SfxAudioSource.volume = value;
         sfxAudioSource.volume = value;
     }
 }
