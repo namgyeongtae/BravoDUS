@@ -1,32 +1,30 @@
 ﻿using System;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-
+using UnityEngine.UI;  // 레거시 UI Text
 
 public class DateSystem : MonoBehaviour
 {
     [Header("Game Day")]
-    public int currentDay = 1;
+    public int currentDay = 1;      // 현재 날짜 (Day 1부터 시작)
 
     [Header("Time Scale")]
     [Tooltip("현실 몇 초마다 게임 하루(Day)가 지나가는가? 기본 60초 = 1 Day")]
     public float realSecondsPerGameDay = 60f;
 
-    [Header("UI (TextMeshPro)")]
-    public TextMeshProUGUI dateText;
+    [Header("UI")]
+    public Text dateText;   // 레거시 UI Text
 
+    // 날짜 변경 시 알림
     public event Action OnDayChanged;
 
-
-    private float _timeAcc = 0f; // 현실 시간 누적
+    private float _timeAcc; // 누적 현실 시간(초)
 
     void Update()
     {
         // 현실 시간 누적
         _timeAcc += Time.deltaTime;
 
-        // 누적 시간이 하루 분량을 넘으면 Day 증가
+        // 누적이 1일 분(기본 60초)을 넘으면 Day++
         while (_timeAcc >= realSecondsPerGameDay)
         {
             _timeAcc -= realSecondsPerGameDay;
@@ -34,11 +32,10 @@ public class DateSystem : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        // 테스트용: 스페이스로 강제 하루 증가
+        // 테스트용: 스페이스로 하루 강제 증가
         if (Input.GetKeyDown(KeyCode.Space))
         {
             IncreaseDay();
-
         }
 #endif
 
@@ -54,12 +51,7 @@ public class DateSystem : MonoBehaviour
 
     private void UpdateText()
     {
-        if (dateText != null)
-            dateText.text = $"Day {currentDay}";
-    }
-    public void AdvanceDay()
-    {
-        currentDay++;
-        OnDayChanged?.Invoke();
+        if (dateText == null) return;
+        dateText.text = $"Day {currentDay}";
     }
 }

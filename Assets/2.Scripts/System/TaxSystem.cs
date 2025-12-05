@@ -4,9 +4,6 @@ using UnityEngine.UI;
 
 public class TaxSystem : MonoBehaviour
 {
-    [SerializeField] GameObject taxRatePanel;
-    [SerializeField] VolumeController volumeController;
-
     public Text taxText;
     public Text expected_Happiness_Change_Text;
 
@@ -116,8 +113,6 @@ public class TaxSystem : MonoBehaviour
         // 오늘 세금 기록
         _todayTax = tax;
 
-        // 세금 징수
-        
 
         // 히스토리에 저장
         RecordTodayTax(_todayTax);
@@ -180,25 +175,11 @@ public class TaxSystem : MonoBehaviour
     {
         taxRate += 5;
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
-        volumeController.SfxAudioSource.PlayOneShot(volumeController.ButtonPositiveConfirm);
     }
 
     public void DecreaseTaxRate()
     {
         taxRate -= 5;
         taxRate = Mathf.Clamp(taxRate, taxRate_Min, taxRate_Max);
-        volumeController.SfxAudioSource.PlayOneShot(volumeController.ButtonNegativeCancel);
-    }
-
-    public void ActivatePanel()
-    {
-        taxRatePanel.SetActive(true);
-        volumeController.SfxAudioSource.PlayOneShot(volumeController.ButtonPositiveConfirm);
-    }
-
-    public void DeActivatePanel()
-    {
-        taxRatePanel.SetActive(false);
-        volumeController.SfxAudioSource.PlayOneShot(volumeController.ButtonNegativeCancel);
     }
 }
