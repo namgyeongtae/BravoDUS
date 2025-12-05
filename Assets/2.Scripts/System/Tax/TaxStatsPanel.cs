@@ -7,8 +7,7 @@ public class TaxStatsPanel : MonoBehaviour
     public Text todayTaxText;      // 오늘 세금
     public Text avg7Text;          // 7일 평균
     public Text weeklyDiffText;    // 전주 대비 (이번 7일 - 지난 7일)
-    public GameObject Statpanel;
-    
+    public GameObject Panel;
     private TaxSystem _taxSystem;
 
     private void Awake()
@@ -22,8 +21,7 @@ public class TaxStatsPanel : MonoBehaviour
     /// </summary>
     public void Open()
     {
-        Statpanel.gameObject.SetActive(true);
-
+        Panel.gameObject.SetActive(true);
         Refresh();
     }
 
@@ -32,7 +30,7 @@ public class TaxStatsPanel : MonoBehaviour
     /// </summary>
     public void Close()
     {
-        Statpanel.gameObject.SetActive(false);
+        Panel.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -46,9 +44,9 @@ public class TaxStatsPanel : MonoBehaviour
             return;
         }
 
-        float today = _taxSystem.TodayTax;
+        int today = _taxSystem.TodayTax;
         float avg7 = _taxSystem.SevenDayAverage;
-        float diff = _taxSystem.WeeklyDiff;
+        int diff = _taxSystem.WeeklyDiff;
 
         string diffSign = diff > 0 ? "▲" : diff < 0 ? "▼" : "-";
 
