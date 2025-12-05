@@ -7,7 +7,7 @@ using UnityEngine.UI;
 // 60~89 만족 : +10% / 90~100 행복 : +20%
 public class HappinessSystem : MonoBehaviour
 {  
-    int happiness = 10; // 행복도 수치
+    int happiness = 1; // 행복도 수치
     float productivityMultiplier = 1.0f;
 
     public float GetProductivityMultiplier()

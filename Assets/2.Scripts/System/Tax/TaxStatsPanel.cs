@@ -46,9 +46,9 @@ public class TaxStatsPanel : MonoBehaviour
             return;
         }
 
-        int today = _taxSystem.TodayTax;
+        float today = _taxSystem.TodayTax;
         float avg7 = _taxSystem.SevenDayAverage;
-        int diff = _taxSystem.WeeklyDiff;
+        float diff = _taxSystem.WeeklyDiff;
 
         string diffSign = diff > 0 ? "¡ã" : diff < 0 ? "¡å" : "-";
 

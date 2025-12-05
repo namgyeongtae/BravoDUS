@@ -33,12 +33,6 @@ public class NpcPathWalker : MonoBehaviour
     {
         // 1) 시작 노드 결정: entrance 근처 가장 가까운 waypoint
         currentWP = roadGraph.FindNearestWaypoint(entrance.position);
-        // 도로가 없는 경우 스크립트 비활성화
-        //if (currentWP == null)
-        //{
-        //    enabled = false;
-        //    return;
-        //}
 
         // 2) NPC를 시작 노드 위치로 스냅
         transform.position = currentWP.transform.position;
