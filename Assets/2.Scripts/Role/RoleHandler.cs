@@ -21,4 +21,16 @@ public abstract class RoleHandler : MonoBehaviour
     public virtual void OnDeBuff() { }
 
     public virtual void OnResolved() { }
+
+    // 외곽 인접 타일 중 Road 가 있으면 활성화
+    public virtual void OnActivate()
+    {
+
+    }
+
+    // 외곽 인접 타일 중 Road 가 없으면 비활성화
+    public virtual void OnDeActivate()
+    {
+
+    }
 }

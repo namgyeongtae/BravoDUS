@@ -18,19 +18,8 @@ public enum RoadDir
     None = 0,               // 0000 : 사방이 도로(센터)
     Right = 1,              // 0001 : 오른쪽만 막힘
     Left = 2,               // 0010 : 왼쪽만 막힘
-    RightLeft = 3,          // 0011 : 좌우만 막힘
     Down = 4,               // 0100 : 아래만 막힘
-    DownRight = 5,          // 0101 : 아래+오른쪽 막힘
-    DownLeft = 6,           // 0110 : 아래+왼쪽 막힘
-    DownRightLeft = 7,      // 0111 : 아래+좌+우 막힘
-    Up = 8,                 // 1000 : 위만 막힘
-    UpRight = 9,            // 1001 : 위+오른쪽 막힘
-    UpLeft = 10,            // 1010 : 위+왼쪽 막힘
-    UpRightLeft = 11,       // 1011 : 위+좌+우 막힘
-    UpDown = 12,            // 1100 : 위+아래 막힘
-    RightUpDown = 13,       // 1101 : 위+아래+오른쪽 막힘
-    LeftUpDown = 14,        // 1110 : 위+아래+왼쪽 막힘
-    LeftRightUpDown = 15    // 1111 : 사방 막힘(고립/엔드캡)
+    Up = 8                  // 1000 : 위만 막힘
 }
 
 public enum RoadMode
@@ -306,9 +295,11 @@ public class RoadSystem : MonoBehaviour
         int[] dirX = { 1, -1, 0, 0 };
         int[] dirY = { 0, 0, -1, 1 };
 
+        RoadDir[] roadDirs = { RoadDir.Right, RoadDir.Left, RoadDir.Down, RoadDir.Up };
+
         int roadState = 0x0000; // 0이면 사방이 도로(센터)
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++) // 오 왼 아래 위
         {
             int nx = cell.x + dirX[i];
             int ny = cell.y + dirY[i];
@@ -317,7 +308,7 @@ public class RoadSystem : MonoBehaviour
             if (nx < -_gridHandler.Width / 2 || nx >= _gridHandler.Width / 2
              || ny < -_gridHandler.Height / 2 || ny >= _gridHandler.Height / 2)
             {
-                roadState |= 1 << i;
+                roadState |= (int)roadDirs[i];
                 continue;
             }
 
@@ -325,7 +316,7 @@ public class RoadSystem : MonoBehaviour
             // (이웃이 Road면 연결되어 "뚫림" 상태이므로 비트 유지)
             TileType neighbor = _gridHandler.GetGridTileType(nx, ny);
             if (neighbor == TileType.Field)
-                roadState |= 1 << i;
+                roadState |= (int)roadDirs[i];
         }
 
         DrawTile(cell, roadState);

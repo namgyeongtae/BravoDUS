@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public enum PlacementMode
 {
@@ -22,7 +23,14 @@ public class PlacementSystem : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        for (int i = 0; i < _gridHandler.Width; i++)
+        {
+            for (int j = 0; j < _gridHandler.Height; j++)
+            {
+                if (_gridHandler.GetGridTileType(i, j) == TileType.Road)
+                    Debug.Log("Road: " + i + ", " + j);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -57,14 +65,18 @@ public class PlacementSystem : MonoBehaviour
             Managers.Resource.Destroy(_currentBuilding);
         }
 
-        _currentBuilding = Instantiate(buildingPrefab);
+        // _currentBuilding = Instantiate(buildingPrefab);
         _buildingSize = buildingSize;
 
-        // 첫 포지션은 스크린 가운데 포인트로 설정
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
+        if (CalcDefaultPosition(_buildingSize, out Vector3 defaultPos))
         {
-            Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-            _currentBuilding.transform.position = _buildingSize % 2 != 0 ? _gridHandler.CellToWorld(cell.x, cell.y) : _gridHandler.CellToWorld(cell.x, cell.y) + new Vector3(_gridHandler.CellSize.x / 2, 0, _gridHandler.CellSize.y / 2);
+            _currentBuilding = Managers.Resource.InstantiateAddressable(buildingPrefab.GetComponent<Building>().BuildingType.ToString(), Vector3.zero, Quaternion.identity);
+            _currentBuilding.transform.position = defaultPos;
+        }
+        else
+        {
+            Managers.UI.AddPanel<UIToastPopup>().SettingPopup("지을 수 있는 곳이 없습니다.");
+            return;
         }
 
         // 프리뷰 머터리얼 설정
@@ -83,8 +95,6 @@ public class PlacementSystem : MonoBehaviour
         }
 
         _currentBuilding.GetComponentInChildren<MeshRenderer>().materials = materials;
-
-        DetectCollision(_buildingSize);
     }
 
     private void UpdatePlacement()
@@ -250,10 +260,11 @@ public class PlacementSystem : MonoBehaviour
             }
         }
 
-        _canBuild = !DetectCollision(_buildingSize);
+        _canBuild = !DetectCollision(_currentBuilding.transform.position, _buildingSize);
+        SetMaterialColor(_canBuild);
     }
 
-    private bool DetectCollision(int buildingSize)
+    private bool DetectCollision(Vector3 position, int buildingSize)
     {
         bool isEven = buildingSize % 2 == 0;
 
@@ -261,15 +272,15 @@ public class PlacementSystem : MonoBehaviour
 
         if (!isEven)
         {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (buildingSize / 2));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (buildingSize / 2));
+            float startPosX = position.x - (_gridHandler.CellSize.x * (buildingSize / 2));
+            float startPosZ = position.z - (_gridHandler.CellSize.y * (buildingSize / 2));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
         else
         {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
+            float startPosX = position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
+            float startPosZ = position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
 
             startPos = new Vector3(startPosX, 0, startPosZ);
         }
@@ -294,16 +305,6 @@ public class PlacementSystem : MonoBehaviour
 
             if (isCollide)
                 break;
-        }
-
-        Color matColor = isCollide ? new Color(1f, 0f, 0f, 0.5f) : new Color(1f, 1f, 1f, 0.5f);
-
-        var materials = _currentBuilding.GetComponentInChildren<MeshRenderer>().materials;
-
-        foreach (var mat in materials)
-        {
-            Debug.Log("Set Color: " + matColor);
-            mat.SetColor("_Color", matColor);
         }
 
         return isCollide;
@@ -344,6 +345,21 @@ public class PlacementSystem : MonoBehaviour
         _gridHandler.ExitBuildMode();
 
         return true;
+    }
+
+    private void SetMaterialColor(bool canBuild)
+    {
+        if (_currentBuilding == null) return;
+
+        Color matColor = canBuild ? new Color(1f, 1f, 1f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
+
+        var materials = _currentBuilding.GetComponentInChildren<MeshRenderer>().materials;
+
+        foreach (var mat in materials)
+        {
+            Debug.Log("Set Color: " + matColor);
+            mat.SetColor("_Color", matColor);
+        }
     }
 
     private void SetTileTypeConstructed()
@@ -389,7 +405,8 @@ public class PlacementSystem : MonoBehaviour
         if (_currentBuilding == null) return;
 
         float currentY = _currentBuilding.transform.rotation.eulerAngles.y;
-        float rotationY = (currentY >= 90) ? 0 : 90;
+        // float rotationY = (currentY <= 0) ? 270 : 0;
+        float rotationY = Mathf.Approximately(currentY, 0) ? 270 : 0;
 
         _currentBuilding.transform.rotation = Quaternion.Euler(0, rotationY, 0);
     }
@@ -402,6 +419,61 @@ public class PlacementSystem : MonoBehaviour
                 return true;
         }
 
+        return false;
+    }
+
+    private bool CalcDefaultPosition(int size, out Vector3 defaultPos)
+    {
+        Vector3Int startCell = Vector3Int.zero;
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
+        {
+            startCell = _gridHandler.WorldToCell(hit.point);
+        }
+
+        int[] dirX = {0, 1, 0, -1};
+        int[] dirY = {-1, 0, 1, 0};
+
+        // BFS 탐색
+        Queue<Vector3Int> cellQueue = new();
+        HashSet<Vector3Int> visitedCells = new();
+
+        cellQueue.Enqueue(startCell);
+        visitedCells.Add(startCell);
+
+        while (cellQueue.Count > 0)
+        {
+            Vector3Int currentCell = cellQueue.Dequeue();
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nextX = (size % 2 == 0) ? currentCell.x + dirX[i] * (size / 2) : currentCell.x + dirX[i] * (size / 2 + 1);
+                int nextY = (size % 2 == 0) ? currentCell.y + dirY[i] * (size / 2) : currentCell.y + dirY[i] * (size / 2 + 1);
+
+                Vector3Int nextCell = new Vector3Int(nextX, nextY, 0);
+
+                if (_gridHandler.IsCellOutOfRange(nextCell) || visitedCells.Contains(nextCell)) continue;
+
+                Vector3 nextPos = _buildingSize % 2 != 0 ? 
+                _gridHandler.CellToWorld(nextCell.x, nextCell.y) 
+              : _gridHandler.CellToWorld(nextCell.x, nextCell.y) + new Vector3(_gridHandler.CellSize.x / 2, 0, _gridHandler.CellSize.y / 2);
+
+                bool isCollide = DetectCollision(nextPos, size);
+
+                if (!isCollide)
+                {
+                    defaultPos = nextPos;
+                    return true;
+                }
+                else
+                {
+                    cellQueue.Enqueue(nextCell);
+                    visitedCells.Add(nextCell);
+                }
+            }
+        }
+
+        defaultPos = Vector3Int.zero;
         return false;
     }
 }
