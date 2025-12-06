@@ -1,0 +1,277 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Duplicate Isolation
+  m_EditorClassIdentifier: 
+  m_GroupName: Duplicate Isolation
+  m_GUID: 1fcf8a7762cfb3245b7f1ead7e9a7c14
+  m_SerializeEntries:
+  - m_GUID: 04baad33970c5fa4db850a49991d6d10
+    m_Address: Assets/Art/Materials/M_Tile_Concrete_Base.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 102bae77eac3d8747b1ad278ad01d1b7
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/dark_blue.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 151a15f6b7b721d4786866f9983d5d34
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/white_2P.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 156ec492e516ccb4099add479601d65e
+    m_Address: Assets/5.Images/2DImages/Belevich/Hyper casual mobile GUI/Sprites/buttons.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 327f45092c16f2d4e9f498d1b5c84175
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/window.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3535ca9d47f2b634e8d624b4b50de4b8
+    m_Address: Assets/Art/Hovl Studio/Magic effects pack/Prefabs/Smoke effects/Dust
+      hemisphere loop.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ed2aafb5ef4d2a44ac82d095bc2cc80
+    m_Address: Assets/Art/Textures/Tile_Concrete/T_Tile_Concrete_T2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 447ed10accf52c241927190fa5701543
+    m_Address: Assets/5.Images/Tiles/Road/RoadTiles.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44c5fa7fa855dc8429a7717f01ef4ecf
+    m_Address: Assets/Art/Textures/Tile_Grass/T_Tile_Grass_T0.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fe229b2d25565748a911830ab166af6
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/bright_green.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5249830ca8a513041bd34328ebc27d3c
+    m_Address: Assets/Art/Textures/Tile_Concrete/T_Tile_Concrete_T1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62526cc2ff4e993408a56be36760c704
+    m_Address: Assets/Art/JMO Assets/FencesPack/Textures/Occlusion/AmbientOcclusion.tif
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d1a2570067e3ae4cb5c72a2bca3b8d5
+    m_Address: Assets/5.Images/2DImages/Belevich/Hyper casual mobile GUI/Sprites/popups.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bbb6349256a5e545b62a498145ad7db
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/blue_2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7db93cc41ea03b844bbc04880b704949
+    m_Address: Assets/Art/Textures/Tile_Grass/T_Tile_Grass_T2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e0ba1102d4744d45831dd93756c407f
+    m_Address: Assets/Art/Textures/Trim_Wood/T_Trim_01_Woods_T0.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85703ee0d52ea0d479ea35a4259a0b41
+    m_Address: Assets/5.Images/2DImages/Belevich/Hyper casual mobile GUI/Sprites/additional
+      controls.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a2f7d47e2d132243a2116ce64679a9c
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/blue.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d48c6ac7e283ea4b97cf40ec03bed95
+    m_Address: Assets/Art/Materials/M_Trim_01_Metal.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95f4e8ac89c60734a86307face746d60
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/green.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b23c1c81ea3e2a45abfe39f69ae2026
+    m_Address: Assets/Art/JMO Assets/FencesPack/Textures/Heighr Map/Displacement.tif
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abd5ece7648190d4daa2606fb75bd941
+    m_Address: Assets/Art/Textures/Trim_Metal/T_Trim_01_Metal_T0.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b02a065911b3454438c5f528d33732e0
+    m_Address: Assets/Art/Textures/Tile_Grass/T_Tile_Grass_T1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6dc664f50c21ce46b51fd6c422d13d5
+    m_Address: Assets/Art/Textures/Trim_Wood/T_Trim_01_Woods_T2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b98f13efd1d879842a65822156ef53fd
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/green_001.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba9c5a438ca85eb4c8db67818cf54c5b
+    m_Address: Assets/4.Materials/Gray.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb3e210b8c738be4886f07bfcb334bb9
+    m_Address: Assets/Art/Materials/M_Tile_Grass_01.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbc32c56102b32f4dafa718b4e782d9d
+    m_Address: Assets/Art/Hovl Studio/Magic effects pack/Textures/SmokeFree1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd23ac9124b5c5b44910cef90f64e021
+    m_Address: Assets/Art/Materials/M_Trim_01_Wood.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0330360456dc234d9203a6df4fa2339
+    m_Address: Assets/Art/JMO Assets/FencesPack/Textures/normal maps/normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c12d95519f4c0fa4ebaa8a19490e7843
+    m_Address: Assets/Art/Textures/Trim_Metal/T_Trim_01_Metal_T1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c82ef5662d8a2b24db2a86991494e0fb
+    m_Address: Assets/Art/Textures/Trim_Metal/T_Trim_01_Metal_T2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c96f9447eefd26942b64e297319317f4
+    m_Address: Assets/Art/Materials/M_Tile_Concrete_PaintedGreen.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d14afe0b179d2f24e95e6dbc3d596886
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/brown.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de2434977cc8f4e4e97ab627f5e46ae4
+    m_Address: Assets/Art/Textures/Tile_Concrete/T_Tile_Concrete_T0.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2aff6b006f7e7a41b004fcc482f4c70
+    m_Address: Assets/Art/Shaders/SG_Lit_Base.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e454b68479104714e8f45f3c0ca1fd65
+    m_Address: Assets/Art/JMO Assets/FencesPack/Materials/WoodWhite.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8bfda23c976c124a9793ad47256810c
+    m_Address: Assets/Art/Textures/Trim_Wood/T_Trim_01_Woods_T1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea6dde5ed1a02aa43828aad40f3f7974
+    m_Address: Assets/Art/Hovl Studio/Magic effects pack/Materials/SmokeFree1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebb0301a62138c84a9aa56a791e7ba33
+    m_Address: Assets/Art/Materials/M_Glass.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f37a8ad86fee7eb4383d72dcdfcd2cb6
+    m_Address: Assets/Art/Shaders/SG_Lit_Glass.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8e72d38ec25d3e4c924fe7949dbbeed
+    m_Address: Assets/Art/Lowpoly Buildings/Materials/white.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 16227bcdb1620b6429077f5587763011, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0865c5596bec3c14a95d300fe9da6d5e, type: 2}
+    - {fileID: 11400000, guid: d4596eb822399a4418b62ceced1d7f32, type: 2}

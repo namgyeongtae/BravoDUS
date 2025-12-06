@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote Building Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote Building Group
+  m_GUID: 4bad36437e44e3147ad3d0d66f25db1e
+  m_SerializeEntries:
+  - m_GUID: 094f23e8bec5b2c49b12935ed1a30f21
+    m_Address: Hospital
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52994a8df09231e4c9693e494643f087
+    m_Address: BookStore
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5724309bfb8d2dd4b8e9ebbbbd2e5d5b
+    m_Address: FireStation
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62529fe9c0dfb934fbd11a86efe4380b
+    m_Address: PoliceOffice
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8fba0a003c0aa324991952647640d335
+    m_Address: ToyFactory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90f5cdd815eed184a933a4f6b960af30
+    m_Address: House_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9509956ce5dc4a14dbb44c33512a09d5
+    m_Address: Government
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ce116bd8a3c7074a933ff5118761471
+    m_Address: House_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5be13b2ce148284c97de448d73a5871
+    m_Address: House_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 16227bcdb1620b6429077f5587763011, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 197c76d9ceb67154ca65d53146f46654, type: 2}
+    - {fileID: 11400000, guid: 2fb1bfc3d6ce9774284ca179c534a8f1, type: 2}
