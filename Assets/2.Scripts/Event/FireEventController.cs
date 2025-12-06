@@ -39,12 +39,14 @@ public class FireEventController : EventController
 
     protected override float ScheduleNext(float now, CityStat stats)
     {
-        // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
+        /* // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
         float lambda = Mathf.Max(0.08f, _baseRatePerMin * Mathf.Clamp01(1 - stats.FireRate));
         // 지수분포: Δt(분) = -ln(1-u)/λ
         float u = Random.value;
         float minutes = -Mathf.Log(1f - u) / lambda;
-        return now + minutes * 60f;
+        return now + minutes * 60f; */
+
+        return now + 30f;
     }
 
     protected override Incident ExecuteSpawn(float now, CityStat stat)
@@ -90,9 +92,11 @@ public class FireEventController : EventController
 
         _incidentBuildings.Add(_targetBuilding, inc);
 
-        var fireVFX = Managers.Resource.InstantiateAddressable("FireSmokeVFX", Vector3.zero, Quaternion.identity, _targetBuilding.transform).GetComponent<ParticleSystem>();
+        /* var fireVFX = Managers.Resource.InstantiateAddressable("FireSmokeVFX", Vector3.zero, Quaternion.identity, _targetBuilding.transform).GetComponent<ParticleSystem>();
         // fireVFX.transform.localPosition = Vector3.zero;
-        fireVFX.Play();
+        fireVFX.Play(); */
+
+        _targetBuilding.OnFire();
 
         var uiWarning = Managers.UI.AddPanel<UIFireEventWarning>(_targetBuilding, true);
         _incidentUIWarnings.Add(inc, uiWarning);
@@ -106,13 +110,7 @@ public class FireEventController : EventController
 
         building.GetComponent<RoleHandler>()?.OnResolved();
 
-        var fireVFX = building.GetComponentInChildren<ParticleSystem>();
-        if (fireVFX == null)
-        {
-            Debug.LogError("FireEventController: Fire VFX not found");
-            return;
-        }
-        Managers.Resource.Destroy(fireVFX.gameObject);
+        building.OffFire();
     }
 
     protected override void OnUpdateTick_Event(Incident inc)

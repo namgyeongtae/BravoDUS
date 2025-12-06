@@ -40,7 +40,7 @@ MonoBehaviour:
     buildingPrefab: {fileID: 9038072763571139337, guid: 5724309bfb8d2dd4b8e9ebbbbd2e5d5b, type: 3}
     Happiness: 0
     Population: 0
-    buildingSize: 4
+    buildingSize: 6
   - buildingName: "\uBAA9\uACF5\uC18C"
     buildingIcon: {fileID: 21300000, guid: c27c9b95e9d800b4a9c1047a9104cb67, type: 3}
     buildingType: 6

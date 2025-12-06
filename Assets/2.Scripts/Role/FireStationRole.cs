@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FireStationRole : RoleHandler
@@ -70,9 +71,9 @@ public class FireStationRole : RoleHandler
         }
     }
 
-    public void DispatchFireTruck(Building targetBuilding)
+    public bool DispatchFireTruck(Building targetBuilding)
     {
-        int buildingSize = GetComponent<Building>().BuildingSize;
+        int buildingSize = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingType == BuildingType.FireStation).buildingSize;
 
         // Truck이 출동 시 첫 포지션 잡기기
         // 중심 셀에서 건물 기준 앞 뒤 왼쪽 오른쪽 순서로 경계에서 한 칸 떨어져있는는 셀 중 TileType이 Field 이거나 Road 인 셀을 찾는다.
@@ -106,6 +107,7 @@ public class FireStationRole : RoleHandler
         if (!isFound) 
         {
             Managers.UI.OpenToastPopup("길이 막혀 소방차가 출동할 수 없습니다.");
+            return false;
         }
         else
         {
@@ -120,7 +122,10 @@ public class FireStationRole : RoleHandler
             {
                 Managers.Resource.Destroy(truck.gameObject);
             }
+
         }
+        
+        return true;
     }
 
     public bool CanProtect(Building building)

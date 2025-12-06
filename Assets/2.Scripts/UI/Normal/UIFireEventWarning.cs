@@ -96,11 +96,13 @@ public class UIFireEventWarning : CanvasPanel
                                             .FirstOrDefault();
                 if (fireFighter != null)
                 {
-                    var inc = Managers.Event.Fire.IncidentBuildings[_targetBuilding];
-                    Managers.Event.Fire.ResolvingWorkForces.Add(inc, fireFighter);
+                    isSuccess = fireStationRole.DispatchFireTruck(_targetBuilding);
                     
-                    fireStationRole.DispatchFireTruck(_targetBuilding);
-                    isSuccess = true;
+                    if (isSuccess)
+                    {
+                        var inc = Managers.Event.Fire.IncidentBuildings[_targetBuilding];
+                        Managers.Event.Fire.ResolvingWorkForces.Add(inc, fireFighter);
+                    }
                     break;
                 }
             }

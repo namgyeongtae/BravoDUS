@@ -10,6 +10,7 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject basePrefab; // 기본 건물 모델 Prefab
     [SerializeField] private GameObject upgradedPrefab; // 업그레이드 모델 Prefab
     [SerializeField] private GameObject constructionEffectPrefab; // 건축 중 이펙트 Prefab (Particle System)
+    [SerializeField] private GameObject fireEffect; // 업그레이드 중 이펙트 Prefab (Particle System)
     [SerializeField] private float upgradeTime = 1f; // 업그레이드 시간 (초, 테스트용 짧게 설정)
     [SerializeField] private int maxLevel = 10; // 업그레이드 최대 레벨
     [SerializeField] private bool _isTestMode = false; // 기본 false
@@ -55,6 +56,8 @@ public class Building : MonoBehaviour
         Debug.Log($"StartConstruction - CurrentState: {CurrentState}, isTestMode: {_isTestMode}");
         if (CurrentState != State.Ruin) return;
         CurrentState = State.Constructing;
+
+        Managers.UI.AddPanel<UIBuildProgress>(this, true);
 
         Debug.Log($"State changed to Constructing: {gameObject.name}");
         constructionCoroutine = StartCoroutine(ConstructCoroutine());
@@ -331,6 +334,16 @@ public class Building : MonoBehaviour
     public void SetCurrentState(State state)
     {
         CurrentState = state;
+    }
+
+    public void OnFire()
+    {
+        fireEffect.SetActive(true);
+    }
+
+    public void OffFire()
+    {
+        fireEffect.SetActive(false);
     }
 
     // ============================

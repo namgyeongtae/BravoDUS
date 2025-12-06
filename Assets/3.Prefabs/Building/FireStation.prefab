@@ -862,11 +862,12 @@ MonoBehaviour:
   basePrefab: {fileID: 2517965925443986976}
   upgradedPrefab: {fileID: 0}
   constructionEffectPrefab: {fileID: 1541352577665823825, guid: 3535ca9d47f2b634e8d624b4b50de4b8, type: 3}
+  fireEffect: {fileID: 0}
   upgradeTime: 1
   maxLevel: 10
   _isTestMode: 0
   constructionTime: 6
-  buildingSize: 1
+  buildingSize: 6
   BuildingType: 4
 --- !u!95 &3879171535332359295
 Animator:
