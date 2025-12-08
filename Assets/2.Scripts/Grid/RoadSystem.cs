@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
-using NUnit.Framework;
 
 // 4방향을 비트로 표현(오=1, 왼=2, 아래=4, 위=8)
 // 이 코드에서는 "막힌 방향(도로가 아닌 방향/경계/필드)"을 1로 세팅하는 컨벤션임
