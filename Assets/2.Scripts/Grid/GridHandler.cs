@@ -2,23 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static GridUtils;
 
 // 🧱 타일의 종류를 정의하는 열거형
 // 여러 시스템(Field, Road, Building 등)에서 공통으로 사용 가능하므로 클래스 밖에 둠
 public enum TileType
 {
-    Field,
-    Road,
-    Constructed
-}
-
-// 🎨 브러시 모드 (사용자가 어떤 종류의 타일을 칠할지)
-public enum BrushMode
-{
     None,
     Field,
     Road,
-    Building
+    Constructed
 }
 
 /// <summary>
@@ -66,40 +59,6 @@ public class GridHandler : MonoBehaviour
         
     }
 
-    // 🖌️ Field 브러시로 타일 칠하기
-    public void DrawFieldTile()
-    {
-        // 빌드 모드 아닐 때는 무시
-        if (!_buildMode) return;
-
-        // 마우스 왼쪽 버튼 누르고 있는 동안만 작동
-        if (Input.GetMouseButton(0))
-        {
-            // 마우스 위치에서 레이 쏘기
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-
-            // Default 레이어만 대상으로 Raycast
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
-            {
-                // 맞은 지점을 셀 좌표로 변환
-                Vector3Int cell = WorldToCell(hit.point); // hit.point = 실제 월드 좌표
-                Debug.Log("cell: " + cell);
-
-                // 셀이 그리드 범위 안에 있으면 타일 세팅
-                if (cell.x >= -_width / 2 && cell.x < _width / 2 &&
-                    cell.y >= -_height / 2 && cell.y < _height / 2)
-                {
-                    // 실제 타일맵에 타일 그리기
-                    _fieldTilemap.SetTile(cell, _selectedTile);
-
-                    // 논리 데이터(타일 타입) 갱신
-                    SetGridTileType(cell.x, cell.y, TileType.Field);
-                }
-            }
-        }
-    }
-
     // 셀 좌표를 월드 좌표(중심점)로 변환
     public Vector3 CellToWorld(int x, int y)
     {                                                           // _gird.CellToWorld : Grid 컴포넌트의 내장 함수
@@ -116,6 +75,13 @@ public class GridHandler : MonoBehaviour
     // 논리 데이터(2D 배열)에 타일 타입 기록
     public void SetGridTileType(int x, int y, TileType tileType)
     {
+
+        if (IsCellOutOfRange(new Vector3Int(x, y, 0)))
+        {
+            Debug.LogError($"Cell is out of range: ({x}, {y})");
+            return;
+        }
+
         int xIndex = x + _width / 2;
         int yIndex = y + _height / 2;
         _gridTileTypes[xIndex, yIndex] = tileType;
@@ -124,14 +90,15 @@ public class GridHandler : MonoBehaviour
     // 특정 셀의 타일 타입을 가져오기
     public TileType GetGridTileType(int x, int y)
     {
+        // 배열 범위 벗어나면 Field로 반환 (안전 처리)
+        if (IsCellOutOfRange(new Vector3Int(x, y, 0)))
+        {
+            Debug.LogError($"Cell is out of range: ({x}, {y})");
+            return TileType.None;
+        }
+
         int xIndex = x + _width / 2;
         int yIndex = y + _height / 2;
-
-        // 배열 범위 벗어나면 Field로 반환 (안전 처리)
-        if (xIndex < 0 || xIndex >= _width || yIndex < 0 || yIndex >= _height)
-        {
-            return TileType.Field;
-        }
 
         return _gridTileTypes[xIndex, yIndex];
     }
@@ -145,26 +112,9 @@ public class GridHandler : MonoBehaviour
 
     public List<Vector3Int> GetCellsInRange(Vector3 center, int size)
     {
-        bool isEven = size % 2 == 0;
-
         List<Vector3Int> cells = new();
 
-        Vector3 startPos;
-
-        if (!isEven)
-        {
-            float startPosX = center.x - (CellSize.x * (size / 2));
-            float startPosZ = center.z - (CellSize.y * (size / 2));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-        else
-        {
-            float startPosX = center.x - CellSize.x / 2 - (CellSize.x * (size / 2 - 1));
-            float startPosZ = center.z - CellSize.y / 2 - (CellSize.y * (size / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
+        Vector3 startPos = CalcCenterPosition(center, size, CellSize);
 
         for (int i = 0; i < size; i++)
         {
@@ -182,7 +132,7 @@ public class GridHandler : MonoBehaviour
         return cells;
     }
 
-public bool IsCellOutOfRange(Vector3Int cell)
+    public bool IsCellOutOfRange(Vector3Int cell)
     {
         return cell.x < -_width / 2 || cell.x >= _width / 2 || cell.y < -_height / 2 || cell.y >= _height / 2;
     }
@@ -200,12 +150,7 @@ public bool IsCellOutOfRange(Vector3Int cell)
     {
         List<Vector3Int> boundaryCells = new List<Vector3Int>();
 
-        bool isEven = buildingSize % 2 == 0;
-
-        float startPosX = isEven ? centerWorldPos.x - CellSize.x / 2 - (CellSize.x * (buildingSize / 2 - 1)) : centerWorldPos.x - (CellSize.x * (buildingSize / 2));
-        float startPosZ = isEven ? centerWorldPos.z - CellSize.y / 2 - (CellSize.y * (buildingSize / 2 - 1)) : centerWorldPos.z - (CellSize.y * (buildingSize / 2));
-
-        Vector3 startPos = new Vector3(startPosX, centerWorldPos.y, startPosZ);
+        Vector3 startPos = CalcCenterPosition(centerWorldPos, buildingSize, CellSize);
         Vector3Int startCell = WorldToCell(startPos);
 
         for (int i = 0; i < buildingSize; i++)
@@ -232,7 +177,6 @@ public bool IsCellOutOfRange(Vector3Int cell)
                     return true;
             }
         }
-
 
         return false;
     }

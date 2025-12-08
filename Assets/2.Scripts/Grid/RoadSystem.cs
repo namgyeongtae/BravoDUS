@@ -1,15 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
-
-// ⚠️ 현재 struct 필드가 전부 private(기본)이라 외부에서 접근이 불가.
-// 앞으로 사용할 계획이면 public으로 바꾸거나 프로퍼티/생성자를 추가하자.
-struct RoadData
-{
-    int x;   // 셀 X
-    int y;   // 셀 Y
-    int dir; // 비트마스크(4방향 막힘정보 등용)
-}
+using NUnit.Framework;
 
 // 4방향을 비트로 표현(오=1, 왼=2, 아래=4, 위=8)
 // 이 코드에서는 "막힌 방향(도로가 아닌 방향/경계/필드)"을 1로 세팅하는 컨벤션임
@@ -37,7 +29,6 @@ public enum RoadMode
 /// </summary>
 public class RoadSystem : MonoBehaviour
 {
-    [SerializeField] private int _size = 1; // 추후 영역 페인트 크기(현재 미사용)
     [SerializeField] private GameObject _constructIndicator; // 설치 미리보기 프리팹
     [SerializeField] private GridHandler _gridHandler;       // 셀 변환/타입 관리
 
@@ -46,7 +37,9 @@ public class RoadSystem : MonoBehaviour
     
     private RoadTileSO _roadTileSO;         // 타일 변형 데이터 모음(SO)
 
-    private List<RoadData> _roadDataList = new(); // 추후 영역/경로 기록용(현재 미사용)
+    private int[] _dirX = { 1, -1, 0, 0 };
+    private int[] _dirY = { 0, 0, -1, 1 };
+
     private RoadTileData _roadTileData => _roadTileSO.RoadTileDatas[(int)_roadType]; // 선택형 타일셋
     private GameObject _currentIndicator = null; // 미리보기 인디케이터 인스턴스
 
@@ -60,7 +53,7 @@ public class RoadSystem : MonoBehaviour
     }
 
     private bool _canInstall = false;
-    [SerializeField] private int _limitedDeltaTouch = 5; // 도로 설치 시 허용되는 Touch 움직임 거리의 제한 -> 이거 넘긴 상태의 Touch는 도로 설치 못함
+    private readonly int _limitedDeltaTouch = 10; // 도로 설치 시 허용되는 Touch 움직임 거리의 제한 -> 이거 넘긴 상태의 Touch는 도로 설치 못함
 
     void Start()
     {
@@ -145,8 +138,6 @@ public class RoadSystem : MonoBehaviour
                 {
                     Vector3Int cell = _gridHandler.WorldToCell(hit.point);
 
-                    //if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
-                    //&& cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
                     if (!_gridHandler.IsCellOutOfRange(cell)
                     && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Field)
                     {
@@ -155,22 +146,11 @@ public class RoadSystem : MonoBehaviour
 
                         DrawRoadTile(cell);
                         DrawAdjacentRoadTile(cell);
-                                    // 그래프에 "변경됨" 알림(리빌드 디바운스 대기 시작)
+                        
+                        // 그래프에 "변경됨" 알림(리빌드 디바운스 대기 시작)
                         NotifyRoadsChanged();
 
-                        var buildigs = Physics.OverlapBox(_gridHandler.CellToWorld(cell.x, cell.y), 
-                                new Vector3(3f, 3f, 3f), Quaternion.identity, LayerMask.GetMask("Building"));
-
-                        // 도로 설치 시 이웃한 건물의 Role을 활성화 (인구, 행복도 증가 등등)
-                        for (int i = 0; i < buildigs.Length; i++)
-                        {
-                            Debug.Log("building: " + buildigs[i].name);
-                            var role = buildigs[i].GetComponentInParent<RoleHandler>();
-                            if (role != null)
-                            {
-                                role.OnActivate();
-                            }
-                        }
+                        ControlBuildingRole(cell, true);
                     }
                     else
                     {
@@ -181,6 +161,8 @@ public class RoadSystem : MonoBehaviour
                 _canInstall = true;
             }
         }
+
+        #region MouseInput
         /* #else
                 if (Input.GetMouseButton(0))
                 {
@@ -208,6 +190,7 @@ public class RoadSystem : MonoBehaviour
                     }
                 } */
         // #endif 
+        #endregion
     }
 
     // 도로 제거: 좌클릭한 셀이 도로면 지우고, 인접 4셀 재계산
@@ -216,8 +199,6 @@ public class RoadSystem : MonoBehaviour
 //#if !UNITY_EDITOR
         if (Input.touchCount > 0)
         {
-            Debug.Log("Remove Road");
-
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Ended)
             {
@@ -226,9 +207,8 @@ public class RoadSystem : MonoBehaviour
                 if (Physics.Raycast(ray,out RaycastHit hit, 1000, LayerMask.GetMask("Ground")))
                 {
                     Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                    Debug.Log("cell: " + cell);
-                    if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2 
-                    && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
+                    
+                    if (!_gridHandler.IsCellOutOfRange(cell)
                     && _gridHandler.GetGridTileType(cell.x, cell.y) == TileType.Road)
                     {
                         _gridHandler.SetGridTileType(cell.x, cell.y, TileType.Field);
@@ -236,19 +216,7 @@ public class RoadSystem : MonoBehaviour
                         RemoveRoadTile(cell);
                         DrawAdjacentRoadTile(cell);
 
-                        var buildigs = Physics.OverlapBox(_gridHandler.CellToWorld(cell.x, cell.y), 
-                                new Vector3(3f, 3f, 3f), Quaternion.identity, LayerMask.GetMask("Building"));
-                        
-                        // 도로 설치 시 이웃한 건물의 Role을 활성화 (인구, 행복도 증가 등등)
-                        for (int i = 0; i < buildigs.Length; i++)
-                        {
-                            Debug.Log("building: " + buildigs[i].name);
-                            var role = buildigs[i].GetComponentInParent<RoleHandler>();
-                            if (role != null)
-                            {
-                                role.OnDeActivate();
-                            }
-                        }
+                        ControlBuildingRole(cell, false);
                     }
                     else
                     {
@@ -258,7 +226,7 @@ public class RoadSystem : MonoBehaviour
             }
         }
     
-        
+        #region MouseInput
 //#endif        
         /* if (Input.GetMouseButton(0))
         {
@@ -268,7 +236,6 @@ public class RoadSystem : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, 1000, LayerMask.GetMask("Default")))
             {
                 Vector3Int cell = _gridHandler.WorldToCell(hit.point);
-                Debug.Log("cell: " + cell);
 
                 if (cell.x >= -_gridHandler.Width / 2 && cell.x < _gridHandler.Width / 2
                  && cell.y >= -_gridHandler.Height / 2 && cell.y < _gridHandler.Height / 2
@@ -292,19 +259,35 @@ public class RoadSystem : MonoBehaviour
                 }
             }
         } */
+        #endregion
+    }
+
+    private void ControlBuildingRole(Vector3Int cell, bool isActivate)
+    {
+        var buildigs = Physics.OverlapBox(_gridHandler.CellToWorld(cell.x, cell.y), 
+                                new Vector3(3f, 3f, 3f), Quaternion.identity, LayerMask.GetMask("Building"));
+                        
+        // 도로 설치 시 이웃한 건물의 Role을 활성화 (인구, 행복도 증가 등등)
+        for (int i = 0; i < buildigs.Length; i++)
+        {
+            var role = buildigs[i].GetComponentInParent<RoleHandler>();
+            if (role != null)
+            {
+                if (isActivate)
+                    role.OnActivate();
+                else
+                    role.OnDeActivate();
+            }
+        }
     }
 
     // 인접 4방(오,왼,아래,위)에 "이미 도로"가 있으면 해당 셀을 다시 그려 연결부 업데이트
     private void DrawAdjacentRoadTile(Vector3Int cell)
     {
-        // Right Left Down Up (비트 순서와 동일하게 유지)
-        int[] dirX = { 1, -1, 0, 0 };
-        int[] dirY = { 0, 0, -1, 1 };
-
         for (int i = 0; i < 4; i++)
         {
-            int nx = cell.x + dirX[i];
-            int ny = cell.y + dirY[i];
+            int nx = cell.x + _dirX[i];
+            int ny = cell.y + _dirY[i];
 
             // 내부 + 도로인 경우만 갱신
             if (nx >= -_gridHandler.Width / 2 && nx < _gridHandler.Width / 2
@@ -319,18 +302,14 @@ public class RoadSystem : MonoBehaviour
     // 현재 셀의 "막힌 방향" 비트마스크를 계산해 적절한 변형 타일을 선택
     private void DrawRoadTile(Vector3Int cell)
     {
-        // Right Left Down Up (비트 0,1,2,3)
-        int[] dirX = { 1, -1, 0, 0 };
-        int[] dirY = { 0, 0, -1, 1 };
-
         RoadDir[] roadDirs = { RoadDir.Right, RoadDir.Left, RoadDir.Down, RoadDir.Up };
 
         int roadState = 0x0000; // 0이면 사방이 도로(센터)
 
         for (int i = 0; i < 4; i++) // 오 왼 아래 위
         {
-            int nx = cell.x + dirX[i];
-            int ny = cell.y + dirY[i];
+            int nx = cell.x + _dirX[i];
+            int ny = cell.y + _dirY[i];
 
             // 경계 밖이면 해당 방향은 "막힘"
             if (nx < -_gridHandler.Width / 2 || nx >= _gridHandler.Width / 2
@@ -361,6 +340,12 @@ public class RoadSystem : MonoBehaviour
         {
             roadRuntimeAPI.Place(cell, _roadTileData.RoadTiles[roadState]);
         }
+    }
+
+    public RoadMode SwitchInstallMode()
+    {
+        _roadMode = (_roadMode == RoadMode.Install) ? RoadMode.UnInstall : RoadMode.Install;
+        return _roadMode;
     }
 
     // 특정 셀의 도로 타일 제거
@@ -421,11 +406,5 @@ public class RoadSystem : MonoBehaviour
                 0.05f,
                 indicatorWorld.z);
         }
-    }
-
-    public RoadMode SwitchInstallMode()
-    {
-        _roadMode = (_roadMode == RoadMode.Install) ? RoadMode.UnInstall : RoadMode.Install;
-        return _roadMode;
-    }
+    } 
 }

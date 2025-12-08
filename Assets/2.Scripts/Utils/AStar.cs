@@ -105,6 +105,11 @@ public class AStar
             }
         }
 
+        return ReComposePath(endNode);
+    }
+
+    private static List<Vector3Int> ReComposePath(Node endNode)
+    {
         // 경로 재구성
         List<Vector3Int> path = new List<Vector3Int>();
         if (endNode != null)

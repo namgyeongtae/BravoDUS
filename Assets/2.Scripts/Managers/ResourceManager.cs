@@ -77,7 +77,13 @@ public class ResourceManager
         else
             instHandle = Addressables.InstantiateAsync(key, position, rotation);
 
-        GameObject go = instHandle.WaitForCompletion();
+        GameObject go = instHandle.WaitForCompletion();     // 사용 시 주의 !!!!! 
+        // -> WaitForCompletion()은 동기 함수를 비동기 처럼 돌리고 싶을 때 사용하는데 이거 쓰면 메인 쓰레드가 블로킹 된다. (즉, 결국 완전히 싱글 스레드로 돌리는데 이걸 블로킹해서 비동기 효과를 보는 것)
+        // -> 블로킹 된 상태로 메인 쓰레드에 진입하고자 하는 코드가 실행되면 오류가 발생!
+        // -> 이 타이밍에 다른 오브젝트들로 인해 Awake나 Start 처럼 MonoBehaviour에 의해 메인 스레드에 진입할 경우 개발자가 해결하기 어렵다.
+        // -> 다른 함수로 인해 메인 스레드에 진입하면 그 함수의 호출을 늦추어 해결할 수는 있지만 MonoBehaviour에 의해 호출 되는 함수(Awake, Start 등) 
+        // -> 개발자가 직접 그 함수들의 호출 타이밍을 늦출 수 없기 때문에 해결하기가 난처해진다.
+        // -> 마주치는 에러 : Exception: Reentering the Update method is not allowed. This can happen when calling WaitForCompletion on an operation while inside of a callback.
 
         if (!instHandle.IsValid() || instHandle.Status != AsyncOperationStatus.Succeeded)
         {

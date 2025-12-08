@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Timeline;
+using static GridUtils;
 
 public enum PlacementMode
 {
@@ -23,14 +23,7 @@ public class PlacementSystem : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        for (int i = 0; i < _gridHandler.Width; i++)
-        {
-            for (int j = 0; j < _gridHandler.Height; j++)
-            {
-                if (_gridHandler.GetGridTileType(i, j) == TileType.Road)
-                    Debug.Log("Road: " + i + ", " + j);
-            }
-        }
+        
     }
 
     // Update is called once per frame
@@ -38,24 +31,7 @@ public class PlacementSystem : MonoBehaviour
     {
         if (Managers.Construct.ConstructMode != ConstructMode.Placement) return;
 
-        /* if (Input.GetKeyDown(KeyCode.I))
-            _placementMode = (_placementMode == PlacementMode.Install) ? PlacementMode.UnInstall : PlacementMode.Install; */
-
         UpdatePlacement();
-
-        /* if (_placementMode == PlacementMode.Install)
-        {
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                if (_currentBuilding == null)
-                {
-                    StartPlacement(_testBuildingPrefab);
-                }
-            }
-            UpdatePlacement();
-        }
-        else
-            UnInstallPlacement(); */
     }
 
     public void StartPlacement(GameObject buildingPrefab, int buildingSize)
@@ -65,7 +41,6 @@ public class PlacementSystem : MonoBehaviour
             Managers.Resource.Destroy(_currentBuilding);
         }
 
-        // _currentBuilding = Instantiate(buildingPrefab);
         _buildingSize = buildingSize;
 
         if (CalcDefaultPosition(_buildingSize, out Vector3 defaultPos))
@@ -103,7 +78,6 @@ public class PlacementSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("Rotate Building");
             RotateBuilding();
         }
 
@@ -158,6 +132,7 @@ public class PlacementSystem : MonoBehaviour
                 Camera.main.GetComponent<MobileCameraPan>().SetMoveMode(true);
             }
         }
+        #region MouseInput
         // #endif
 
 
@@ -174,13 +149,11 @@ public class PlacementSystem : MonoBehaviour
             EndPlacement();
         }
         #endif */
+        #endregion
     }
 
     private void UnInstallPlacement()
     {
-        // TODO:
-        // 마찬가지로 이후 모바일에서 그냥 터치한다고 파괴되는 게 아니라 UI/UX 정책이 필요하다.
-        // 현재는 테스트 용으로 PC 기준 입력만 고려
 #if UNITY_EDITOR
         if (Input.GetMouseButtonUp(0))
         {
@@ -268,22 +241,7 @@ public class PlacementSystem : MonoBehaviour
     {
         bool isEven = buildingSize % 2 == 0;
 
-        Vector3 startPos;
-
-        if (!isEven)
-        {
-            float startPosX = position.x - (_gridHandler.CellSize.x * (buildingSize / 2));
-            float startPosZ = position.z - (_gridHandler.CellSize.y * (buildingSize / 2));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-        else
-        {
-            float startPosX = position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (buildingSize / 2 - 1));
-            float startPosZ = position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (buildingSize / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
+        Vector3 startPos = CalcCenterPosition(position, buildingSize, _gridHandler.CellSize);
 
         bool isCollide = false;
 
@@ -367,24 +325,7 @@ public class PlacementSystem : MonoBehaviour
         if (_currentBuilding == null)
             return;
 
-        Vector3 startPos;
-
-        bool isEven = _buildingSize % 2 == 0;
-
-        if (!isEven)
-        {
-            float startPosX = _currentBuilding.transform.position.x - (_gridHandler.CellSize.x * (_buildingSize / 2));
-            float startPosZ = _currentBuilding.transform.position.z - (_gridHandler.CellSize.y * (_buildingSize / 2));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
-        else
-        {
-            float startPosX = _currentBuilding.transform.position.x - _gridHandler.CellSize.x / 2 - (_gridHandler.CellSize.x * (_buildingSize / 2 - 1));
-            float startPosZ = _currentBuilding.transform.position.z - _gridHandler.CellSize.y / 2 - (_gridHandler.CellSize.y * (_buildingSize / 2 - 1));
-
-            startPos = new Vector3(startPosX, 0, startPosZ);
-        }
+        Vector3 startPos = CalcCenterPosition(_currentBuilding.transform.position, _buildingSize, _gridHandler.CellSize);
 
         for (int i = 0; i < _buildingSize; i++)
         {
@@ -415,7 +356,7 @@ public class PlacementSystem : MonoBehaviour
     {
         for (int i = 0; i < cells.Count; i++)
         {
-            if (cells[i].x < -_gridHandler.Width / 2 || cells[i].x > _gridHandler.Width / 2 || cells[i].y < -_gridHandler.Height / 2 || cells[i].y > _gridHandler.Height / 2)
+            if (_gridHandler.IsCellOutOfRange(cells[i]))
                 return true;
         }
 
