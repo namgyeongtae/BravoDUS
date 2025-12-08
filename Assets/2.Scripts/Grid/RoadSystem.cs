@@ -157,6 +157,20 @@ public class RoadSystem : MonoBehaviour
                         DrawAdjacentRoadTile(cell);
                                     // 그래프에 "변경됨" 알림(리빌드 디바운스 대기 시작)
                         NotifyRoadsChanged();
+
+                        var buildigs = Physics.OverlapBox(_gridHandler.CellToWorld(cell.x, cell.y), 
+                                new Vector3(3f, 3f, 3f), Quaternion.identity, LayerMask.GetMask("Building"));
+
+                        // 도로 설치 시 이웃한 건물의 Role을 활성화 (인구, 행복도 증가 등등)
+                        for (int i = 0; i < buildigs.Length; i++)
+                        {
+                            Debug.Log("building: " + buildigs[i].name);
+                            var role = buildigs[i].GetComponentInParent<RoleHandler>();
+                            if (role != null)
+                            {
+                                role.OnActivate();
+                            }
+                        }
                     }
                     else
                     {
@@ -221,6 +235,20 @@ public class RoadSystem : MonoBehaviour
 
                         RemoveRoadTile(cell);
                         DrawAdjacentRoadTile(cell);
+
+                        var buildigs = Physics.OverlapBox(_gridHandler.CellToWorld(cell.x, cell.y), 
+                                new Vector3(3f, 3f, 3f), Quaternion.identity, LayerMask.GetMask("Building"));
+                        
+                        // 도로 설치 시 이웃한 건물의 Role을 활성화 (인구, 행복도 증가 등등)
+                        for (int i = 0; i < buildigs.Length; i++)
+                        {
+                            Debug.Log("building: " + buildigs[i].name);
+                            var role = buildigs[i].GetComponentInParent<RoleHandler>();
+                            if (role != null)
+                            {
+                                role.OnDeActivate();
+                            }
+                        }
                     }
                     else
                     {

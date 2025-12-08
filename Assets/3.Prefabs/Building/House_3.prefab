@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 9109011863291238540}
   - component: {fileID: 9067149262771358547}
   - component: {fileID: 5117428689784352083}
+  - component: {fileID: 6570184079496865158}
   m_Layer: 6
   m_Name: House_3
   m_TagString: Untagged
@@ -432,6 +433,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6570184079496865158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4729445768684862340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056702bbca58c4845be964f450d0d50b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4806110512098815339
 GameObject:
   m_ObjectHideFlags: 0

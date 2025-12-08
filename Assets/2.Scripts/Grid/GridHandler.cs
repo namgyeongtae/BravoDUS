@@ -182,7 +182,7 @@ public class GridHandler : MonoBehaviour
         return cells;
     }
 
-    public bool IsCellOutOfRange(Vector3Int cell)
+public bool IsCellOutOfRange(Vector3Int cell)
     {
         return cell.x < -_width / 2 || cell.x >= _width / 2 || cell.y < -_height / 2 || cell.y >= _height / 2;
     }
@@ -196,6 +196,46 @@ public class GridHandler : MonoBehaviour
         return null;
     }
     
+    public bool IsConnectedToRoad(Vector3 centerWorldPos, int buildingSize)
+    {
+        List<Vector3Int> boundaryCells = new List<Vector3Int>();
+
+        bool isEven = buildingSize % 2 == 0;
+
+        float startPosX = isEven ? centerWorldPos.x - CellSize.x / 2 - (CellSize.x * (buildingSize / 2 - 1)) : centerWorldPos.x - (CellSize.x * (buildingSize / 2));
+        float startPosZ = isEven ? centerWorldPos.z - CellSize.y / 2 - (CellSize.y * (buildingSize / 2 - 1)) : centerWorldPos.z - (CellSize.y * (buildingSize / 2));
+
+        Vector3 startPos = new Vector3(startPosX, centerWorldPos.y, startPosZ);
+        Vector3Int startCell = WorldToCell(startPos);
+
+        for (int i = 0; i < buildingSize; i++)
+        {
+            for (int j = 0; j < buildingSize; j++)
+            {
+                Vector3Int currentCell = new Vector3Int(startCell.x + j, startCell.y + i, 0);
+                boundaryCells.Add(currentCell);
+            }
+        }
+
+        int[] dirX = {0, 1, 0, -1};
+        int[] dirY = {-1, 0, 1, 0};
+
+        for (int i = 0; i < boundaryCells.Count; i++)
+        {
+            for (int dir = 0; dir < 4; dir++)
+            {
+                Vector3Int nextCell = new Vector3Int(boundaryCells[i].x + dirX[dir], boundaryCells[i].y + dirY[dir], 0);
+
+                if (IsCellOutOfRange(nextCell)) continue;
+
+                if (GetGridTileType(nextCell.x, nextCell.y) == TileType.Road)
+                    return true;
+            }
+        }
+
+
+        return false;
+    }
     public void AddBuildngByCell(Vector3Int cell, Building building)
     {
         _buildingByCellDict.Add(cell, building);

@@ -137,8 +137,14 @@ public class Building : MonoBehaviour
         }
         //////////////////////////////////////////////////////////
          
-        Managers.UI.GetUI<SceneUI>().BuildingHappiness(this);
-        Managers.UI.GetUI<SceneUI>().BuildingPopulation(this);
+        /* Managers.UI.GetUI<SceneUI>().BuildingHappiness(this);
+        Managers.UI.GetUI<SceneUI>().BuildingPopulation(this); */
+
+        // 인접한 cell 중 Road 가 있으면 활성화
+        if (gridHandler.IsConnectedToRoad(transform.position, buildingSize))
+        {
+            GetComponent<RoleHandler>().OnActivate();
+        }
 
         Debug.Log($"건설 완료: {gameObject.name}, Level: {Level}, State: {CurrentState}");
 

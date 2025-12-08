@@ -153,10 +153,26 @@ public class SceneUI : CanvasPanel
         _happinessText.text = $"{CityManager.Instance.happinessSystem.GetHappiness()}";
     }
 
+    public void DeactivateBuildingHappiness(Building building)
+    {
+        int happiness = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingType == building.BuildingType).Happiness;
+        CityManager.Instance.happinessSystem.ApplyHappinessChange(-happiness);
+
+        _happinessText.text = $"{CityManager.Instance.happinessSystem.GetHappiness()}";
+    }
+
     public void BuildingPopulation(Building building)
     {
         int population = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingType == building.BuildingType).Population;
         CityManager.Instance.populationSystem.ApplyPopulationChange(population);
+
+        _populationText.text = $"{CityManager.Instance.populationSystem.GetCurrentPopulation()}/{CityManager.Instance.populationSystem.GetMaxPopulation()}";
+    }
+
+    public void DeactivateBuildingPopulation(Building building)
+    {
+        int population = Managers.SO.BuildingSO.buildingDatas.FirstOrDefault(x => x.buildingType == building.BuildingType).Population;
+        CityManager.Instance.populationSystem.ApplyPopulationChange(-population);
 
         _populationText.text = $"{CityManager.Instance.populationSystem.GetCurrentPopulation()}/{CityManager.Instance.populationSystem.GetMaxPopulation()}";
     }
