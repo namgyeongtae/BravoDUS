@@ -8,10 +8,10 @@ using static GridUtils;
 // 여러 시스템(Field, Road, Building 등)에서 공통으로 사용 가능하므로 클래스 밖에 둠
 public enum TileType
 {
-    None,
     Field,
     Road,
-    Constructed
+    Constructed,
+    OutofRange,
 }
 
 /// <summary>
@@ -94,7 +94,7 @@ public class GridHandler : MonoBehaviour
         if (IsCellOutOfRange(new Vector3Int(x, y, 0)))
         {
             Debug.LogError($"Cell is out of range: ({x}, {y})");
-            return TileType.None;
+            return TileType.OutofRange;
         }
 
         int xIndex = x + _width / 2;

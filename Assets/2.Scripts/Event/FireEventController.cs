@@ -39,14 +39,12 @@ public class FireEventController : EventController
 
     protected override float ScheduleNext(float now, CityStat stats)
     {
-        /* // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
+        // λ = base * FireRate(0~1). 너무 낮으면 아주 드물게라도 나오도록
         float lambda = Mathf.Max(0.08f, _baseRatePerMin * Mathf.Clamp01(1 - stats.FireRate));
         // 지수분포: Δt(분) = -ln(1-u)/λ
         float u = Random.value;
         float minutes = -Mathf.Log(1f - u) / lambda;
-        return now + minutes * 60f; */
-
-        return now + 30f;
+        return now + minutes * 60f;
     }
 
     protected override Incident ExecuteSpawn(float now, CityStat stat)

@@ -252,7 +252,7 @@ public class PlacementSystem : MonoBehaviour
                 float posX = startPos.x + (_gridHandler.CellSize.x * i);
                 float posZ = startPos.z + (_gridHandler.CellSize.y * j);
 
-                TileType tileType = _gridHandler.GetGridTileType(new Vector3(posX, 0, posZ));
+                TileType tileType = _gridHandler.GetGridTileType(new Vector3(posX, startPos.y, posZ));
 
                 if (tileType != TileType.Field)
                 {
