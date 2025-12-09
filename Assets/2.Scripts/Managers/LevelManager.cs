@@ -35,7 +35,10 @@ public class LevelManager : IManagerBase
         // 씬 활성화 및 페이드 아웃
         await FadeOut(handle);
 
-        GameManager.Instance.Managers.Init();
+        if (sceneName == "MainScene")
+        {
+            GameManager.Instance.SetGameStarted(true);
+        }
     }
 
     public async UniTask FadeIn()

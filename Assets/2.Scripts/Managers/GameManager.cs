@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     public Managers Managers => _managers;
 
+    private bool _isGameStarted = false;
+
     private void Awake()
     {
         Instance = this;
@@ -55,7 +57,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        _managers.Update();
+        if (_isGameStarted)
+        {
+            _managers.Update();
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -71,6 +76,16 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         sfxAudioSource.PlayOneShot(buttonPositiveConfirm);
+    }
+
+    public void SetGameStarted(bool isStarted)
+    {
+        _isGameStarted = isStarted;
+
+        if (isStarted)
+        {
+            _managers.Init();
+        }
     }
 
     void Quit()

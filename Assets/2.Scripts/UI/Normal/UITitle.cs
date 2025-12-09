@@ -14,6 +14,9 @@ public class UITitle : CanvasPanel
     [SerializeField] private GameObject _downloadPanel;
     [SerializeField] private Image _downloadProgress;
     [SerializeField] private Text _downloadProgressText;
+    [SerializeField] private UIButton _startButton;
+
+    private const float BYTES_TO_MB = 1048576f;
 
 
     protected override void Start()
@@ -28,12 +31,11 @@ public class UITitle : CanvasPanel
 
     public async UniTask OnStartButtonClicked()
     {
-        Debug.Log("OnStartButtonClicked");
-
         // 이미 다운 받았는지 확인
         var downloadSize = await Addressables.GetDownloadSizeAsync("default");
         if(downloadSize > 0)
         {
+            _startButton.gameObject.SetActive(false);
             await DownloadAsync("default");
         }
 
@@ -52,7 +54,7 @@ public class UITitle : CanvasPanel
     {
         _downloadPanel.SetActive(true);
         _downloadProgress.fillAmount = 0;
-        _downloadProgressText.text = "0.00 %";
+        _downloadProgressText.text = "0/0 (0.00 %)";
 
         try 
         {
@@ -67,11 +69,11 @@ public class UITitle : CanvasPanel
                 while(!handle.IsDone)
                 {
                     var downStatus = handle.GetDownloadStatus();
-                    Debug.Log($"{downStatus.DownloadedBytes}/{downStatus.TotalBytes}");
+                    Debug.Log($"{downStatus.DownloadedBytes / BYTES_TO_MB:F2}MB/{downStatus.TotalBytes / BYTES_TO_MB:F2}MB");
                     Debug.Log($"{downStatus.Percent * 100f} %");
 
                     _downloadProgress.fillAmount = downStatus.Percent;
-                    _downloadProgressText.text = $"{downStatus.Percent * 100f:F2} %";
+                    _downloadProgressText.text = $"{downStatus.DownloadedBytes / BYTES_TO_MB:F2}MB/{downStatus.TotalBytes / BYTES_TO_MB:F2}MB ({downStatus.Percent * 100f:F2} %)";
 
                     await UniTask.Yield();
                 }

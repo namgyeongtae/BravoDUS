@@ -9,8 +9,6 @@ using UnityEngine.UI;
 public class SceneUI : CanvasPanel
 {
     [Header("UserInfo")]
-    [Bind("SliderImage")] private Image _levelGaugeSlider;
-    [Bind("Level")] private Text _levelText;
 
     [Header("Commodity")]
     //[Bind("WoodIcon")] private UIParticleAttractor _woodParticleAttractor;
@@ -35,10 +33,6 @@ public class SceneUI : CanvasPanel
     [Bind("UIBuildingSelection")] private UIBuildingSelection _buildingSelection;
 
     public UIBuildingSelection BuildingSelection => _buildingSelection;
-
-    //public UIParticleAttractor WoodParticleAttractor => _woodParticleAttractor;
-
-    int delta;
 
     protected override void Initialize()
     {
