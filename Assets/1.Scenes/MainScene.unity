@@ -11596,7 +11596,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDay: 1
   realSecondsPerGameDay: 60
-  dateText: {fileID: 0}
+  dateText: {fileID: 2089225531}
+  dateButton: {fileID: 1189523595}
 --- !u!1 &1314381122
 GameObject:
   m_ObjectHideFlags: 0
@@ -15452,6 +15453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6718efba05b83d74c9a1d6ff2c705007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  taxRatePanel: {fileID: 604390670}
+  volumeController: {fileID: 1776023000}
   taxText: {fileID: 1679913888}
   expected_Happiness_Change_Text: {fileID: 1525256072}
 --- !u!114 &1717760920
