@@ -82,6 +82,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - default
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 61f50e232b265774f86d971d4dbe29a3
+    m_Address: Assets/5.Images/2DImages/RoadWarning.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 62526cc2ff4e993408a56be36760c704
     m_Address: Assets/Art/JMO Assets/FencesPack/Textures/Occlusion/AmbientOcclusion.tif
     m_ReadOnly: 0
@@ -235,6 +241,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e454b68479104714e8f45f3c0ca1fd65
     m_Address: Assets/Art/JMO Assets/FencesPack/Materials/WoodWhite.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5077bed5a6aedd468c4a15b5b31418e
+    m_Address: Assets/5.Images/2DImages/SpeechBubble.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default

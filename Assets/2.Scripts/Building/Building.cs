@@ -141,6 +141,10 @@ public class Building : MonoBehaviour
         {
             GetComponent<RoleHandler>().OnActivate();
         }
+        else
+        {
+            GetComponent<RoleHandler>().OnDeActivate();
+        }
 
         Debug.Log($"건설 완료: {gameObject.name}, Level: {Level}, State: {CurrentState}");
 
