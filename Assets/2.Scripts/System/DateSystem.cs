@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;  // 레거시 UI Text
+using TMPro;
+using UnityEngine.UI;
 
 public class DateSystem : MonoBehaviour
 {
@@ -12,12 +13,19 @@ public class DateSystem : MonoBehaviour
     public float realSecondsPerGameDay = 60f;
 
     [Header("UI")]
-    public Text dateText;   // 레거시 UI Text
+    public TextMeshProUGUI dateText;   // 레거시 UI Text
+
+    public Button dateButton;
 
     // 날짜 변경 시 알림
     public event Action OnDayChanged;
 
     private float _timeAcc; // 누적 현실 시간(초)
+
+    private void Start()
+    {
+        dateButton.onClick.AddListener(IncreaseDay);
+    }
 
     void Update()
     {
@@ -30,14 +38,6 @@ public class DateSystem : MonoBehaviour
             _timeAcc -= realSecondsPerGameDay;
             IncreaseDay();
         }
-
-#if UNITY_EDITOR
-        // 테스트용: 스페이스로 하루 강제 증가
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            IncreaseDay();
-        }
-#endif
 
         UpdateText();
     }
