@@ -6,6 +6,7 @@ public class TaxSystem : MonoBehaviour
 {
     [Header("Script")]
     [SerializeField] SceneUI sceneUI;
+    [SerializeField] VolumeController volumeController;
 
     [Header("Object")]
     [SerializeField] GameObject taxRatePanel;
@@ -19,7 +20,7 @@ public class TaxSystem : MonoBehaviour
     int tax; // 세금 금액 (인구수 x 세금률) 
     int expected_Happiness_Change;
 
-    VolumeController volumeController;
+    
     DateSystem dateSystem;
     PopulationSystem populationSystem;
     HappinessSystem happinessSystem;
@@ -85,7 +86,6 @@ public class TaxSystem : MonoBehaviour
 
     private void Start()
     {
-        volumeController = VolumeController.Instance;
         dateSystem = CityManager.Instance.dateSystem;
         populationSystem = CityManager.Instance.populationSystem;
         happinessSystem = CityManager.Instance.happinessSystem;
@@ -196,12 +196,12 @@ public class TaxSystem : MonoBehaviour
     public void ActivatePanel()
     {
         taxRatePanel.SetActive(true);
-        volumeController.PlayButtonPositive();
+        volumeController.SfxAudioSource.PlayOneShot(volumeController.ButtonPositiveConfirm);
     }
 
     public void DeActivatePanel()
     {
         taxRatePanel.SetActive(false);
-        volumeController.PlayButtonNegative();
+        volumeController.SfxAudioSource.PlayOneShot(volumeController.ButtonNegativeCancel);
     }
 }
