@@ -4,9 +4,12 @@ using UnityEngine.UI;
 
 public class TaxSystem : MonoBehaviour
 {
-    [SerializeField] GameObject taxRatePanel;
+    [Header("Script")]
+    [SerializeField] SceneUI sceneUI;
     [SerializeField] VolumeController volumeController;
 
+    [Header("Object")]
+    [SerializeField] GameObject taxRatePanel;
     public Text taxText;
     public Text expected_Happiness_Change_Text;
 
@@ -83,7 +86,6 @@ public class TaxSystem : MonoBehaviour
 
     private void Start()
     {
-        
         dateSystem = CityManager.Instance.dateSystem;
         populationSystem = CityManager.Instance.populationSystem;
         happinessSystem = CityManager.Instance.happinessSystem;
@@ -122,6 +124,11 @@ public class TaxSystem : MonoBehaviour
 
         // 행복도 변화량 적용
         ApplyHappinessByTaxRate();
+
+        Managers.Commodity.AddMoney(tax);
+
+        // 텍스트 갱신 함수 호출 (임시)
+        sceneUI.UpdateMoneyText();
     }
 
     // 하루 세금 금액 계산

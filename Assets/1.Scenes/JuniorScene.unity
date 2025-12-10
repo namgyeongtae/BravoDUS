@@ -15453,8 +15453,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6718efba05b83d74c9a1d6ff2c705007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taxRatePanel: {fileID: 604390670}
+  sceneUI: {fileID: 1330242136}
   volumeController: {fileID: 1776023000}
+  taxRatePanel: {fileID: 604390670}
   taxText: {fileID: 1679913888}
   expected_Happiness_Change_Text: {fileID: 1525256072}
 --- !u!114 &1717760920
