@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class PopulationSystem : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class PopulationSystem : MonoBehaviour
     public int maxPopulation = 1;
 
     bool isWarning = false;
+
+    public event Action OnPopulationChanged;
 
     void Update()
     {
@@ -33,6 +36,8 @@ public class PopulationSystem : MonoBehaviour
 
     public void ApplyPopulationChange(int delta)
     {
+        OnPopulationChanged?.Invoke();
+
         currentPopulation += delta;
         maxPopulation += delta;
     }

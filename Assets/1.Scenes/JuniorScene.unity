@@ -6218,6 +6218,7 @@ MonoBehaviour:
   - {fileID: 5986958801767457440, guid: 87a7b985b15a4244091de35d7df9169a, type: 3}
   entrance: {fileID: 681854155}
   roadGraphFromGrid: {fileID: 1227149903}
+  populationSystem: {fileID: 1893234406}
 --- !u!1001 &717460063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15454,7 +15455,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneUI: {fileID: 1330242136}
-  volumeController: {fileID: 1776023000}
   taxRatePanel: {fileID: 604390670}
   taxText: {fileID: 1679913888}
   expected_Happiness_Change_Text: {fileID: 1525256072}
@@ -15715,9 +15715,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2dc84fcbc12c7540a3c87cca7b44a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  optionButton: {fileID: 257385057}
-  soundPanel: {fileID: 959174733}
-  closeButton: {fileID: 785705119}
   masterSoundSlider: {fileID: 1915328850}
   masterText: {fileID: 1202596218}
   bgmSoundSlider: {fileID: 1460926889}
@@ -15725,8 +15722,11 @@ MonoBehaviour:
   sfxSoundSlider: {fileID: 1246198703}
   sfxText: {fileID: 1950521018}
   sfxAudioSource: {fileID: 1776023002}
+  soundPanel: {fileID: 959174733}
+  closeButton: {fileID: 785705119}
   buttonPositiveConfirm: {fileID: 8300000, guid: 5c20f8509d7d267e3ab3cd4bc77d927c, type: 3}
   buttonNegativeCancel: {fileID: 8300000, guid: 63abb224d3a104d0a9de133310638405, type: 3}
+  optionButton: {fileID: 257385057}
 --- !u!4 &1776023001
 Transform:
   m_ObjectHideFlags: 0

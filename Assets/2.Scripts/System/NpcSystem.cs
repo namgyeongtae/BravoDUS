@@ -8,11 +8,21 @@ public class NpcSystem : MonoBehaviour
     [SerializeField] GameObject[] npcPrefabs = new GameObject[6];
     [SerializeField] Transform entrance;
     [SerializeField] RoadGraphFromGrid roadGraphFromGrid;
+    [SerializeField] PopulationSystem populationSystem;
 
     void Start()
     {
-        CityManager.Instance.dateSystem.OnDayChanged += OnDayChanged;
         StartCoroutine(SpawnFirstNPC());
+    }
+
+    private void OnEnable()
+    {
+        populationSystem.OnPopulationChanged += OnPopulationChanged;
+    }
+
+    private void OnDisable()
+    {
+        populationSystem.OnPopulationChanged -= OnPopulationChanged;
     }
 
     void SpawnNpc()
@@ -21,7 +31,7 @@ public class NpcSystem : MonoBehaviour
         Instantiate(npcPrefabs[i], entrance.position, Quaternion.identity);
     }
 
-    void OnDayChanged()
+    void OnPopulationChanged()
     {
         SpawnNpc();
     }
