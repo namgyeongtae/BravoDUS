@@ -47,6 +47,9 @@ public class PlacementSystem : MonoBehaviour
         {
             _currentBuilding = Managers.Resource.InstantiateAddressable(buildingPrefab.GetComponent<Building>().BuildingType.ToString(), Vector3.zero, Quaternion.identity);
             _currentBuilding.transform.position = defaultPos;
+
+            var cameraPan = Camera.main.GetComponent<MobileCameraPan>();
+            cameraPan.StartPanToGameObject(_currentBuilding.gameObject, 10f);
         }
         else
         {

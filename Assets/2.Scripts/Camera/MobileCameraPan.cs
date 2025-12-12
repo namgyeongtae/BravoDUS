@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.InputSystem;   // New Input System (마우스 휠)
 using UITouch = UnityEngine.Touch;
 using UITouchPhase = UnityEngine.TouchPhase;
@@ -54,13 +55,13 @@ public class MobileCameraPan : MonoBehaviour
     {
         if (!canMove) return;
 
-#if UNITY_EDITOR
+/* #if UNITY_EDITOR
         if (UIUtils.IsPointerOverUIObject(Input.mousePosition)) return;
 
         if (Input.GetMouseButtonDown(0)) dragging = TryScreenToGround(Input.mousePosition, out lastHit);
         else if (Input.GetMouseButton(0) && dragging) PanTo(Input.mousePosition);
         else if (Input.GetMouseButtonUp(0)) dragging = false;
-#endif
+#endif */
 
         if (Input.touchCount == 1)
         {
@@ -68,7 +69,7 @@ public class MobileCameraPan : MonoBehaviour
 
             if (UIUtils.IsPointerOverUIObject(t.position)) return;
 
-            if (t.phase == UITouchPhase.Began) dragging = TryScreenToGround(t.position, out lastHit);
+            if (t.phase == UITouchPhase.Began) { dragging = TryScreenToGround(t.position, out lastHit); Debug.Log($"LastHit: {lastHit}"); }
             else if (t.phase == UITouchPhase.Moved && dragging) PanTo(t.position);
             else if (t.phase == UITouchPhase.Ended || t.phase == UITouchPhase.Canceled) dragging = false;
         }
@@ -183,6 +184,53 @@ public class MobileCameraPan : MonoBehaviour
 
         ClampWithinMinMax();
         lastHit = hitNow;
+    }
+
+    private IEnumerator PanToGameObject(GameObject target, float speed)
+    {
+        canMove = false;
+
+        Vector3 f = cam.transform.forward;
+        Vector3 t = target.transform.position;
+
+        // 타겟을 바라보는 선(C = T - λF)과 y = fixedY 평면의 교점
+        float lambda = (t.y - fixedY) / f.y;
+        Vector3 targetPos = t - f * lambda;     // 이 상태에서 이미 targetPos.y ≈ fixedY
+
+        // 혹시 모를 오차 보정
+        targetPos.y = fixedY;
+
+        while (Vector3.Dot((t - cam.transform.position).normalized, f) < 1f)
+        {
+            cam.transform.position = Vector3.Lerp(cam.transform.position, targetPos, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        // 마지막 정렬
+        /* cam.transform.position = targetPos;
+        cam.transform.rotation = Quaternion.Euler(fixedRotation);
+        ClampWithinMinMax(); */
+
+        canMove = true;
+
+        // 드래그 관련 초기화
+        dragging = false;
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        if (TryScreenToGround(screenCenter, out var hitNow))
+            lastHit = hitNow;
+    }
+
+    public void StartPanToGameObject(GameObject target, float speed)
+    {
+        float dot = Vector3.Dot((target.transform.position - cam.transform.position).normalized, cam.transform.forward);
+
+        if (dot >= 1f)
+        {
+            Debug.Log($"Already in front of the target / dot: {dot}");
+            return;
+        }
+
+        StartCoroutine(PanToGameObject(target, speed));
     }
 
     // -------------------------

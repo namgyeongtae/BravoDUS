@@ -31,6 +31,7 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private List<Building> buildings = new List<Building>();
 
     private bool isDragging = false;
+    private bool touchStartedOnUI = false;
     private float lastInputTime = 0f;
     private const float inputCooldown = 0.2f;
 
@@ -106,31 +107,52 @@ public class CraftingManager : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (UIUtils.IsPointerOverUIObject(touch.position))
+            if (touch.phase == TouchPhase.Began)
             {
-                Debug.Log("Touch input ignored due to pointer over game object.");
-                return;
+                touchStartedOnUI = UIUtils.IsPointerOverUIObject(touch.position);
+                if (touchStartedOnUI)
+                {
+                    Debug.Log("Touch started on UI object.");
+                }
             }
 
             if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude > 10f)
             {
                 isDragging = true;
             }
+
             if (touch.phase == TouchPhase.Ended)
             {
+                if (touchStartedOnUI)
+                {
+                    Debug.Log("Touch ended but started on UI - ProcessRaycast ignored.");
+                    touchStartedOnUI = false;
+                    isDragging = false;
+                    return;
+                }
+
                 if (isDragging)
                 {
                     isDragging = false;
+                    touchStartedOnUI = false;
                     return;
                 }
                 if (Time.time - lastInputTime < inputCooldown)
                 {
                     Debug.Log("Touch input ignored due to cooldown.");
+                    touchStartedOnUI = false;
                     return;
                 }
                 lastInputTime = Time.time;
                 Debug.Log($"Touch ended at position: {touch.position}");
                 ProcessRaycast(Camera.main.ScreenPointToRay(touch.position));
+                touchStartedOnUI = false;
+            }
+
+            if (touch.phase == TouchPhase.Canceled)
+            {
+                touchStartedOnUI = false;
+                isDragging = false;
             }
         }
     }
@@ -193,6 +215,7 @@ public class CraftingManager : MonoBehaviour
                 else if (building.CurrentState == Building.State.Base)
                 {
                     Debug.Log($"Key press detected for {gameObject.name} - BuildingType: {building.BuildingType}");
+
                     Managers.UI.GetUI<SceneUI>("SceneUI").ToggleBuildingSelection(building);
                 }
             }
