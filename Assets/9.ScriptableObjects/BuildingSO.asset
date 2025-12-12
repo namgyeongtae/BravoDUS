@@ -27,13 +27,6 @@ MonoBehaviour:
     Happiness: 0
     Population: 10
     buildingSize: 4
-  - buildingName: "\uC815\uBD80 \uC2DC\uC124"
-    buildingIcon: {fileID: 21300000, guid: 13e4f9bf5e2754445b31aa8c11a8aca9, type: 3}
-    buildingType: 1
-    buildingPrefab: {fileID: 8962847944763816215, guid: 9509956ce5dc4a14dbb44c33512a09d5, type: 3}
-    Happiness: 0
-    Population: 0
-    buildingSize: 7
   - buildingName: "\uC18C\uBC29\uC11C"
     buildingIcon: {fileID: 21300000, guid: 287c88a3a2cdd054d898f9bf55474274, type: 3}
     buildingType: 4
@@ -41,13 +34,6 @@ MonoBehaviour:
     Happiness: 0
     Population: 0
     buildingSize: 6
-  - buildingName: "\uBAA9\uACF5\uC18C"
-    buildingIcon: {fileID: 21300000, guid: c27c9b95e9d800b4a9c1047a9104cb67, type: 3}
-    buildingType: 6
-    buildingPrefab: {fileID: 4573888785615173616, guid: 16ff278cf2d3cdd4bb2c1e61e4021f22, type: 3}
-    Happiness: 0
-    Population: 10
-    buildingSize: 3
   - buildingName: "\uC8FC\uD0DD1"
     buildingIcon: {fileID: 21300000, guid: b4ac09b852d076b4a9fa02b49ddd90e8, type: 3}
     buildingType: 6

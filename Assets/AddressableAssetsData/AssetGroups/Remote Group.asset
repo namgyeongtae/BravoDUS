@@ -69,6 +69,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - default
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d359c8e32d0ab5439bac4b78f7ba426
+    m_Address: UIBuildingInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 92c71e910679fe044a2e6793c7e1abbc
     m_Address: FadeSceneTransition
     m_ReadOnly: 0

@@ -171,28 +171,7 @@ public class UIBuildingSelection : CanvasPanel
 
     private void Action_ShowInfo()
     {
-        Debug.Log("Show Info");
-        
-        // TODO
-        // _selectedBuildingType 에 따라 정보 팝업 표시
-        switch (_selectedBuildingType)
-        {
-            case BuildingType.Government:
-                Debug.Log("Show Government Info");
-                break;
-            case BuildingType.Hospital:
-                Debug.Log("Show Hospital Info");
-                break;
-            case BuildingType.PoliceStation:
-                Debug.Log("Show Police Station Info");
-                break;
-            case BuildingType.FireStation:
-                Debug.Log("Show Fire Station Info");
-                break;
-            case BuildingType.ConvenienceStore:
-                Debug.Log("Show Convenience Store Info");
-                break;
-        }
+        Managers.UI.AddPanel<UIBuildingInfo>(_selectedBuilding);
     }
 
     private void Action_Upgrade()
